@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="PokemonGame.vcxproj" Id="001151d5-636f-4740-801c-91844a3344c5" />
+</Solution>
