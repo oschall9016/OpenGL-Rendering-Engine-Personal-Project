@@ -57,11 +57,18 @@ int main(int argc, char* args[])
 
     Camera camera(position, front, up);
     SDLInput input;
+
+    float currentFrame = 0.0f;
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
     
     // main game loop
     bool gameRunning = true;
     while (gameRunning)
     {
+        currentFrame = SDL_GetTicks() / 1000.0f;
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
         
         glClearColor(0.1f, 0.6f, 0.9f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -94,7 +101,7 @@ int main(int argc, char* args[])
   
         window.SwapBuffers();
         input.updateKeyState();
-        camera.ProcessInput(input, 0.01f);
+        camera.ProcessInput(input, deltaTime);
     }
 
     return 0;

@@ -21,25 +21,27 @@ glm::mat4 Camera::createViewMatrix()
 
 void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 {
+	float speed = 2.5f;
+	float cameraSpeed = speed * deltaTime;
 	switch (direction)
 	{
 	case FORWARD:
-		position += front * deltaTime;
+		position += front * cameraSpeed;
 		break;
 	case BACKWARD:
-		position -= front * deltaTime;
+		position -= front * cameraSpeed;
 		break;
 	case LEFT:
-		position -= glm::normalize(glm::cross(front, up)) * deltaTime;
+		position -= glm::normalize(glm::cross(front, up)) * cameraSpeed;
 		break;
 	case RIGHT:
-		position += glm::normalize(glm::cross(front, up)) * deltaTime;
+		position += glm::normalize(glm::cross(front, up)) * cameraSpeed;
 		break;
 	case UP:
-		position += up * deltaTime;
+		position += up * cameraSpeed;
 		break;
 	case DOWN:
-		position -= up * deltaTime;
+		position -= up * cameraSpeed;
 		break;
 	}
 }
