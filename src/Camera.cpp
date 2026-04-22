@@ -7,8 +7,6 @@
 
 #include <SDL2/SDL.h>
 
-
-
 Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up)
 {
 	this->position = position;
@@ -25,23 +23,40 @@ void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 {
 	switch (direction)
 	{
-	case Forward:
+	case FORWARD:
 		position += front * deltaTime;
 		break;
-	case Backward:
+	case BACKWARD:
 		position -= front * deltaTime;
 		break;
-	case Left:
+	case LEFT:
 		position -= glm::normalize(glm::cross(front, up)) * deltaTime;
 		break;
-	case Right:
+	case RIGHT:
 		position += glm::normalize(glm::cross(front, up)) * deltaTime;
 		break;
 	}
 }
 
-// i don't like connecting the gameRunning thing here
-void Camera::ProcessInput()
+void Camera::ProcessInput(SDLInput input, float deltaTime)
 {
+	if (input.isKeyPressed(SDL_SCANCODE_W))
+	{
+		processKeyboard(FORWARD, deltaTime);
+	}
 
+	if (input.isKeyPressed(SDL_SCANCODE_S))
+	{
+		processKeyboard(BACKWARD, deltaTime);
+	}
+
+	if (input.isKeyPressed(SDL_SCANCODE_A))
+	{
+		processKeyboard(LEFT, deltaTime);
+	}
+
+	if (input.isKeyPressed(SDL_SCANCODE_D))
+	{
+		processKeyboard(RIGHT, deltaTime);
+	}
 }

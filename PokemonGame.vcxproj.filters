@@ -30,7 +30,7 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDLInput.cpp">
+    <ClCompile Include="src\SDLInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClInclude Include="include\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SDLInput.h">
+    <ClInclude Include="include\SDLInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
