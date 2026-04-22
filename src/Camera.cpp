@@ -35,28 +35,27 @@ void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 	case RIGHT:
 		position += glm::normalize(glm::cross(front, up)) * deltaTime;
 		break;
+	case UP:
+		position += up * deltaTime;
+		break;
+	case DOWN:
+		position -= up * deltaTime;
+		break;
 	}
 }
 
 void Camera::ProcessInput(SDLInput input, float deltaTime)
 {
-	if (input.isKeyPressed(SDL_SCANCODE_W))
-	{
-		processKeyboard(FORWARD, deltaTime);
-	}
+	if (input.isKeyPressed(SDL_SCANCODE_W)) processKeyboard(FORWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_S))
-	{
-		processKeyboard(BACKWARD, deltaTime);
-	}
+	if (input.isKeyPressed(SDL_SCANCODE_S)) processKeyboard(BACKWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_A))
-	{
-		processKeyboard(LEFT, deltaTime);
-	}
+	if (input.isKeyPressed(SDL_SCANCODE_A)) processKeyboard(LEFT, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_D))
-	{
-		processKeyboard(RIGHT, deltaTime);
-	}
+	if (input.isKeyPressed(SDL_SCANCODE_D)) processKeyboard(RIGHT, deltaTime);
+	
+	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) processKeyboard(UP, deltaTime);
+
+	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) processKeyboard(DOWN, deltaTime);
+	
 }
