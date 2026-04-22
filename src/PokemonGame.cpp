@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "SDLWindow.h"
 #include "Camera.h"
+#include "SDLInput.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -55,6 +56,7 @@ int main(int argc, char* args[])
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
     Camera camera(position, front, up);
+    SDLInput input;
     
     // main game loop
     bool gameRunning = true;
@@ -91,7 +93,8 @@ int main(int argc, char* args[])
 
   
         window.SwapBuffers();
-        camera.PollEvents(gameRunning);
+        input.updateKeyState();
+        camera.ProcessInput(input, 0.01f);
     }
 
     return 0;
