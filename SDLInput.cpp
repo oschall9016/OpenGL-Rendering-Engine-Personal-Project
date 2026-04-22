@@ -2,12 +2,18 @@
 
 #include <SDL2/SDL.h>
 
-
-
-SDLInput::SDLInput() {}
+SDLInput::SDLInput() { keyStates = SDL_GetKeyboardState(nullptr); }
 SDLInput::~SDLInput() {}
 
-void SDLInput::setKey(SDL_Scancode, bool pressed) {}
-bool SDLInput::isKeyUp(SDL_Scancode key) {}
-bool SDLInput::isKeyDown(SDL_Scancode key) {}
+bool SDLInput::isKeyPressed(SDL_Scancode key)
+{
+	return keyStates[key];
+}
+
+void SDLInput::updateKeyState()
+{
+	SDL_PumpEvents();
+	keyStates = SDL_GetKeyboardState(nullptr);
+}
+
 

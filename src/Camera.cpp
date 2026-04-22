@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "SDLInput.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -40,35 +41,7 @@ void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 }
 
 // i don't like connecting the gameRunning thing here
-void Camera::PollEvents(bool& gameRunning)
+void Camera::ProcessInput()
 {
-	// maybe seperate key events into own function?
-	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_KEYDOWN)
-		{
-			switch (event.key.keysym.sym)
-			{
-			case SDLK_ESCAPE:
-				gameRunning = false;
-				break;
-			case SDLK_a:
-				processKeyboard(Left, 0.1f);
-				break;
-			case SDLK_d:
-				processKeyboard(Right, 0.1f);
-				break;
-			case SDLK_w:
-				processKeyboard(Forward, 0.1f);
-				break;
-			case SDLK_s:
-				processKeyboard(Backward, 0.1f);
-				break;
-			}
-		}
-		else if (event.type == SDL_QUIT)
-		{
-			gameRunning = false;
-		}
-	}
+
 }

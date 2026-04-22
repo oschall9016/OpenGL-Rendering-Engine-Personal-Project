@@ -35,28 +35,6 @@ SDLWindow::~SDLWindow()
     SDL_Quit();
 }
 
-// i don't like connecting the gameRunning thing here
-void SDLWindow::PollEvents(bool& gameRunning)
-{
-    // maybe seperate key events into own function?
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_KEYDOWN)
-        {
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_ESCAPE:
-                gameRunning = false;
-                break;
-            }
-        }
-        else if (event.type == SDL_QUIT)
-        {
-            gameRunning = false;
-        }
-    }
-}
-
 void SDLWindow::SwapBuffers()
 {
     SDL_GL_SwapWindow(window);

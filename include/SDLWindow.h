@@ -8,7 +8,6 @@ public:
 	SDLWindow(int width, int height, const char* title);
 	~SDLWindow();
 
-	void PollEvents(bool& gameRunning);
 	void SwapBuffers();
 
 	int GetWidth();
