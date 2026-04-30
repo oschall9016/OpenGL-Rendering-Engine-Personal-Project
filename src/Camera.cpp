@@ -5,18 +5,24 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
 
+// TODO: create default vectors
 Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up)
 {
 	this->position = position;
 	this->front = front;
 	this->up = up;
+	right = glm::normalize(glm::cross(front, up));
+	yaw = -90.0f;
+	pitch = 0.0f;
 }
 
 glm::mat4 Camera::createViewMatrix()
 {
-	return glm::lookAt(position, position+ front, up);
+	return glm::lookAt(position, position + front, up);
 }
 
 void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
@@ -60,4 +66,26 @@ void Camera::ProcessInput(SDLInput input, float deltaTime)
 
 	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) processKeyboard(DOWN, deltaTime);
 	
+}
+
+void Camera::ProcessMouse(Sint32 x, Sint32 y)
+{
+	
+	yaw += x * 0.1f;
+	pitch -= y * 0.1f;
+
+	if (pitch > 89.0f) pitch = 89.0f;
+	if (pitch < -89.0f) pitch = -89.0f;
+
+	glm::vec3 newFront;
+	newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	newFront.y = sin(glm::radians(pitch));
+	newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	newFront = glm::normalize(newFront);
+
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	front = newFront;
+	right = glm::normalize(glm::cross(front, worldUp));
+	up = glm::normalize(glm::cross(right, front));
 }

@@ -98,10 +98,13 @@ int main(int argc, char* args[])
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-  
-        window.SwapBuffers();
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);
+        camera.ProcessMouse(input.getMouseX(), input.getMouseY());
+
+
+        window.SwapBuffers();
+        
     }
 
     return 0;
