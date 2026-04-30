@@ -9,7 +9,7 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
     width = w;
     height = h;
 
-    // inititalize SDL window and context
+    // probably shouldnt init everything here...
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -25,6 +25,9 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     context = SDL_GL_CreateContext(window);
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+
 }
 
 
