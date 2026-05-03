@@ -71,8 +71,8 @@ void Camera::ProcessInput(SDLInput input, float deltaTime)
 void Camera::ProcessMouse(Sint32 x, Sint32 y)
 {
 	
-	yaw += x * 0.1f;
-	pitch -= y * 0.1f;
+	yaw += x * 0.05f;
+	pitch -= y * 0.05f;
 
 	if (pitch > 89.0f) pitch = 89.0f;
 	if (pitch < -89.0f) pitch = -89.0f;
