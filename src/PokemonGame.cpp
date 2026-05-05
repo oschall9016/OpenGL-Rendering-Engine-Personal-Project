@@ -2,6 +2,7 @@
 #include "SDLWindow.h"
 #include "Camera.h"
 #include "SDLInput.h"
+#include "Model.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -62,6 +63,8 @@ int main(int argc, char* args[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     
+    Model backpack("assets/models/backpack/backpack.obj");
+
     // main game loop
     bool gameRunning = true;
     while (gameRunning)
@@ -95,8 +98,10 @@ int main(int argc, char* args[])
         int projLoc = glGetUniformLocation(basicShader.getID(), "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        //glBindVertexArray(VAO);
+        //glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        backpack.Draw(basicShader);
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);
