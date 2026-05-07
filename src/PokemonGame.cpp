@@ -29,28 +29,9 @@ int main(int argc, char* args[])
 
    // ------------------------------------------------------------------------------------------------------------
 
-    float vertices[] = {
-        // positions          
-         0.5f,  0.5f, 0.0f,   
-         0.5f, -0.5f, 0.0f,   
-        -0.5f, -0.5f, 0.0f,   
-        -0.5f,  0.5f, 0.0f,   
-    };
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
     glEnable(GL_DEPTH_TEST);
 
-    Shader basicShader("assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
+    Shader basicShader("assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
     
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -98,9 +79,6 @@ int main(int argc, char* args[])
         int projLoc = glGetUniformLocation(basicShader.getID(), "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        //glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
         backpack.Draw(basicShader);
 
         input.updateKeyState();
@@ -114,4 +92,3 @@ int main(int argc, char* args[])
 
     return 0;
 }
-

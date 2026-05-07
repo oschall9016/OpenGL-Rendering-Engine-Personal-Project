@@ -39,6 +39,8 @@
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\shaders\BasicBackpackFragment.fs" />
+    <None Include="assets\shaders\BasicBackpackVertex.vs" />
     <None Include="assets\shaders\BasicFragment.fs" />
     <None Include="assets\shaders\BasicVertex.vs" />
   </ItemGroup>

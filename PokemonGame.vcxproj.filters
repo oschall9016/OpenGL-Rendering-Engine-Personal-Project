@@ -73,5 +73,11 @@
     <None Include="assets\shaders\BasicVertex.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="assets\shaders\BasicBackpackFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\BasicBackpackVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
