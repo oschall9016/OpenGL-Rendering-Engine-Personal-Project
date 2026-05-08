@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "SDLInput.h"
 #include "Model.h"
+#include "ModelLoader.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -44,7 +45,8 @@ int main(int argc, char* args[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     
-    Model backpack("assets/models/backpack/backpack.obj");
+    ModelLoader loader;
+    Model backpack = loader.loadModel("assets/models/backpack/backpack.obj");
 
     // main game loop
     bool gameRunning = true;
