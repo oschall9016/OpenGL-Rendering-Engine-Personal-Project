@@ -23,19 +23,23 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\PokemonGame.cpp" />
     <ClCompile Include="src\SDLInput.cpp" />
     <ClCompile Include="src\SDLWindow.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Sprite_Billboard.cpp" />
     <ClCompile Include="stb_add.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\ModelLoader.h" />
     <ClInclude Include="include\SDLInput.h" />
     <ClInclude Include="include\SDLWindow.h" />
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\Sprite_Billboard.h" />
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
