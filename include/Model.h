@@ -1,19 +1,17 @@
 #pragma once
 
 #include "Shader.h"
-#include "Mesh.h"
+//#include "Mesh.h"
+#include "NewMesh.h"
 
 #include <vector>
 #include <string>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-
 class Model
 {
 public:
-	Model(std::vector<Mesh> meshes);
+	Model(std::vector<NewMesh> meshes);
 	void Draw(Shader& shader);
 private:
-	std::vector<Mesh> meshes;
+	std::vector<NewMesh> meshes;
 };

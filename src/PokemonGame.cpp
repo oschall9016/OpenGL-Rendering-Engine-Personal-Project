@@ -5,6 +5,11 @@
 #include "Model.h"
 #include "ModelLoader.h"
 
+#include "NewModelLoader.h"
+#include "NewMesh.h"
+
+#include "Mesh.h"
+
 #include <iostream>
 #include <glad/glad.h>
 
@@ -32,7 +37,7 @@ int main(int argc, char* args[])
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader basicShader("assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
+    Shader basicShader("assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
     
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -45,8 +50,76 @@ int main(int argc, char* args[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     
-    ModelLoader loader;
-    Model backpack = loader.loadModel("assets/models/backpack/backpack.obj");
+    NewModelLoader loader;
+    Model backpack = loader.LoadModel("assets/models/backpack/backpack.obj");
+
+    /*
+
+    std::vector<glm::vec3> positions =
+    {
+         glm::vec3(-0.5f,  0.5f, 0.0f), // top left 0
+         glm::vec3(0.5f,  0.5f, 0.0f), // top right 1
+         glm::vec3(0.5f, -0.5f, 0.0f), // bottom right 2
+         glm::vec3(-0.5f, -0.5f, 0.0f)  // bottom left 3
+    };
+
+    float height = 32.0f;
+    float width = 32.0f;
+
+    float x = 0;
+    float y = 0;
+
+    float uMin = x / width;
+    float vMin = y / height;
+
+    float uMax = (x + width) / width;
+    float vMax = (y + height) / height;
+
+    std::vector<glm::vec2> texCoords =
+    {
+        {uMin, vMax}, // top left
+        {uMax, vMax}, // top right
+        {uMax, vMin}, // bottom right
+        {uMin, vMin}  // bottom left
+    };
+
+    unsigned int id;
+
+    id = ModelLoader::TextureFromFile(
+        "OverWorld_Sprite_Hero_M_Test.png",
+        "assets/sprites"
+    );
+
+    Texture texture =
+    {
+        "assets/sprites/OverWorld_Sprite_Hero_M_Test.png",
+        "texture_diffuse",
+         id
+    };
+
+    std::vector<Texture> textures;
+
+    textures.push_back(texture);
+
+    std::vector<unsigned int> indices =
+    {
+         0, 1, 3,
+         1, 2, 3
+    };
+
+    std::vector<Vertex> vertices =
+    {
+        {positions[0], glm::vec3(0.0f), texCoords[0]},
+        {positions[1], glm::vec3(0.0f), texCoords[1]},
+        {positions[2], glm::vec3(0.0f), texCoords[2]},
+        {positions[3], glm::vec3(0.0f), texCoords[3]}
+    };
+    
+
+    Mesh Nate(vertices,indices, textures);
+    */
+
+    /////////////////////////////////
 
     // main game loop
     bool gameRunning = true;
@@ -62,7 +135,7 @@ int main(int argc, char* args[])
         basicShader.use(); 
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
         glm::mat4 view = camera.createViewMatrix();
 
@@ -82,6 +155,7 @@ int main(int argc, char* args[])
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         backpack.Draw(basicShader);
+        //Nate.Draw(basicShader);
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);

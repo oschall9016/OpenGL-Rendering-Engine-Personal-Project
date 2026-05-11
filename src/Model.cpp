@@ -14,7 +14,7 @@
 
 #include <stb_image.h>
 
-Model::Model(std::vector<Mesh> meshes)
+Model::Model(std::vector<NewMesh> meshes)
 {
 	this->meshes = meshes;
 }
