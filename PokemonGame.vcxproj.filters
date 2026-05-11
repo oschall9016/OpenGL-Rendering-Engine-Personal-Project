@@ -42,7 +42,10 @@
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sprite_Billboard.cpp">
+    <ClCompile Include="src\NewMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NewModelLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +71,10 @@
     <ClInclude Include="include\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sprite_Billboard.h">
+    <ClInclude Include="include\NewMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NewModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,6 +89,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\BasicBackpackVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\spriteFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\spriteVertex.vs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
