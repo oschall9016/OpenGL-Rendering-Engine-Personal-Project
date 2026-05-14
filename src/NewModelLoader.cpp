@@ -1,18 +1,21 @@
 #include "NewModelLoader.h"
 #include "NewMesh.h"
 #include "Model.h"
+#include "Texture.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
+
+#include <stb_image.h>
 
 #include <string>
 #include <iostream>
 #include <stack>
 #include <vector>
-
 
 Model NewModelLoader::LoadModel(const std::string& path)
 {
@@ -44,7 +47,7 @@ void NewModelLoader::TraverseAssimpScene(const aiScene* scene, std::vector<NewMe
 		aiNode* curNode = nodeStack.top();
 		nodeStack.pop();
 
-		// do stuff with epic node
+		// process node
 		for (unsigned int i = 0; i < curNode->mNumMeshes; i++)
 		{
 			unsigned int meshIndex = curNode->mMeshes[i];
@@ -89,4 +92,48 @@ NewMesh NewModelLoader::CreateMesh(aiMesh* mesh)
 	}
 
 	return NewMesh(tempVertices, tempIndices);
+}
+
+Texture NewModelLoader::LoadTexture(const std::string& path)
+{
+	int width, height, nrChannels;
+	unsigned char* data;
+	data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+	if (!data)
+	{
+		std::cout << "Failed to Load Texture" << "\n";
+	}
+	
+	GLenum format;
+	if (nrChannels == 1) format = GL_RED;
+	else if (nrChannels == 3) format = GL_RGB;
+	else if (nrChannels == 4) format = GL_RGBA;
+	else
+	{
+		std::cout << "Unrecognized Channel Count" << "\n";
+		format = GL_RGB; // placeholder
+	}
+
+	unsigned int ID;
+
+	glGenTextures(1, &ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
+
+	// wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	Texture texture(path, ID, width, height);
+
+	// free image
+	stbi_image_free(data);
+
+	return texture;
 }

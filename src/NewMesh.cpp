@@ -43,3 +43,4 @@ void NewMesh::setUpMesh()
 
 	glBindVertexArray(0);
 }
+
