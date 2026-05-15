@@ -16,8 +16,9 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <memory>
 
-Model NewModelLoader::LoadModel(const std::string& path)
+std::shared_ptr<Model> NewModelLoader::LoadModel(const std::string& path)
 {
 	Assimp::Importer importer;
 
@@ -32,7 +33,9 @@ Model NewModelLoader::LoadModel(const std::string& path)
 
 	TraverseAssimpScene(scene, meshes);
 
-	return Model(meshes);
+	std::shared_ptr<Model> model = make_shared<Model>(meshes);
+
+	return model;
 
 }
 
@@ -94,7 +97,7 @@ NewMesh NewModelLoader::CreateMesh(aiMesh* mesh)
 	return NewMesh(tempVertices, tempIndices);
 }
 
-Texture NewModelLoader::LoadTexture(const std::string& path)
+std::shared_ptr<Texture> NewModelLoader::LoadTexture(const std::string& path)
 {
 	int width, height, nrChannels;
 	unsigned char* data;
@@ -102,6 +105,7 @@ Texture NewModelLoader::LoadTexture(const std::string& path)
 	if (!data)
 	{
 		std::cout << "Failed to Load Texture" << "\n";
+		return nullptr;
 	}
 	
 	GLenum format;
@@ -111,7 +115,7 @@ Texture NewModelLoader::LoadTexture(const std::string& path)
 	else
 	{
 		std::cout << "Unrecognized Channel Count" << "\n";
-		format = GL_RGB; // placeholder
+		return nullptr;
 	}
 
 	unsigned int ID;
@@ -130,10 +134,10 @@ Texture NewModelLoader::LoadTexture(const std::string& path)
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	Texture texture(path, ID, width, height);
-
 	// free image
 	stbi_image_free(data);
 
+
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>(path, ID, width, height);
 	return texture;
 }

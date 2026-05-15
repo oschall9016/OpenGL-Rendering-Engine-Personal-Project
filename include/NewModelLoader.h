@@ -4,14 +4,19 @@
 #include "NewMesh.h"
 #include "Texture.h"
 
+#include <memory>
+
 #include <assimp/scene.h>
 
+
+// maybe make this a namespace?
 class NewModelLoader
 {
 public:
-	Model LoadModel(const std::string& path);
-	Texture LoadTexture(const std::string& path);
+
+	static std::shared_ptr<Model> LoadModel(const std::string& path);
+	static std::shared_ptr<Texture> LoadTexture(const std::string& path);
 private:
-	void TraverseAssimpScene(const aiScene* scene, std::vector<NewMesh>& meshes);
-	NewMesh CreateMesh(aiMesh* mesh);
+	static void TraverseAssimpScene(const aiScene* scene, std::vector<NewMesh>& meshes);
+	static NewMesh CreateMesh(aiMesh* mesh);
 };
