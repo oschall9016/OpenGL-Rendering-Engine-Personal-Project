@@ -1,6 +1,5 @@
 #include "Model.h"
 #include "Shader.h"
-#include "Mesh.h"
 
 #include <vector>
 #include <string>
