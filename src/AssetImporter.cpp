@@ -1,5 +1,5 @@
-#include "NewModelLoader.h"
-#include "NewMesh.h"
+#include "AssetImporter.h"
+#include "Mesh.h"
 #include "Model.h"
 #include "Texture.h"
 
@@ -18,7 +18,7 @@
 #include <vector>
 #include <memory>
 
-std::shared_ptr<Model> NewModelLoader::LoadModel(const std::string& path)
+std::shared_ptr<Model> AssetImporter::LoadModel(const std::string& path)
 {
 	Assimp::Importer importer;
 
@@ -29,7 +29,7 @@ std::shared_ptr<Model> NewModelLoader::LoadModel(const std::string& path)
 		std::cout << "Failed to Load Model: " << importer.GetErrorString() << "\n";
 	}
 
-	std::vector<NewMesh> meshes;
+	std::vector<Mesh> meshes;
 
 	TraverseAssimpScene(scene, meshes);
 
@@ -39,7 +39,7 @@ std::shared_ptr<Model> NewModelLoader::LoadModel(const std::string& path)
 
 }
 
-void NewModelLoader::TraverseAssimpScene(const aiScene* scene, std::vector<NewMesh>& meshes)
+void AssetImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>& meshes)
 {
 	
 	std::stack<aiNode*> nodeStack;
@@ -54,7 +54,7 @@ void NewModelLoader::TraverseAssimpScene(const aiScene* scene, std::vector<NewMe
 		for (unsigned int i = 0; i < curNode->mNumMeshes; i++)
 		{
 			unsigned int meshIndex = curNode->mMeshes[i];
-			NewMesh tempMesh = CreateMesh(scene->mMeshes[meshIndex]);
+			Mesh tempMesh = CreateMesh(scene->mMeshes[meshIndex]);
 			meshes.push_back(tempMesh);
 		}
 
@@ -66,7 +66,7 @@ void NewModelLoader::TraverseAssimpScene(const aiScene* scene, std::vector<NewMe
 	}
 }
 
-NewMesh NewModelLoader::CreateMesh(aiMesh* mesh)
+Mesh AssetImporter::CreateMesh(aiMesh* mesh)
 {
 	std::vector<NewVertex> tempVertices;
 	std::vector<unsigned int> tempIndices;
@@ -94,10 +94,10 @@ NewMesh NewModelLoader::CreateMesh(aiMesh* mesh)
 		}
 	}
 
-	return NewMesh(tempVertices, tempIndices);
+	return Mesh(tempVertices, tempIndices);
 }
 
-std::shared_ptr<Texture> NewModelLoader::LoadTexture(const std::string& path)
+std::shared_ptr<Texture> AssetImporter::LoadTexture(const std::string& path)
 {
 	int width, height, nrChannels;
 	unsigned char* data;

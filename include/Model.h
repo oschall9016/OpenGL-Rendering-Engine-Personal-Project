@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Shader.h"
-//#include "Mesh.h"
-#include "NewMesh.h"
+#include "Mesh.h"
 
 #include <vector>
 #include <string>
@@ -10,8 +9,8 @@
 class Model
 {
 public:
-	Model(std::vector<NewMesh> meshes);
+	Model(std::vector<Mesh> meshes);
 	void Draw(Shader& shader);
 private:
-	std::vector<NewMesh> meshes;
+	std::vector<Mesh> meshes;
 };

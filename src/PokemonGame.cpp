@@ -4,8 +4,7 @@
 #include "SDLInput.h"
 #include "Model.h"
 
-#include "NewModelLoader.h"
-#include "NewMesh.h"
+#include "Mesh.h"
 
 #include "AssetManager.h"
 

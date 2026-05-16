@@ -1,4 +1,4 @@
-#include "NewMesh.h"
+#include "Mesh.h"
 #include "Shader.h"
 
 #include "glad/glad.h"
@@ -8,7 +8,7 @@
 
 
 
-NewMesh::NewMesh(std::vector<NewVertex> vertices,std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<NewVertex> vertices,std::vector<unsigned int> indices)
 {
 	this->vertices = vertices;
 	this->indices = indices;
@@ -16,14 +16,14 @@ NewMesh::NewMesh(std::vector<NewVertex> vertices,std::vector<unsigned int> indic
 	setUpMesh();
 }
 
-void NewMesh::Draw(Shader& shader)
+void Mesh::Draw(Shader& shader)
 {
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
-void NewMesh::setUpMesh()
+void Mesh::setUpMesh()
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
