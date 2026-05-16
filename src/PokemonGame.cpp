@@ -37,7 +37,7 @@ int main(int argc, char* args[])
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader basicShader("assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
+    Shader basicShader("assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
     
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
