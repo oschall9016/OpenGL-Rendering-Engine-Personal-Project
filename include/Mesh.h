@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Shader.h"
+#include "Texture.h"
 
 #include <glm/glm.hpp>
 
 #include <vector>
+#include <memory>
 
 struct Vertex
 {
@@ -16,12 +18,14 @@ struct Vertex
 class Mesh
 {
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
 	void Draw(Shader& shader);
 private:
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
+
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	unsigned int VAO, VBO, EBO;
 
