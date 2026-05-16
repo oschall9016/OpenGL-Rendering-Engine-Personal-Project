@@ -68,12 +68,14 @@ void AssetImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>&
 
 Mesh AssetImporter::CreateMesh(aiMesh* mesh)
 {
-	std::vector<NewVertex> tempVertices;
+	std::vector<Vertex> tempVertices;
 	std::vector<unsigned int> tempIndices;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
-		NewVertex tempVertex;
+		Vertex tempVertex{};
+
+		// store positions
 		tempVertex.position = glm::vec3
 		(
 			mesh->mVertices[i].x, 
@@ -81,9 +83,31 @@ Mesh AssetImporter::CreateMesh(aiMesh* mesh)
 			mesh->mVertices[i].z
 		);
 
+		// store normals
+		if (mesh->HasNormals())
+		{
+			tempVertex.normal = glm::vec3
+			(
+				mesh->mNormals[i].x,
+				mesh->mNormals[i].y,
+				mesh->mNormals[i].z
+			);
+		}
+
+		// store texCoords (for main texture)
+		if (mesh->HasTextureCoords(0))
+		{
+			tempVertex.texCoord = glm::vec2
+			(
+				mesh->mTextureCoords[0][i].x,
+				mesh->mTextureCoords[0][i].y
+			);
+		}
+
 		tempVertices.push_back(tempVertex);
 	}
 
+	// store indices
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
@@ -136,7 +160,6 @@ std::shared_ptr<Texture> AssetImporter::LoadTexture(const std::string& path)
 
 	// free image
 	stbi_image_free(data);
-
 
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>(path, ID, width, height);
 	return texture;
