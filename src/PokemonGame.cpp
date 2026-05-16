@@ -4,7 +4,13 @@
 #include "SDLInput.h"
 #include "Model.h"
 
+#include "Mesh.h"
+
+#include "AssetManager.h"
+
 #include <iostream>
+#include <memory>
+
 #include <glad/glad.h>
 
 #include <glm/glm.hpp>
@@ -44,7 +50,9 @@ int main(int argc, char* args[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     
-    Model backpack("assets/models/backpack/backpack.obj");
+    AssetManager aManager;
+
+    std::shared_ptr<Model> backpack = aManager.LoadModel("assets/models/backpack/backpack.obj");
 
     // main game loop
     bool gameRunning = true;
@@ -60,12 +68,9 @@ int main(int argc, char* args[])
         basicShader.use(); 
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
         glm::mat4 view = camera.createViewMatrix();
-
-        //glm::mat4 view = glm::mat4(1.0f);
-        //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -79,7 +84,7 @@ int main(int argc, char* args[])
         int projLoc = glGetUniformLocation(basicShader.getID(), "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        backpack.Draw(basicShader);
+        backpack->Draw(basicShader);
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);
