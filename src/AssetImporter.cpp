@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "Texture.h"
+#include "AssetManager.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -18,7 +19,7 @@
 #include <vector>
 #include <memory>
 
-std::shared_ptr<Model> AssetImporter::LoadModel(const std::string& path)
+std::shared_ptr<Model> AssetImporter::LoadModel(const std::string& path, AssetManager& manager)
 {
 	Assimp::Importer importer;
 
@@ -31,7 +32,7 @@ std::shared_ptr<Model> AssetImporter::LoadModel(const std::string& path)
 
 	std::vector<Mesh> meshes;
 
-	TraverseAssimpScene(scene, meshes);
+	TraverseAssimpScene(path, scene, meshes, manager);
 
 	std::shared_ptr<Model> model = make_shared<Model>(meshes);
 
@@ -39,7 +40,7 @@ std::shared_ptr<Model> AssetImporter::LoadModel(const std::string& path)
 
 }
 
-void AssetImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>& meshes)
+void AssetImporter::TraverseAssimpScene(const std::string& directory, const aiScene* scene, std::vector<Mesh>& meshes, AssetManager& manager)
 {
 	
 	std::stack<aiNode*> nodeStack;
@@ -54,7 +55,7 @@ void AssetImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>&
 		for (unsigned int i = 0; i < curNode->mNumMeshes; i++)
 		{
 			unsigned int meshIndex = curNode->mMeshes[i];
-			Mesh tempMesh = CreateMesh(scene->mMeshes[meshIndex]);
+			Mesh tempMesh = CreateMesh(directory,scene,scene->mMeshes[meshIndex],manager);
 			meshes.push_back(tempMesh);
 		}
 
@@ -66,7 +67,7 @@ void AssetImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>&
 	}
 }
 
-Mesh AssetImporter::CreateMesh(aiMesh* mesh)
+Mesh AssetImporter::CreateMesh(const std::string& directory, const aiScene* scene, aiMesh* mesh, AssetManager& manager)
 {
 	std::vector<Vertex> tempVertices;
 	std::vector<unsigned int> tempIndices;
@@ -118,17 +119,43 @@ Mesh AssetImporter::CreateMesh(aiMesh* mesh)
 		}
 	}
 
-	return Mesh(tempVertices, tempIndices);
+	aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+	std::vector<std::shared_ptr<Texture>> tempTextures;
+	
+	// diffuse
+	std::vector<std::shared_ptr<Texture>> diffuseTextures = importTextures(directory, mat, aiTextureType_DIFFUSE, manager);
+	tempTextures.insert(tempTextures.end(), diffuseTextures.begin(), diffuseTextures.end());
+
+	return Mesh(tempVertices, tempIndices, tempTextures);
+}
+
+std::vector<std::shared_ptr<Texture>> AssetImporter::importTextures(const std::string& directory,aiMaterial* mat, aiTextureType type, AssetManager &manager)
+{
+	std::vector<std::shared_ptr<Texture>> tempTextures;
+
+	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		aiString aiPath; 
+		mat->GetTexture(type, i, &aiPath);
+		std::string path = aiPath.C_Str();
+
+		std::string absPath = directory.substr(0, directory.find_last_of('/'));
+		absPath += "/" + path;
+
+		tempTextures.push_back(manager.LoadTexture(absPath));
+	}
+	return tempTextures;
 }
 
 std::shared_ptr<Texture> AssetImporter::LoadTexture(const std::string& path)
 {
+	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChannels;
 	unsigned char* data;
 	data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 	if (!data)
 	{
-		std::cout << "Failed to Load Texture" << "\n";
+		std::cout << "Failed to Import Texture: " << path << "\n";
 		return nullptr;
 	}
 	
