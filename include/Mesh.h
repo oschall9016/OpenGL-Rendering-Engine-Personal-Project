@@ -6,19 +6,21 @@
 
 #include <vector>
 
-struct NewVertex
+struct Vertex
 {
 	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec2 texCoord;
 };
 
 class Mesh
 {
 public:
-	Mesh(std::vector<NewVertex> vertices, std::vector<unsigned int> indices);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	void Draw(Shader& shader);
 private:
 
-	std::vector<NewVertex> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
 	unsigned int VAO, VBO, EBO;
