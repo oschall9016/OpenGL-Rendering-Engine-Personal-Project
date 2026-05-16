@@ -19,30 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\AssetImporter.cpp" />
     <ClCompile Include="src\PokemonGame.cpp" />
     <ClCompile Include="src\SDLInput.cpp" />
     <ClCompile Include="src\SDLWindow.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="stb_add.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\AssetImporter.h" />
     <ClInclude Include="include\SDLInput.h" />
     <ClInclude Include="include\SDLWindow.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\stb_image.h" />
+    <ClInclude Include="include\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicBackpackFragment.fs" />
     <None Include="assets\shaders\BasicBackpackVertex.vs" />
     <None Include="assets\shaders\BasicFragment.fs" />
     <None Include="assets\shaders\BasicVertex.vs" />
+    <None Include="assets\shaders\spriteFragment.fs" />
+    <None Include="assets\shaders\spriteVertex.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

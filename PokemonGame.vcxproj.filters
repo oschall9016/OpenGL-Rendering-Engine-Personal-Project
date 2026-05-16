@@ -36,10 +36,19 @@
     <ClCompile Include="stb_add.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Model.cpp">
+    <ClCompile Include="src\AssetImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,10 +68,19 @@
     <ClInclude Include="include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Model.h">
+    <ClInclude Include="include\AssetImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,6 +95,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\BasicBackpackVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\spriteFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\spriteVertex.vs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
