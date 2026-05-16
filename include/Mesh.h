@@ -11,10 +11,10 @@ struct NewVertex
 	glm::vec3 position;
 };
 
-class NewMesh
+class Mesh
 {
 public:
-	NewMesh(std::vector<NewVertex> vertices, std::vector<unsigned int> indices);
+	Mesh(std::vector<NewVertex> vertices, std::vector<unsigned int> indices);
 	void Draw(Shader& shader);
 private:
 

@@ -4,7 +4,7 @@
 
 #include "Texture.h"
 #include "Model.h"
-#include "NewModelLoader.h"
+#include "AssetImporter.h"
 
 #include <memory>
 #include <map>
@@ -21,7 +21,7 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
 	}
 
 	// texture not in list, needs loaded
-	Textures.insert({path,NewModelLoader::LoadTexture(path)});
+	Textures.insert({path,AssetImporter::LoadTexture(path)});
 	return Textures.at(path);
 }
 
@@ -35,7 +35,7 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	}
 
 	// texture not in list, needs loaded
-	Models.insert({ path,NewModelLoader::LoadModel(path) });
+	Models.insert({ path,AssetImporter::LoadModel(path) });
 	return Models.at(path); 
 }
 

@@ -13,7 +13,7 @@
 
 #include <stb_image.h>
 
-Model::Model(std::vector<NewMesh> meshes)
+Model::Model(std::vector<Mesh> meshes)
 {
 	this->meshes = meshes;
 }
