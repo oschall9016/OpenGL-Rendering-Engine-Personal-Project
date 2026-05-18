@@ -24,7 +24,6 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\AssetImporter.cpp" />
     <ClCompile Include="src\ModelImporter.cpp" />
     <ClCompile Include="src\PokemonGame.cpp" />
     <ClCompile Include="src\SDLInput.cpp" />
@@ -39,7 +38,6 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\Mesh.h" />
-    <ClInclude Include="include\AssetImporter.h" />
     <ClInclude Include="include\ModelImporter.h" />
     <ClInclude Include="include\SDLInput.h" />
     <ClInclude Include="include\SDLWindow.h" />
