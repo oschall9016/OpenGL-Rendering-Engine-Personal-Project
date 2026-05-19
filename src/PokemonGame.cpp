@@ -53,6 +53,7 @@ int main(int argc, char* args[])
     AssetManager aManager;
 
     std::shared_ptr<Model> backpack = aManager.LoadModel("assets/models/backpack/backpack.obj");
+    std::shared_ptr<Model> backpack2 = aManager.LoadModel("assets/models/backpack/backpack.obj");
 
     // main game loop
     bool gameRunning = true;
@@ -85,6 +86,12 @@ int main(int argc, char* args[])
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         backpack->Draw(basicShader);
+
+        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelLoc = glGetUniformLocation(basicShader.getID(), "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        backpack2->Draw(basicShader);
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);
