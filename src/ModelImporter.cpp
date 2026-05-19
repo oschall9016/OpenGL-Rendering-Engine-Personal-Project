@@ -133,8 +133,10 @@ std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* 
 {
 	std::vector<std::shared_ptr<Texture>> tempTextures;
 
+	// loop through all textures of given type
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
+		// get the absolute path to the texture
 		aiString aiPath;
 		mat->GetTexture(type, i, &aiPath);
 		std::string fileName = aiPath.C_Str();
@@ -142,6 +144,7 @@ std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* 
 		std::string absPath = path.substr(0, path.find_last_of('/'));
 		absPath += "/" + fileName;
 
+		// load texture from manager
 		tempTextures.push_back(manager.LoadTexture(absPath));
 	}
 	return tempTextures;
