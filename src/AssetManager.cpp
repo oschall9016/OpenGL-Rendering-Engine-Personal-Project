@@ -4,7 +4,9 @@
 
 #include "Texture.h"
 #include "Model.h"
-#include "AssetImporter.h"
+
+#include "ModelImporter.h"
+#include "TextureImporter.h"
 
 #include <memory>
 #include <unordered_map>
@@ -20,8 +22,8 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
 		return Textures.at(path);
 	}
 
-	// texture not in list, needs loaded
-	std::shared_ptr<Texture> importedTexture = AssetImporter::LoadTexture(path);
+	// texture not in list, needs imported
+	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportTexture(path, *this);
 	if (importedTexture == nullptr)
 	{
 		std::cout << "Texture: " << path << " Failed To Load \n";
@@ -41,8 +43,9 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 		return Models.at(path);
 	}
 
-	// model not in list, needs loaded
-	std::shared_ptr<Model> importedModel = AssetImporter::LoadModel(path, *this);
+	// model not in list, needs imported
+	ModelImporter mImporter(*this);
+	std::shared_ptr<Model> importedModel = mImporter.ImportModel(path);
 	if (importedModel == nullptr)
 	{
 		std::cout << "Model: " << path << " Failed To Load \n";
