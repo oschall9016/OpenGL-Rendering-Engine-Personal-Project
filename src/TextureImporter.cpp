@@ -1,12 +1,6 @@
 #include "TextureImporter.h"
-#include "Mesh.h"
-#include "Model.h"
-#include "Texture.h"
-#include "AssetManager.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "Texture.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -15,8 +9,6 @@
 
 #include <string>
 #include <iostream>
-#include <stack>
-#include <vector>
 #include <memory>
 
 std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, AssetManager& manager)
