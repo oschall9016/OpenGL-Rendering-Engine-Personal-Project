@@ -42,6 +42,7 @@
     <ClInclude Include="include\SDLInput.h" />
     <ClInclude Include="include\SDLWindow.h" />
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\SparseSet.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureImporter.h" />
