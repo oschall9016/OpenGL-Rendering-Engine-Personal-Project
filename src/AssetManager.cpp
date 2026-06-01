@@ -56,6 +56,21 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	return Models.at(path); 
 }
 
+std::shared_ptr<Shader> AssetManager::LoadShader(const std::string& name, const std::string& vPath, const std::string& fPath)
+{
+	// if shader is in the list
+	if (Shaders.find(name) != Shaders.end())
+	{
+		std::cout << "Shader: " << name << " Is Already Loaded \n";
+		return Shaders.at(name);
+	}
+
+	// if shader not in list, needs imported
+	std::shared_ptr<Shader> shaderPointer = std::make_shared<Shader>(vPath, fPath);
+	Shaders.insert({name, shaderPointer});
+	return Shaders.at(name);
+}
+
 
 
 
