@@ -20,6 +20,10 @@ class Mesh
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
 	void Draw(Shader& shader);
+
+	const std::vector<Vertex>& GetVertices();
+	const std::vector<unsigned int>& getIndices();
+	const std::vector<std::shared_ptr<Texture>>& getTextures();
 private:
 
 	std::vector<Vertex> vertices;

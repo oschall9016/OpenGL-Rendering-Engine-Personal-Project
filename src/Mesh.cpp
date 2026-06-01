@@ -70,3 +70,18 @@ void Mesh::setUpMesh()
 	glBindVertexArray(0);
 }
 
+const std::vector<Vertex>& Mesh::GetVertices()
+{
+	return vertices;
+}
+
+const std::vector<unsigned int>& Mesh::getIndices()
+{
+	return indices;
+}
+
+const std::vector<std::shared_ptr<Texture>>& Mesh::getTextures()
+{
+	return textures;
+}
+
