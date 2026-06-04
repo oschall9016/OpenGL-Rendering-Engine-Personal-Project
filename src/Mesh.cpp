@@ -85,3 +85,8 @@ const std::vector<std::shared_ptr<Texture>>& Mesh::getTextures()
 	return textures;
 }
 
+const unsigned int& Mesh::GetVAO()
+{
+	return VAO;
+}
+
