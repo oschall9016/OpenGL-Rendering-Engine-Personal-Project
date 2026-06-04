@@ -24,6 +24,7 @@ public:
 	const std::vector<Vertex>& GetVertices();
 	const std::vector<unsigned int>& getIndices();
 	const std::vector<std::shared_ptr<Texture>>& getTextures();
+	const unsigned int& GetVAO();
 private:
 
 	std::vector<Vertex> vertices;
