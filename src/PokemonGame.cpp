@@ -6,6 +6,8 @@
 
 #include "Mesh.h"
 
+#include "EntityHandler.h"
+
 #include "AssetManager.h"
 
 #include <iostream>
@@ -22,20 +24,12 @@ int main(int argc, char* args[])
 
     SDLWindow window(800, 600, "Cool Window");
 
-    // initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
     
-
-    glViewport(0, 0, window.GetWidth(), window.GetHeight());
 
 
    // ------------------------------------------------------------------------------------------------------------
 
-    glEnable(GL_DEPTH_TEST);
+    
 
     Shader basicShader("assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
     
