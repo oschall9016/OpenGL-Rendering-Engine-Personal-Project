@@ -18,10 +18,7 @@ Model::Model(std::vector<Mesh> meshes)
 	this->meshes = meshes;
 }
 
-void Model::Draw(Shader& shader)
+std::vector<Mesh>& Model::GetMeshes()
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i].Draw(shader);
-	}
+	return meshes;
 }
