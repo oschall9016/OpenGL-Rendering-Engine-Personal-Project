@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include "Entity.h"
 
 constexpr int EMPTY_INDEX = -1;
 
@@ -9,41 +10,50 @@ template <typename T>
 struct Value
 {
 	T component;
-	int entity; //TODO: swap for actual "entity" when it exists
+	Entity entity; //TODO: swap for actual "entity" when it exists
 };
 
-template <typename T>
-class SparseSet
+class ComponentSet
 {
 public:
-	SparseSet(int maxSize);
-	void Insert(Value<T> value);
-	void Delete(int index);
-	T* DataAt(int index);
+	virtual ~ComponentSet() = default;
+	//virtual void EntityDestroyed(Entity entity) = 0;
+};
 
-	void printSet(); // for debugging
-private:
+
+template <typename T>
+class SparseSet : public ComponentSet
+{
+public:
+	SparseSet(int maxEntities);
+	void Insert(Entity entity, T component);
+	void Delete(Entity entity);
+	T* DataAt(Entity entity);
+
 	// stores indices into dense
 	std::vector<int> sparse;
 
 	// stores actual data
 	std::vector<Value<T>> dense;
 
-	int maxSize;
+	//void printSet(); // for debugging
+private:
+	int maxEntities;
 };
 
 template <typename T>
-SparseSet<T>::SparseSet(int maxSize)
+SparseSet<T>::SparseSet(int maxEntities)
 {
-	this->maxSize = maxSize;
-	sparse.resize(maxSize);
-	std::fill(sparse.begin(), sparse.end(), -1);
+	this->maxEntities = maxEntities;
+	sparse.resize(maxEntities);
+	std::fill(sparse.begin(), sparse.end(), EMPTY_INDEX);
 }
 
 template <typename T>
-void SparseSet<T>::Insert(Value<T> value)
+void SparseSet<T>::Insert(Entity entity, T component)
 {
-	if (value.entity >= maxSize)
+	Value value = { component,entity };
+	if (value.entity >= maxEntities)
 	{
 		std::cout << "Maximum Sparse Set Size Reached\n";
 		return;
@@ -56,7 +66,7 @@ void SparseSet<T>::Insert(Value<T> value)
 }
 
 template <typename T>
-void SparseSet<T>::Delete(int entity)
+void SparseSet<T>::Delete(Entity entity)
 {
 
 	// update dense by swapping removed entity and last entity
@@ -74,19 +84,20 @@ void SparseSet<T>::Delete(int entity)
 }
 
 template <typename T>
-T* SparseSet<T>::DataAt(int entity)
+T* SparseSet<T>::DataAt(Entity entity)
 {
-	if (entity >= maxSize || sparse[entity] == EMPTY_INDEX)
+	if (entity >= maxEntities || sparse[entity] == EMPTY_INDEX)
 	{
 		return nullptr;
 	}
 
-	std::cout << dense[sparse[entity]].component << "\n"; // debug
+	//std::cout << dense[sparse[entity]].component << "\n"; // debug
 	return &dense[sparse[entity]].component;
 }
 
 
 // for debugging
+/*
 template <typename T>
 void SparseSet<T>::printSet()
 {
@@ -104,3 +115,4 @@ void SparseSet<T>::printSet()
 	}
 	std::cout << "]\n\n\n";
 }
+*/
