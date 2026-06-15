@@ -25,7 +25,7 @@ public:
 	template <typename T>
 	T* GetComponent(Entity entity); // get a component from an array for an entity
 
-	void EntityDeleted(); // remove all components from all arrays for an entity
+	void EntityDeleted(Entity entity); // remove all components from all arrays for an entity
 private:
 	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays;
 	int maxEntities;
@@ -84,9 +84,13 @@ T* ComponentManager::GetComponent(Entity entity)
 	return componentArray->DataAt(entity);
 }
 
-inline void ComponentManager::EntityDeleted()
+inline void ComponentManager::EntityDeleted(Entity entity)
 {
-	// loop over and call remove on all
+	for (const auto& pair : componentArrays)
+	{
+		const auto& componentSet = pair.second;
+		componentSet->Delete(entity);
+	}
 }
 
 template<typename T>
