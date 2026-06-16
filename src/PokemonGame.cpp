@@ -10,7 +10,6 @@
 
 #include "Renderer.h"
 
-#include "TestScene.h"
 #include "c_Renderable.h"
 #include "s_Render.h"
 #include "Entity.h"
