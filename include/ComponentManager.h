@@ -26,12 +26,13 @@ public:
 	T* GetComponent(Entity entity); // get a component from an array for an entity
 
 	void EntityDeleted(Entity entity); // remove all components from all arrays for an entity
+
+	template <typename T>
+	std::shared_ptr<SparseSet<T>> GetComponentSet(); // get the SparseSet of a component
+
 private:
 	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays;
 	int maxEntities;
-
-	template <typename T>
-	std::shared_ptr<SparseSet<T>> GetComponentSet();
 };
  
 inline ComponentManager::ComponentManager(int maxEntities)
