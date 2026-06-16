@@ -10,14 +10,14 @@ template <typename T>
 struct Value
 {
 	T component;
-	Entity entity; //TODO: swap for actual "entity" when it exists
+	Entity entity;
 };
 
 class ComponentSet
 {
 public:
 	virtual ~ComponentSet() = default;
-	//virtual void EntityDestroyed(Entity entity) = 0;
+	virtual void Delete(Entity entity) = 0;
 };
 
 
@@ -36,7 +36,6 @@ public:
 	// stores actual data
 	std::vector<Value<T>> dense;
 
-	//void printSet(); // for debugging
 private:
 	int maxEntities;
 };
@@ -91,28 +90,5 @@ T* SparseSet<T>::DataAt(Entity entity)
 		return nullptr;
 	}
 
-	//std::cout << dense[sparse[entity]].component << "\n"; // debug
 	return &dense[sparse[entity]].component;
 }
-
-
-// for debugging
-/*
-template <typename T>
-void SparseSet<T>::printSet()
-{
-	std::cout << "SPARSE: [";
-	for (auto i : sparse)
-	{
-		std::cout << i << ", ";
-	}
-	std::cout << "]\n";
-
-	std::cout << "DENSE: [";
-	for (auto j : dense)
-	{
-		std::cout << "(" << j.component << ", " << j.entity << "), ";
-	}
-	std::cout << "]\n\n\n";
-}
-*/
