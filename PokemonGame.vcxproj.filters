@@ -54,9 +54,6 @@
     <ClCompile Include="stb_add.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\EntityHandler.cpp">
-      <Filter>Source Files\ECS</Filter>
-    </ClCompile>
     <ClCompile Include="src\AssetManager.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="src\s_Render.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityHandler.cpp">
+      <Filter>Source Files\ECS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="include\s_Render.h">
       <Filter>Header Files\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TestScene.h">
-      <Filter>Header Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="include\ComponentManager.h">
       <Filter>Header Files\ECS</Filter>

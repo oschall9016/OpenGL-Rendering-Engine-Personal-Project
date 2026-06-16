@@ -4,7 +4,6 @@
 #include "SparseSet.h"
 #include "c_Renderable.h"
 #include "Renderer.h"
-#include "TestScene.h"
 #include "ComponentManager.h"
 
 #include <set>

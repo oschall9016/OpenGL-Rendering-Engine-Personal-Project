@@ -54,7 +54,6 @@
     <ClInclude Include="include\SparseSet.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\s_Render.h" />
-    <ClInclude Include="include\TestScene.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureImporter.h" />
   </ItemGroup>
