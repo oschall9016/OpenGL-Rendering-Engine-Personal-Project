@@ -28,7 +28,7 @@ public:
 	void EntityDeleted(Entity entity); // remove all components from all arrays for an entity
 
 	template <typename T>
-	std::shared_ptr<SparseSet<T>> GetComponentSet(); // get the SparseSet of a component
+	std::shared_ptr<SparseSet<T>> GetComponentSet(); // get the SparseSet of a component set
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays;
