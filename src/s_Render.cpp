@@ -14,18 +14,22 @@
 #include <memory>
 
 
-s_Render::s_Render(Renderer& renderer, ComponentManager& manager) : renderer(renderer), manager(manager)
+s_Render::s_Render(Renderer& renderer, EntityComponentSystem& ecs) : renderer(renderer), ecs(ecs)
 {
 }
 
 void s_Render::RenderEntitites()
 {
-	for (auto& value : entities)
-	{
-		std::shared_ptr<Model>& model = manager.GetComponent<c_Renderable>(value)->model;
-		std::shared_ptr<Shader>& shader = manager.GetComponent<c_Renderable>(value)->shader;
+	int distanceBetweenEntities = 0; // just line them up as a test
 
-		int translateAmount = value * 5;
+	auto componentSet = ecs.GetComponentSet<c_Renderable>();
+	for (auto& value : componentSet->dense)
+	{
+		std::shared_ptr<Model>& model = value.component.model;
+		std::shared_ptr<Shader>& shader = value.component.shader;
+
+		int translateAmount = distanceBetweenEntities * 5;
+		distanceBetweenEntities++;
 
 		glm::mat4 modelMat = glm::mat4(1.0f);
 		modelMat = glm::translate(modelMat, glm::vec3(translateAmount, 0, 0));
