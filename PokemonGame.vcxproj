@@ -42,6 +42,7 @@
     <ClInclude Include="include\ComponentManager.h" />
     <ClInclude Include="include\c_Renderable.h" />
     <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\EntityComponentSystem.h" />
     <ClInclude Include="include\EntityHandler.h" />
     <ClInclude Include="include\Header.h" />
     <ClInclude Include="include\Model.h" />

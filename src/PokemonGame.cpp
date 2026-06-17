@@ -16,6 +16,7 @@
 #include "EntityHandler.h"
 #include "SparseSet.h"
 #include "ComponentManager.h"
+#include "EntityComponentSystem.h"
 
 #include <iostream>
 #include <memory>
@@ -58,18 +59,17 @@ int main(int argc, char* args[])
     std::shared_ptr<Model> backpack2 = aManager.LoadModel("assets/models/backpack/backpack.obj");
 
     int maxEntities = 5;
-    EntityHandler entityHandler(maxEntities);
-    ComponentManager componentManager(maxEntities);
-    componentManager.RegisterComponent<c_Renderable>();
+    EntityComponentSystem ecs(maxEntities);
 
-    s_Render renderSystem(renderer, componentManager);
+    ecs.RegisterComponent<c_Renderable>();
+
+    s_Render renderSystem(renderer, ecs);
 
     for (int i = 0; i < maxEntities; i++)
     {
-        Entity entity = entityHandler.CreateEntity();
+        Entity entity = ecs.CreateEntity();
         c_Renderable entityRenderData = c_Renderable{ aManager.LoadModel("assets/models/backpack/backpack.obj"), aManager.LoadShader("BackpackShader","assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs")};
-        renderSystem.entities.insert(entity);
-        componentManager.AddComponent(entity, entityRenderData);
+        ecs.AddComponent<c_Renderable>(entity,entityRenderData);
     }
 
     // main game loop

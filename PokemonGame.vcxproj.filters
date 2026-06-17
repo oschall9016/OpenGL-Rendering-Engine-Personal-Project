@@ -143,6 +143,9 @@
     <ClInclude Include="include\ComponentManager.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="include\EntityComponentSystem.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicFragment.fs">
