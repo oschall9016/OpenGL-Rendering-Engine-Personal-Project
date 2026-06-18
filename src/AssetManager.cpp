@@ -71,6 +71,16 @@ std::shared_ptr<Shader> AssetManager::LoadShader(const std::string& name, const 
 	return Shaders.at(name);
 }
 
+std::shared_ptr<Shader> AssetManager::GetShader(const std::string& name)
+{
+	// if shader is in the list
+	if (Shaders.find(name) != Shaders.end())
+	{
+		return Shaders.at(name);
+	}
+	std::cout << "Shader:" << name << " Not Found\n";
+	return nullptr;
+}
 
 
 
