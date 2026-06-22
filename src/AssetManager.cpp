@@ -56,6 +56,20 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	return Models.at(path); 
 }
 
+std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, const Model model)
+{
+	// if model is in the list
+	if (Models.find(name) != Models.end())
+	{
+		return Models.at(name);
+	}
+
+	std::shared_ptr<Model> importedModel = std::make_shared<Model>(model);
+	Models.insert({ name, importedModel });
+	std::cout << "Loaded Model: " << name << "\n";
+	return Models.at(name);
+}
+
 std::shared_ptr<Shader> AssetManager::LoadShader(const std::string& name, const std::string& vPath, const std::string& fPath)
 {
 	// if shader is in the list
