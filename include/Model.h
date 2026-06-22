@@ -11,6 +11,7 @@ class Model
 public:
 	Model(std::vector<Mesh> meshes);
 	std::vector<Mesh>& GetMeshes();
+	static Model CreateQuad(std::shared_ptr<Texture> texture);
 private:
 	std::vector<Mesh> meshes;
 };
