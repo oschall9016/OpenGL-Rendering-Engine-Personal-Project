@@ -6,15 +6,17 @@
 #include "Renderer.h"
 #include "ComponentManager.h"
 #include "EntityComponentSystem.h"
+#include "Camera.h"
 
 #include <set>
 
 class s_Render
 {
 public:
-	s_Render(Renderer& renderer, EntityComponentSystem& ecs);
+	s_Render(Renderer& renderer, EntityComponentSystem& ecs, Camera& camera);
 	void RenderEntitites();
 
 	EntityComponentSystem& ecs;
 	Renderer& renderer;
+	Camera& camera;
 };
