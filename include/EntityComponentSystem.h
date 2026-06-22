@@ -1,14 +1,29 @@
 #pragma once
 
+// Sparse Set Entity Component Sytstem
+// 
+// good cache locallity when systems use one component
+// but because each component's sparse set has a different order
+// multiple components in one system won't be perfectly lined up
+// so lookups and extra memory accesses will be needed
+
+// for maximum efficiency try to keep the necessary data packaged
+// in one component
+
+// a full architype ecs design might be overkill for this project's
+// goals but would be a fun future project for a heftier engine
+
 #include "Entity.h"
 #include "EntityHandler.h"
 #include "ComponentManager.h"
 #include "SparseSet.h"
 
+#include <iostream>
+
 class EntityComponentSystem
 {
 public:
-	EntityComponentSystem(int maxEntities);
+	EntityComponentSystem();
 	Entity CreateEntity();
 	void DestroyEntity(Entity entity);
 
@@ -32,7 +47,7 @@ private:
 	ComponentManager componentManager;
 };
 
-inline EntityComponentSystem::EntityComponentSystem(int maxEntities) : entityHandler(maxEntities), componentManager(maxEntities)
+inline EntityComponentSystem::EntityComponentSystem() : entityHandler(), componentManager()
 {
 }
 
@@ -43,36 +58,48 @@ inline Entity EntityComponentSystem::CreateEntity()
 
 inline void EntityComponentSystem::DestroyEntity(Entity entity)
 {
-	entityHandler.DeleteEntity(entity); //TODO change delete to destroy
-	componentManager.EntityDeleted(entity);
+	if (entityHandler.DoesEntityExist(entity))
+	{
+		entityHandler.DestroyEntity(entity);
+		componentManager.EntityDeleted(entity);
+	}
 }
 
 template <typename T>
 void EntityComponentSystem::RegisterComponent()
 {
-	componentManager.RegisterComponent<T>(); // do i need <T> here?
+	componentManager.RegisterComponent<T>();
 }
 
 template <typename T>
 void EntityComponentSystem::AddComponent(Entity entity, T component)
 {
-	componentManager.AddComponent<T>(entity, component);
+	if (entityHandler.DoesEntityExist(entity)) 
+	{
+		componentManager.AddComponent<T>(entity, component);
+	}
 }
 
 template <typename T>
 void EntityComponentSystem::RemoveComponent(Entity entity)
 {
-	componentManager.RemoveComponent<T>(entity);
+	if (entityHandler.DoesEntityExist(entity))
+	{
+		componentManager.RemoveComponent<T>(entity);
+	}
 }
 
 template <typename T>
 T* EntityComponentSystem::GetComponent(Entity entity)
 {
-	return componentManager.GetComponent<T>(entity);
+	if (entityHandler.DoesEntityExist(entity))
+	{
+		return componentManager.GetComponent<T>(entity);
+	}
 }
 
 template <typename T>
 std::shared_ptr<SparseSet<T>>  EntityComponentSystem::GetComponentSet()
 {
 	return componentManager.GetComponentSet<T>();
-} // maybe store sets of components and just get them from the manager?
+} 
