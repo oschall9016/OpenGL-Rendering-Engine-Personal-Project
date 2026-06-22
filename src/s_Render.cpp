@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Shader.h"
 #include "Model.h"
+#include "Camera.h"
 
 #include <glad/glad.h>
 
@@ -14,10 +15,11 @@
 #include <memory>
 
 
-s_Render::s_Render(Renderer& renderer, EntityComponentSystem& ecs) : renderer(renderer), ecs(ecs)
+s_Render::s_Render(Renderer& renderer, EntityComponentSystem& ecs, Camera& camera) : renderer(renderer), ecs(ecs), camera(camera)
 {
 }
 
+// would this confirm that each entity has all required components?
 void s_Render::RenderEntitites()
 {
 	int distanceBetweenEntities = 0; // just line them up as a test
@@ -27,6 +29,19 @@ void s_Render::RenderEntitites()
 	{
 		std::shared_ptr<Model>& model = value.component.model;
 		std::shared_ptr<Shader>& shader = value.component.shader;
+
+		shader->use();
+
+		glm::mat4 view = camera.createViewMatrix();
+
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		int viewLoc = glGetUniformLocation(shader->getID(), "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+		int projLoc = glGetUniformLocation(shader->getID(), "projection");
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		int translateAmount = distanceBetweenEntities * 5;
 		distanceBetweenEntities++;
