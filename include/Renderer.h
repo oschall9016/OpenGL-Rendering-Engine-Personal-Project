@@ -9,6 +9,7 @@ public:
 	Renderer();
 	void RenderModel(Model& model, Shader& shader);
 	void RenderMesh(Mesh& mesh, Shader& shader);
+
 private:
 	
 	

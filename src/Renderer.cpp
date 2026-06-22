@@ -6,6 +6,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include <vector>
 
@@ -32,6 +33,8 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 	const unsigned int& VAO = mesh.GetVAO();
 	const std::vector<unsigned int>& indices = mesh.getIndices();
 
+	shader.use();
+
 	unsigned int diffuseNr = 1;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
@@ -46,8 +49,6 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 		glBindTexture(GL_TEXTURE_2D, textures[i]->GetID());
 
 	}
-
-	shader.use();
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
