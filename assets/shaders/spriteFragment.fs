@@ -8,5 +8,18 @@ uniform sampler2D material_texture_diffuse1;
 
 void main()
 {
-	FragColor = texture(material_texture_diffuse1, TexCoord);
+
+	vec2 uv = TexCoord;
+	uv.x /= 8.0;
+	uv.y /= 3.0;
+	uv.x += 64.0;
+
+	vec4 textureColor = texture(material_texture_diffuse1, uv);
+
+	if(textureColor.a < 0.1)
+	{
+		discard;
+	}
+
+	FragColor = textureColor;
 }
