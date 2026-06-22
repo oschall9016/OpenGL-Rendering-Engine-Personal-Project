@@ -9,16 +9,14 @@
 class EntityHandler
 {
 public:
-	EntityHandler(int maxEntityAmount);
+	EntityHandler();
 	Entity CreateEntity();
-	void DeleteEntity(Entity entity);
+	void DestroyEntity(Entity entity);
+	bool DoesEntityExist(Entity entity);
 
-	void SetSignature(Entity entity, Signature signature);
-	Signature GetSignature(Entity entity);
 private:
 	std::queue<Entity> availableEntities;
-	std::vector<Signature> signatures;
+	std::bitset<MAX_ENTITIES> livingEntitiesSet;
 
-	int MAX_ENTITIES; // TODO: look back through project at overall const styling
 	int livingEntities;
 };
