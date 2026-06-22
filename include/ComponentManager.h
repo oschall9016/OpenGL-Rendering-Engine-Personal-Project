@@ -11,7 +11,7 @@
 class ComponentManager
 {
 public:
-	ComponentManager(int maxEntities);
+	ComponentManager();
 
 	template <typename T>
 	void RegisterComponent(); // add a new component to the array
@@ -32,26 +32,22 @@ public:
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays;
-	int maxEntities;
 };
  
-inline ComponentManager::ComponentManager(int maxEntities)
-{
-	this->maxEntities = maxEntities;
-}
+inline ComponentManager::ComponentManager(){}
 
 template<typename T>
 void ComponentManager::RegisterComponent()
 {
 	std::string componentName = typeid(T).name();
 
-	if (componentArrays.find(componentName) != componentArrays.end()) // pretty sure this is done in the get part
+	if (componentArrays.find(componentName) != componentArrays.end())
 	{
 		std::cout << "Component Already Registered\n";
 		return;
 	}
 
-	componentArrays.insert({ componentName, std::make_shared<SparseSet<T>>(maxEntities) });
+	componentArrays.insert({ componentName, std::make_shared<SparseSet<T>>(MAX_ENTITIES) });
 }
 
 template<typename T>
@@ -65,7 +61,7 @@ void ComponentManager::AddComponent(Entity entity, T component)
 		std::cout << "Component Is Not Registered\n";
 		return;
 	}
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); // should this be a reference?
+	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); 
 	componentArray->Insert(entity, component);
 }
 
@@ -73,7 +69,7 @@ void ComponentManager::AddComponent(Entity entity, T component)
 template<typename T>
 void ComponentManager::RemoveComponent(Entity entity)
 {
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); // should this be a reference?
+	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>();
 	//TODO: check for null
 	componentArray->Delete(entity);
 }
@@ -81,7 +77,7 @@ void ComponentManager::RemoveComponent(Entity entity)
 template<typename T>
 T* ComponentManager::GetComponent(Entity entity)
 {
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); // should this be a reference?
+	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); 
 	return componentArray->DataAt(entity);
 }
 
