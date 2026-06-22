@@ -8,6 +8,16 @@
 
 #include "AssetManager.h"
 
+#include "Renderer.h"
+
+#include "c_Renderable.h"
+#include "s_Render.h"
+#include "Entity.h"
+#include "EntityHandler.h"
+#include "SparseSet.h"
+#include "ComponentManager.h"
+#include "EntityComponentSystem.h"
+
 #include <iostream>
 #include <memory>
 
@@ -22,23 +32,6 @@ int main(int argc, char* args[])
 
     SDLWindow window(800, 600, "Cool Window");
 
-    // initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-    
-
-    glViewport(0, 0, window.GetWidth(), window.GetHeight());
-
-
-   // ------------------------------------------------------------------------------------------------------------
-
-    glEnable(GL_DEPTH_TEST);
-
-    Shader basicShader("assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
-    
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -51,9 +44,36 @@ int main(int argc, char* args[])
     float lastFrame = 0.0f;
     
     AssetManager aManager;
+    Renderer renderer;
 
-    std::shared_ptr<Model> backpack = aManager.LoadModel("assets/models/backpack/backpack.obj");
-    std::shared_ptr<Model> backpack2 = aManager.LoadModel("assets/models/backpack/backpack.obj");
+    int maxEntities = 5;
+    EntityComponentSystem ecs;
+
+    ecs.RegisterComponent<c_Renderable>();
+
+    s_Render renderSystem(renderer, ecs, camera);
+
+    /*
+    std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
+    std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/backpack/backpack.obj");
+    */
+
+    std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/HeroSpriteTestTrimmed.png");
+    std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
+    std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
+
+    /*
+    for (int i = 0; i < maxEntities; i++)
+    {
+        Entity entity = ecs.CreateEntity();
+        c_Renderable entityRenderData = c_Renderable{ backpackModel, basicShader };
+        ecs.AddComponent<c_Renderable>(entity,entityRenderData);
+    }
+    */
+
+    Entity spriteEntity = ecs.CreateEntity();
+    c_Renderable spriteRenderData = c_Renderable{testSpriteModel, testSpriteShader};
+    ecs.AddComponent<c_Renderable>(spriteEntity, spriteRenderData);
 
     // main game loop
     bool gameRunning = true;
@@ -66,32 +86,7 @@ int main(int argc, char* args[])
         glClearColor(0.1f, 0.6f, 0.9f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        basicShader.use(); 
-
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-        glm::mat4 view = camera.createViewMatrix();
-
-        glm::mat4 projection;
-        projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-        int modelLoc = glGetUniformLocation(basicShader.getID(), "model");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-        int viewLoc = glGetUniformLocation(basicShader.getID(), "view");
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-        int projLoc = glGetUniformLocation(basicShader.getID(), "projection");
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-        backpack->Draw(basicShader);
-
-        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        modelLoc = glGetUniformLocation(basicShader.getID(), "model");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-        backpack2->Draw(basicShader);
+        renderSystem.RenderEntitites(); // TODO: check if model still has its own draw function
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);

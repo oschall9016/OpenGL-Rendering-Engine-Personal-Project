@@ -18,7 +18,6 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
 	// if texture is in the list
 	if (Textures.find(path) != Textures.end())
 	{
-		std::cout << "Texture: " << path << " Is Already Loaded \n";
 		return Textures.at(path);
 	}
 
@@ -31,6 +30,7 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
 	}
 
 	Textures.insert({ path, importedTexture });
+	std::cout << "Loaded Texture: " << path <<"\n";
 	return Textures.at(path);
 }
 
@@ -39,7 +39,6 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	// if model is in the list
 	if (Models.find(path) != Models.end())
 	{
-		std::cout << "Model: " << path << " Is Already Loaded \n";
 		return Models.at(path);
 	}
 
@@ -53,9 +52,49 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	}
 
 	Models.insert({ path, importedModel });
+	std::cout << "Loaded Model: " << path << "\n";
 	return Models.at(path); 
 }
 
+std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, const Model model)
+{
+	// if model is in the list
+	if (Models.find(name) != Models.end())
+	{
+		return Models.at(name);
+	}
+
+	std::shared_ptr<Model> importedModel = std::make_shared<Model>(model);
+	Models.insert({ name, importedModel });
+	std::cout << "Loaded Model: " << name << "\n";
+	return Models.at(name);
+}
+
+std::shared_ptr<Shader> AssetManager::LoadShader(const std::string& name, const std::string& vPath, const std::string& fPath)
+{
+	// if shader is in the list
+	if (Shaders.find(name) != Shaders.end())
+	{
+		return Shaders.at(name);
+	}
+
+	// if shader not in list, needs imported
+	std::shared_ptr<Shader> shaderPointer = std::make_shared<Shader>(vPath, fPath);
+	Shaders.insert({name, shaderPointer});
+	std::cout << "Loaded Shader: " << name << "\n";
+	return Shaders.at(name);
+}
+
+std::shared_ptr<Shader> AssetManager::GetShader(const std::string& name)
+{
+	// if shader is in the list
+	if (Shaders.find(name) != Shaders.end())
+	{
+		return Shaders.at(name);
+	}
+	std::cout << "Shader:" << name << " Not Found\n";
+	return nullptr;
+}
 
 
 

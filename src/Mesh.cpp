@@ -16,29 +16,24 @@ Mesh::Mesh(std::vector<Vertex> vertices,std::vector<unsigned int> indices, std::
 	setUpMesh();
 }
 
-void Mesh::Draw(Shader& shader)
+const std::vector<Vertex>& Mesh::GetVertices()
 {
+	return vertices;
+}
 
-	unsigned int diffuseNr = 1;
-	for (unsigned int i = 0; i < textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		std::string number;
-		std::string name = "texture_diffuse";
-		number = std::to_string(diffuseNr++);
+const std::vector<unsigned int>& Mesh::getIndices()
+{
+	return indices;
+}
 
-		// now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.getID(), (name + number).c_str()), i);
-		// and finally bind the texture
-		glBindTexture(GL_TEXTURE_2D, textures[i]->ID);
+const std::vector<std::shared_ptr<Texture>>& Mesh::getTextures()
+{
+	return textures;
+}
 
-	}
-
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glActiveTexture(GL_TEXTURE0);
+const unsigned int& Mesh::GetVAO()
+{
+	return VAO;
 }
 
 void Mesh::setUpMesh()
