@@ -5,10 +5,8 @@
 #include <queue>
 #include <iostream>
 
-EntityHandler::EntityHandler(int maxEntityAmount)
+EntityHandler::EntityHandler()
 {
-	MAX_ENTITIES = maxEntityAmount;
-	signatures.resize(MAX_ENTITIES);
 	livingEntities = 0;
 	
 
@@ -30,40 +28,26 @@ Entity EntityHandler::CreateEntity()
 
 	Entity id = availableEntities.front();
 	availableEntities.pop();
+	livingEntitiesSet.set(id);
 	livingEntities++;
 	return id;
 }
 
-void EntityHandler::DeleteEntity(Entity entity)
+void EntityHandler::DestroyEntity(Entity entity)
 {
-	if (entity >= livingEntities) // TODO: not correctly checking
+	if (livingEntitiesSet[entity] == 0) // kind of redundant
 	{
 		std::cout << "Entity Not Deleted: Entity Does Not Exist\n";
 		return;
 	}
 	availableEntities.push(entity);
+	livingEntitiesSet.reset(entity);
 	livingEntities--;
-
-	signatures[entity].reset();
 }
 
-void EntityHandler::SetSignature(Entity entity, Signature signature)
+bool EntityHandler::DoesEntityExist(Entity entity)
 {
-	if (entity >= livingEntities) // TODO: not correctly checking
-	{
-		std::cout << "Signature Not Set: Entity Does Not Exist\n";
-		return;
-	}
-	signatures[entity] = signature;
-}
-
-Signature EntityHandler::GetSignature(Entity entity)
-{
-	if (entity >= livingEntities)
-	{
-		std::cout << "Signature Not Set: Entity Does Not Exist\n";
-		return Signature(); //TODO error handling still sucks
-	}
-	return signatures[entity];
+	if (livingEntitiesSet[entity] == 1) return true;
+	else return false;
 }
 
