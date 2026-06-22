@@ -16,3 +16,24 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &ID);
 }
+
+
+const unsigned int& Texture::GetID()
+{
+	return ID;
+}
+
+const int& Texture::GetWidth()
+{
+	return width;
+}
+
+const int& Texture::GetHeight()
+{
+	return height;
+}
+
+const std::string& Texture::GetPath()
+{
+	return path;
+}

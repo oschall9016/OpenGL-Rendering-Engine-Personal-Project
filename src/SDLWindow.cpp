@@ -1,6 +1,8 @@
 #include "SDLWindow.h"
 
 #include <SDL2/SDL.h>
+#include <glad/glad.h>
+
 #include <iostream>
 
 // TODO: - Add Icon
@@ -9,7 +11,6 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
     width = w;
     height = h;
 
-    // probably shouldnt init everything here...
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -20,13 +21,25 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
     if (window == NULL)
     {
         std::cout << "Failed to Create SDL window" << std::endl;
-        //return -1;
+        //return -1; TODO: error handling
     }
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     context = SDL_GL_CreateContext(window);
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    // initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        //return -1; TODO: error handling
+    }
+
+    glViewport(0, 0, width, height);
+
+    glEnable(GL_DEPTH_TEST);
+
 
 }
 
