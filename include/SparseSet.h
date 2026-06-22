@@ -57,6 +57,12 @@ void SparseSet<T>::Insert(Entity entity, T component)
 		std::cout << "Maximum Sparse Set Size Reached\n";
 		return;
 	}
+	
+	if (sparse[value.entity] != EMPTY_INDEX)
+	{
+		std::cout << "Entity:" << entity << " Already Inserted\n";
+		return;
+	}
 
 	const auto pos = dense.size();
 	dense.push_back(value);
@@ -67,6 +73,12 @@ void SparseSet<T>::Insert(Entity entity, T component)
 template <typename T>
 void SparseSet<T>::Delete(Entity entity)
 {
+
+	if (sparse[entity] == EMPTY_INDEX)
+	{
+		std::cout << "Entity:" << entity << " Does Not Exist\n";
+		return;
+	}
 
 	// update dense by swapping removed entity and last entity
 	const auto backEntity = dense.back();
