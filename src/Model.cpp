@@ -62,8 +62,3 @@ Model Model::CreateQuad(std::shared_ptr<Texture> texture)
 
 	return Model(quadMeshVector);
 }
-
-glm::mat4& Model::GetModelMatrix()
-{
-	return modelMatrix;
-}
