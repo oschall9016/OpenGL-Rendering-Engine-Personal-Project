@@ -8,7 +8,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "c_Renderable.h"
 
@@ -32,16 +31,11 @@ void s_Render::RenderEntitites()
 
 		shader->use();
 
-		glm::mat4 view = camera.createViewMatrix();
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 projection = camera.GetProjectionMatrix();
 
-		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-		int viewLoc = glGetUniformLocation(shader->getID(), "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-		int projLoc = glGetUniformLocation(shader->getID(), "projection");
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		shader->setMat4("view", view);
+		shader->setMat4("projection", projection);
 
 		int translateAmount = distanceBetweenEntities * 5;
 		distanceBetweenEntities++;
@@ -49,8 +43,7 @@ void s_Render::RenderEntitites()
 		glm::mat4 modelMat = glm::mat4(1.0f);
 		modelMat = glm::translate(modelMat, glm::vec3(translateAmount, 0, 0));
 
-		int modelLoc = glGetUniformLocation(shader->getID(), "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+		shader->setMat4("model", modelMat);
 
 		renderer.RenderModel(*model, *shader);
 	}
