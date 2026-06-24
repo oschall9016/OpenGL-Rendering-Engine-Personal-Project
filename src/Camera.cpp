@@ -9,7 +9,6 @@
 
 #include <SDL2/SDL.h>
 
-// TODO: create default vectors
 Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up)
 {
 	this->position = position;
@@ -18,14 +17,32 @@ Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up)
 	right = glm::normalize(glm::cross(front, up));
 	yaw = -90.0f;
 	pitch = 0.0f;
+
+	UpdateViewMatrix();
+	UpdateProjectionMatrix(glm::radians(45.0f), 800.0f, 600.0f); // default values
 }
 
-glm::mat4 Camera::createViewMatrix()
+void Camera::UpdateViewMatrix()
 {
-	return glm::lookAt(position, position + front, up);
+	view = glm::lookAt(position, position + front, up);
 }
 
-void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
+glm::mat4& Camera::GetViewMatrix()
+{
+	return view;
+}
+
+void Camera::UpdateProjectionMatrix(float fov, float screenWidth, float screenHeight)
+{
+	projection = glm::perspective(fov, screenWidth/screenHeight, 0.1f, 100.0f);
+}
+
+glm::mat4& Camera::GetProjectionMatrix()
+{
+	return projection;
+}
+
+void Camera::ProcessKeyboard(Camera_Direction direction, float deltaTime)
 {
 	float speed = 2.5f;
 	float cameraSpeed = speed * deltaTime;
@@ -38,10 +55,10 @@ void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 		position -= front * cameraSpeed;
 		break;
 	case LEFT:
-		position -= glm::normalize(glm::cross(front, up)) * cameraSpeed;
+		position -= right * cameraSpeed;
 		break;
 	case RIGHT:
-		position += glm::normalize(glm::cross(front, up)) * cameraSpeed;
+		position += right * cameraSpeed;
 		break;
 	case UP:
 		position += up * cameraSpeed;
@@ -50,21 +67,23 @@ void Camera::processKeyboard(Camera_Direction direction, float deltaTime)
 		position -= up * cameraSpeed;
 		break;
 	}
+
+	UpdateViewMatrix();
 }
 
 void Camera::ProcessInput(SDLInput input, float deltaTime)
 {
-	if (input.isKeyPressed(SDL_SCANCODE_W)) processKeyboard(FORWARD, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_W)) ProcessKeyboard(FORWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_S)) processKeyboard(BACKWARD, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_S)) ProcessKeyboard(BACKWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_A)) processKeyboard(LEFT, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_A)) ProcessKeyboard(LEFT, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_D)) processKeyboard(RIGHT, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_D)) ProcessKeyboard(RIGHT, deltaTime);
 	
-	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) processKeyboard(UP, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) ProcessKeyboard(UP, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) processKeyboard(DOWN, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) ProcessKeyboard(DOWN, deltaTime);
 	
 }
 
@@ -88,4 +107,6 @@ void Camera::ProcessMouse(Sint32 x, Sint32 y)
 	front = newFront;
 	right = glm::normalize(glm::cross(front, worldUp));
 	up = glm::normalize(glm::cross(right, front));
+
+	UpdateViewMatrix();
 }
