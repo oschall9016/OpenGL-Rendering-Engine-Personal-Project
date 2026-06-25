@@ -44,6 +44,7 @@
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponentSystem.h" />
     <ClInclude Include="include\EntityHandler.h" />
+    <ClInclude Include="include\Framebuffer.h" />
     <ClInclude Include="include\Header.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\Mesh.h" />
