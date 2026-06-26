@@ -18,6 +18,8 @@
 #include "ComponentManager.h"
 #include "EntityComponentSystem.h"
 
+#include "Framebuffer.h"
+
 #include <iostream>
 #include <memory>
 
@@ -29,10 +31,17 @@
 
 int main(int argc, char* args[])
 {
+    int windowWidth = 1920;
+    int windowHeight = 1080;
 
-    SDLWindow window(800, 600, "Cool Window");
+    int renderWidth = 256;
+    int renderHeight = 144;
+
+    SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
     Camera camera;
+    camera.UpdateProjectionMatrix(glm::radians(45.0f), renderWidth, renderHeight);
+
     SDLInput input;
 
     float currentFrame = 0.0f;
@@ -56,6 +65,8 @@ int main(int argc, char* args[])
     std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
 
+    std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
+
     Entity spriteEntity = ecs.CreateEntity();
     c_Renderable spriteRenderData = c_Renderable{testSpriteModel, testSpriteShader};
     ecs.AddComponent<c_Renderable>(spriteEntity, spriteRenderData);
@@ -67,6 +78,7 @@ int main(int argc, char* args[])
        ecs.AddComponent<c_Renderable>(entity,entityRenderData);
    }
    
+   Framebuffer pixelFramebuffer(renderWidth, renderHeight);
 
     // main game loop
     bool gameRunning = true;
@@ -76,10 +88,16 @@ int main(int argc, char* args[])
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
+        pixelFramebuffer.Bind();
+
         glClearColor(0.1f, 0.6f, 0.9f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderSystem.RenderEntitites();
+
+        pixelFramebuffer.Unbind(windowWidth,windowHeight);
+
+        pixelFramebuffer.renderFramebufferQuad(framebufferShader);
 
         input.updateKeyState();
         camera.ProcessInput(input, deltaTime);
