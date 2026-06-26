@@ -84,6 +84,9 @@
     <ClCompile Include="src\EntityHandler.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\SDLWindow.h">
@@ -131,9 +134,6 @@
     <ClInclude Include="include\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\c_Renderable.h">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
@@ -167,6 +167,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\spriteVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\FramebufferVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\FramebufferFragment.fs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
