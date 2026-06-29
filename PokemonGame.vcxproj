@@ -22,6 +22,7 @@
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DeltaTime.cpp" />
     <ClCompile Include="src\EntityHandler.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Model.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\ComponentManager.h" />
     <ClInclude Include="include\c_Renderable.h" />
+    <ClInclude Include="include\DeltaTime.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\EntityComponentSystem.h" />
     <ClInclude Include="include\EntityHandler.h" />
