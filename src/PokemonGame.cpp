@@ -20,6 +20,8 @@
 
 #include "Framebuffer.h"
 
+#include "DeltaTime.h"
+
 #include <iostream>
 #include <memory>
 
@@ -34,8 +36,8 @@ int main(int argc, char* args[])
     int windowWidth = 1920;
     int windowHeight = 1080;
 
-    int renderWidth = 256;
-    int renderHeight = 144;
+    int renderWidth = 256; //256
+    int renderHeight = 144; //144
 
     SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
@@ -44,9 +46,7 @@ int main(int argc, char* args[])
 
     SDLInput input;
 
-    float currentFrame = 0.0f;
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
+    DeltaTime dt;
     
     AssetManager aManager;
     Renderer renderer;
@@ -59,8 +59,10 @@ int main(int argc, char* args[])
     s_Render renderSystem(renderer, ecs, camera);
  
     std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
-    std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/backpack/backpack.obj");
-   
+    
+    //std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/testmodel2/Test Model.obj"); //"assets/models/backpack/backpack.obj"
+    std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/backpack/backpack.obj");   
+
     std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/HeroSpriteTestTrimmed.png");
     std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
@@ -84,9 +86,7 @@ int main(int argc, char* args[])
     bool gameRunning = true;
     while (gameRunning)
     {
-        currentFrame = SDL_GetTicks() / 1000.0f;
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        dt.Update();
         
         pixelFramebuffer.Bind();
 
@@ -100,7 +100,7 @@ int main(int argc, char* args[])
         pixelFramebuffer.renderFramebufferQuad(framebufferShader);
 
         input.updateKeyState();
-        camera.ProcessInput(input, deltaTime);
+        camera.ProcessInput(input, dt.Get());
         camera.ProcessMouse(input.getMouseX(), input.getMouseY());
 
 
