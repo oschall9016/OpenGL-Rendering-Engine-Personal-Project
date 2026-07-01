@@ -11,5 +11,5 @@
 class TextureImporter
 {
 public:
-	static std::shared_ptr<Texture> ImportTexture(const std::string& path, AssetManager& manager);
+	static std::shared_ptr<Texture> ImportTexture(const std::string& path, AssetManager& manager, bool needsFlipped);
 };

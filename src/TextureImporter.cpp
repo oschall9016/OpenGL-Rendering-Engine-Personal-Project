@@ -11,9 +11,10 @@
 #include <iostream>
 #include <memory>
 
-std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, AssetManager& manager)
+std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, AssetManager& manager, bool needsFlipped)
 {
-	stbi_set_flip_vertically_on_load(true);
+	if(needsFlipped) stbi_set_flip_vertically_on_load(true);
+
 	int width, height, nrChannels;
 	unsigned char* data;
 	data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
