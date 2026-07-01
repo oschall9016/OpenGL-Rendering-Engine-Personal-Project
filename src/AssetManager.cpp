@@ -13,7 +13,7 @@
 #include <string>
 #include <iostream>
 
-std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
+std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path, bool needsFlipped)
 {
 	// if texture is in the list
 	if (Textures.find(path) != Textures.end())
@@ -22,7 +22,7 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path)
 	}
 
 	// texture not in list, needs imported
-	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportTexture(path, *this);
+	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportTexture(path, *this, needsFlipped);
 	if (importedTexture == nullptr)
 	{
 		std::cout << "Texture: " << path << " Failed To Load \n";
