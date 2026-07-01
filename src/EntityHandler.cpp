@@ -1,4 +1,3 @@
-#pragma once
 #include "EntityHandler.h"
 #include "Entity.h"
 
@@ -40,6 +39,7 @@ void EntityHandler::DestroyEntity(Entity entity)
 		std::cout << "Entity Not Deleted: Entity Does Not Exist\n";
 		return;
 	}
+	signatures[entity].reset();
 	availableEntities.push(entity);
 	livingEntitiesSet.reset(entity);
 	livingEntities--;
@@ -49,5 +49,24 @@ bool EntityHandler::DoesEntityExist(Entity entity)
 {
 	if (livingEntitiesSet[entity] == 1) return true;
 	else return false;
+}
+
+void EntityHandler::SetSignature(Entity entity, Signature signature)
+{
+	if (!DoesEntityExist(entity))
+	{
+		return;
+	}
+	signatures[entity] = signature;
+}
+
+Signature EntityHandler::GetSignature(Entity entity)
+{
+	if (!DoesEntityExist(entity))
+	{
+		return {};
+	}
+
+	return signatures[entity];
 }
 
