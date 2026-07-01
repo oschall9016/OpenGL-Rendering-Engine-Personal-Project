@@ -23,7 +23,7 @@ std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
 	this->path = path;
 	Assimp::Importer importer;
 
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs); //TODO look into other flags
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate); //TODO look into other flags
 
 	if (scene == nullptr)
 	{
@@ -145,7 +145,7 @@ std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* 
 		absPath += "/" + fileName;
 
 		// load texture from manager
-		tempTextures.push_back(manager.LoadTexture(absPath));
+		tempTextures.push_back(manager.LoadTexture(absPath, false));
 	}
 	return tempTextures;
 }
