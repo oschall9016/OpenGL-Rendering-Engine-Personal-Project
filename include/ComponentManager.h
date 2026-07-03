@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <queue>
 
 class ComponentManager
 {
@@ -15,6 +16,9 @@ public:
 
 	template <typename T>
 	void RegisterComponent(); // add a new component to the array
+
+	template <typename t>
+	const int GetBitPosition(); // returns the bit position for a given component
 
 	template <typename T>
 	void AddComponent(Entity entity, T component); // adds a component to the array for an entity
@@ -31,10 +35,18 @@ public:
 	std::shared_ptr<SparseSet<T>> GetComponentSet(); // get the SparseSet of a component set
 
 private:
-	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays;
+	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays; // TODO: change naming convention
+	std::unordered_map<std::string, int> componentTypeBitMap;
+	std::queue<int> componentBits;
 };
  
-inline ComponentManager::ComponentManager(){}
+inline ComponentManager::ComponentManager()
+{
+	for (int i = 0; i < MAX_COMPONENTS; i++)
+	{
+		componentBits.push(i);
+	}
+}
 
 template<typename T>
 void ComponentManager::RegisterComponent()
@@ -47,7 +59,25 @@ void ComponentManager::RegisterComponent()
 		return;
 	}
 
+	if (componentTypeBitMap.empty())
+	{
+		std::cout << "Cannot Register Component: " << componentName << " Max Number of Components Reached\n";
+		return;
+	}
+
+	int bit = componentBits.front();
+	componentBits.pop();
+
+	componentTypeBitMap.insert({componentName, bit});
 	componentArrays.insert({ componentName, std::make_shared<SparseSet<T>>(MAX_ENTITIES) });
+}
+
+template <typename t>
+const int ComponentManager::GetBitPosition()
+{
+	std::string componentName = typeid(T).name();
+
+	return componentTypeBitMap.at(componentName);
 }
 
 template<typename T>
