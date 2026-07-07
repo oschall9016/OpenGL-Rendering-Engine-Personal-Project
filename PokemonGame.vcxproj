@@ -57,6 +57,8 @@
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SparseSet.h" />
     <ClInclude Include="include\stb_image.h" />
+    <ClInclude Include="include\System.h" />
+    <ClInclude Include="include\SystemManager.h" />
     <ClInclude Include="include\s_Render.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureImporter.h" />
