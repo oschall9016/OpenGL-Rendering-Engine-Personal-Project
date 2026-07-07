@@ -13,9 +13,12 @@
 // a full architype ecs design might be overkill for this project's
 // goals but would be a fun future project for a heftier engine
 
+// TODO: change overall template names from T to something more descriptive
+
 #include "Entity.h"
 #include "EntityHandler.h"
 #include "ComponentManager.h"
+#include "SystemManager.h"
 #include "SparseSet.h"
 
 #include <iostream>
@@ -24,7 +27,9 @@ class EntityComponentSystem
 {
 public:
 	EntityComponentSystem();
+
 	Entity CreateEntity();
+
 	void DestroyEntity(Entity entity);
 
 	template <typename T>
@@ -42,9 +47,14 @@ public:
 	template <typename T>
 	std::shared_ptr<SparseSet<T>> GetComponentSet();
 
+	template <typename SystemName, typename... ComponentNames>
+	std::shared_ptr<SystemName> RegisterSystem(std::shared_ptr<SystemName> system);
+
+
 private:
 	EntityHandler entityHandler;
 	ComponentManager componentManager;
+	SystemManager systemManager;
 };
 
 inline EntityComponentSystem::EntityComponentSystem() : entityHandler(), componentManager()
@@ -74,10 +84,22 @@ void EntityComponentSystem::RegisterComponent()
 template <typename T>
 void EntityComponentSystem::AddComponent(Entity entity, T component)
 {
-	if (entityHandler.DoesEntityExist(entity)) 
+	if (!entityHandler.DoesEntityExist(entity)) // TODO: change name to EntityExists
 	{
-		componentManager.AddComponent<T>(entity, component);
+		return;
 	}
+
+	componentManager.AddComponent<T>(entity, component);
+
+	// update entity signature
+	Signature entitySig = entityHandler.GetSignature(entity);
+	int bitPosition = componentManager.GetBitPosition<T>();
+
+	entitySig.set(bitPosition);
+
+	entityHandler.SetSignature(entity, entitySig);
+
+	systemManager.EntitySignatureChanged(entity, entitySig);
 }
 
 template <typename T>
@@ -85,8 +107,20 @@ void EntityComponentSystem::RemoveComponent(Entity entity)
 {
 	if (entityHandler.DoesEntityExist(entity))
 	{
-		componentManager.RemoveComponent<T>(entity);
+		return;
 	}
+
+	componentManager.RemoveComponent<T>(entity);
+
+	// update entity signature
+	Signature entitySig = entityHandler.GetSignature(entity);
+	int bitPosition = componentManager.GetBitPosition<T>();
+
+	entitySig.reset(bitPosition);
+
+	entityHandler.SetSignature(entity, entitySig);
+
+	systemManager.EntitySignatureChanged(entity, entitySig);
 }
 
 template <typename T>
@@ -99,7 +133,18 @@ T* EntityComponentSystem::GetComponent(Entity entity)
 }
 
 template <typename T>
-std::shared_ptr<SparseSet<T>>  EntityComponentSystem::GetComponentSet()
+std::shared_ptr<SparseSet<T>> EntityComponentSystem::GetComponentSet()
 {
 	return componentManager.GetComponentSet<T>();
 } 
+
+template <typename SystemName, typename... ComponentNames>
+std::shared_ptr<SystemName> EntityComponentSystem::RegisterSystem(std::shared_ptr<SystemName> system)
+{
+	Signature systemSignature;
+
+	// set signature by folding over each of the given components
+	(systemSignature.set(componentManager.GetBitPosition<ComponentNames>()), ...);
+
+	return systemManager.RegisterSystem<SystemName>(systemSignature, system);
+}
