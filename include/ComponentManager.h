@@ -17,7 +17,7 @@ public:
 	template <typename T>
 	void RegisterComponent(); // add a new component to the array
 
-	template <typename t>
+	template <typename T>
 	const int GetBitPosition(); // returns the bit position for a given component
 
 	template <typename T>
@@ -59,7 +59,7 @@ void ComponentManager::RegisterComponent()
 		return;
 	}
 
-	if (componentTypeBitMap.empty())
+	if (componentBits.empty())
 	{
 		std::cout << "Cannot Register Component: " << componentName << " Max Number of Components Reached\n";
 		return;
@@ -72,7 +72,7 @@ void ComponentManager::RegisterComponent()
 	componentArrays.insert({ componentName, std::make_shared<SparseSet<T>>(MAX_ENTITIES) });
 }
 
-template <typename t>
+template <typename T>
 const int ComponentManager::GetBitPosition()
 {
 	std::string componentName = typeid(T).name();
@@ -128,7 +128,7 @@ std::shared_ptr<SparseSet<T>> ComponentManager::GetComponentSet()
 
 	if (component == componentArrays.end())
 	{
-		std::cout << "Cannot Get Component Set, Component Is Not Registered\n";
+		std::cout << "Cannot Get Component Set, " << componentName <<", Component Is Not Registered\n";
 		return nullptr;
 	}
 
