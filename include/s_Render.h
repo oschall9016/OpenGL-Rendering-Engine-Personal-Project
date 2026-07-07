@@ -1,5 +1,6 @@
 #pragma once
 
+#include "System.h"
 #include "Entity.h"
 #include "SparseSet.h"
 #include "c_Renderable.h"
@@ -10,7 +11,7 @@
 
 #include <set>
 
-class s_Render
+class s_Render : public System
 {
 public:
 	s_Render(Renderer& renderer, EntityComponentSystem& ecs, Camera& camera);

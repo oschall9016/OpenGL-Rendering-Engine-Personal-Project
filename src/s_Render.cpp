@@ -12,22 +12,21 @@
 #include "c_Renderable.h"
 
 #include <memory>
+#include <iostream>
 
 
 s_Render::s_Render(Renderer& renderer, EntityComponentSystem& ecs, Camera& camera) : renderer(renderer), ecs(ecs), camera(camera)
 {
 }
 
-// would this confirm that each entity has all required components?
 void s_Render::RenderEntitites()
 {
 	int distanceBetweenEntities = 0; // just line them up as a test
 
-	auto componentSet = ecs.GetComponentSet<c_Renderable>();
-	for (auto& value : componentSet->dense)
+	for (auto& entity : entities)
 	{
-		std::shared_ptr<Model>& model = value.component.model;
-		std::shared_ptr<Shader>& shader = value.component.shader;
+		std::shared_ptr<Model> model = ecs.GetComponent<c_Renderable>(entity)->model; // TODO: add better error checking for when wrong type is given
+		std::shared_ptr<Shader> shader = ecs.GetComponent<c_Renderable>(entity)->shader;
 
 		shader->use();
 
