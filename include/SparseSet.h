@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Entity.h"
+
 #include <vector>
 #include <iostream>
-#include "Entity.h"
 
 constexpr int EMPTY_INDEX = -1;
 
