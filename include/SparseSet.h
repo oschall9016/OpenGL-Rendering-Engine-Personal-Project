@@ -14,16 +14,18 @@ struct Value
 	Entity entity;
 };
 
-class ComponentSet
+
+class UniversalSparseSet
 {
 public:
-	virtual ~ComponentSet() = default;
+	virtual ~UniversalSparseSet() = default;
 	virtual void Delete(Entity entity) = 0;
 };
 
 
+
 template <typename T>
-class SparseSet : public ComponentSet
+class SparseSet : public UniversalSparseSet
 {
 public:
 	SparseSet(int maxEntities);
