@@ -8,129 +8,122 @@
 #include <string>
 #include <iostream>
 #include <queue>
+#include <typeindex>
 
 class ComponentManager
 {
 public:
 	ComponentManager();
 
-	template <typename T>
+	template <typename ComponentType>
 	void RegisterComponent(); // add a new component to the array
 
-	template <typename T>
+	template <typename ComponentType>
 	const int GetBitPosition(); // returns the bit position for a given component
 
-	template <typename T>
-	void AddComponent(Entity entity, T component); // adds a component to the array for an entity
+	template <typename ComponentType>
+	void AddComponent(Entity entity, ComponentType component); // adds a component to the array for an entity
 
-	template<typename T>
+	template<typename ComponentType>
 	void RemoveComponent(Entity entity); // removes a component from an array for an entity
 
-	template <typename T>
-	T* GetComponent(Entity entity); // get a component from an array for an entity
+	template <typename ComponentType>
+	ComponentType* GetComponent(Entity entity); // get a component from an array for an entity
 
 	void EntityDeleted(Entity entity); // remove all components from all arrays for an entity
 
-	template <typename T>
-	std::shared_ptr<SparseSet<T>> GetComponentSet(); // get the SparseSet of a component set
+	template <typename ComponentType>
+	std::shared_ptr<SparseSet<ComponentType>> GetComponentSet(); // get the specific SparseSet of a USS stored in componentArrays
 
 private:
-	std::unordered_map<std::string, std::shared_ptr<ComponentSet>> componentArrays; // TODO: change naming convention
-	std::unordered_map<std::string, int> componentTypeBitMap;
-	std::queue<int> componentBits;
+	std::unordered_map<std::type_index, std::shared_ptr<UniversalSparseSet>> componentTypeUSSMap;
+	std::unordered_map<std::type_index, int> componentTypeBitMap;
+	std::queue<int> componentBitsQueue;
 };
  
 inline ComponentManager::ComponentManager()
 {
 	for (int i = 0; i < MAX_COMPONENTS; i++)
 	{
-		componentBits.push(i);
+		componentBitsQueue.push(i);
 	}
 }
 
-template<typename T>
+template<typename ComponentType>
 void ComponentManager::RegisterComponent()
 {
-	std::string componentName = typeid(T).name();
-
-	if (componentArrays.find(componentName) != componentArrays.end())
+	if (componentTypeUSSMap.find(typeid(ComponentType)) != componentTypeUSSMap.end())
 	{
 		std::cout << "Component Already Registered\n";
 		return;
 	}
 
-	if (componentBits.empty())
+	if (componentBitsQueue.empty())
 	{
-		std::cout << "Cannot Register Component: " << componentName << " Max Number of Components Reached\n";
+		std::cout << "Cannot Register Component: " << typeid(ComponentType).name() << " Max Number of Components Reached\n";
 		return;
 	}
 
-	int bit = componentBits.front();
-	componentBits.pop();
+	int bit = componentBitsQueue.front();
+	componentBitsQueue.pop();
 
-	componentTypeBitMap.insert({componentName, bit});
-	componentArrays.insert({ componentName, std::make_shared<SparseSet<T>>(MAX_ENTITIES) });
+	componentTypeBitMap.insert({ typeid(ComponentType), bit});
+	componentTypeUSSMap.insert({ typeid(ComponentType), std::make_shared<SparseSet<ComponentType>>(MAX_ENTITIES) });
 }
 
-template <typename T>
+template <typename ComponentType>
 const int ComponentManager::GetBitPosition()
 {
-	std::string componentName = typeid(T).name();
-
-	return componentTypeBitMap.at(componentName);
+	return componentTypeBitMap.at(typeid(ComponentType));
 }
 
-template<typename T>
-void ComponentManager::AddComponent(Entity entity, T component)
+template<typename ComponentType>
+void ComponentManager::AddComponent(Entity entity, ComponentType component)
 {
-	std::string componentName = typeid(T).name();
-
-	//TODO: check if entity exists?
-	if (componentArrays.find(componentName) == componentArrays.end())
+	if (componentTypeUSSMap.find(typeid(ComponentType)) == componentTypeUSSMap.end())
 	{
 		std::cout << "Component Is Not Registered\n";
 		return;
 	}
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); 
-	componentArray->Insert(entity, component);
+	std::shared_ptr<SparseSet<ComponentType>> componentSet = GetComponentSet<ComponentType>();
+	componentSet->Insert(entity, component);
 }
 
 
-template<typename T>
+template<typename ComponentType>
 void ComponentManager::RemoveComponent(Entity entity)
 {
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>();
-	//TODO: check for null
-	componentArray->Delete(entity);
+	std::shared_ptr<SparseSet<ComponentType>> componentSet = GetComponentSet<ComponentType>();
+
+	componentSet->Delete(entity);
 }
 
-template<typename T>
-T* ComponentManager::GetComponent(Entity entity)
+template<typename ComponentType>
+ComponentType* ComponentManager::GetComponent(Entity entity)
 {
-	std::shared_ptr<SparseSet<T>> componentArray = GetComponentSet<T>(); 
-	return componentArray->DataAt(entity);
+	std::shared_ptr<SparseSet<ComponentType>> componentSet = GetComponentSet<ComponentType>();
+	return componentSet->DataAt(entity);
 }
 
 inline void ComponentManager::EntityDeleted(Entity entity)
 {
-	for (const auto& pair : componentArrays)
+	for (const auto& componentTypeUSSPair : componentTypeUSSMap)
 	{
-		const auto& componentSet = pair.second;
+		const auto& componentSet = componentTypeUSSPair.second;
 		componentSet->Delete(entity);
 	}
 }
 
-template<typename T>
-std::shared_ptr<SparseSet<T>> ComponentManager::GetComponentSet()
+template<typename ComponentType>
+std::shared_ptr<SparseSet<ComponentType>> ComponentManager::GetComponentSet()
 {
-	std::string componentName = typeid(T).name();
-	auto component = componentArrays.find(componentName);
+	auto componentTypeUSSPair = componentTypeUSSMap.find(typeid(ComponentType));
 
-	if (component == componentArrays.end())
+	if (componentTypeUSSPair == componentTypeUSSMap.end())
 	{
-		std::cout << "Cannot Get Component Set, " << componentName <<", Component Is Not Registered\n";
+		std::cout << "Cannot Get Component Set, " << typeid(ComponentType).name() << ", Component Is Not Registered\n";
 		return nullptr;
 	}
 
-	return std::static_pointer_cast<SparseSet<T>>(component->second);
+	return std::static_pointer_cast<SparseSet<ComponentType>>(componentTypeUSSPair->second);
 }
