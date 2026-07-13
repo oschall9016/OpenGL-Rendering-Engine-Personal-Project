@@ -81,7 +81,7 @@
     <ClCompile Include="src\s_Render.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\EntityHandler.cpp">
+    <ClCompile Include="src\EntityManager.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
     <ClCompile Include="Framebuffer.cpp">
@@ -113,7 +113,7 @@
     <ClInclude Include="include\Entity.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="include\EntityHandler.h">
+    <ClInclude Include="include\EntityManager.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="include\AssetManager.h">

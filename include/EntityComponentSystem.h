@@ -6,7 +6,7 @@
 // goals but would be a fun future project for a larger more efficient engine
 
 #include "Entity.h"
-#include "EntityHandler.h"
+#include "EntityManager.h"
 #include "ComponentManager.h"
 #include "SystemManager.h"
 #include "SparseSet.h"
@@ -42,25 +42,25 @@ public:
 
 
 private:
-	EntityHandler entityHandler;
+	EntityManager entityManager;
 	ComponentManager componentManager;
 	SystemManager systemManager;
 };
 
-inline EntityComponentSystem::EntityComponentSystem() : entityHandler(), componentManager()
+inline EntityComponentSystem::EntityComponentSystem() : entityManager(), componentManager()
 {
 }
 
 inline Entity EntityComponentSystem::CreateEntity()
 {
-	return entityHandler.CreateEntity();
+	return entityManager.CreateEntity();
 }
 
 inline void EntityComponentSystem::DestroyEntity(Entity entity)
 {
-	if (entityHandler.EntityExists(entity))
+	if (entityManager.EntityExists(entity))
 	{
-		entityHandler.DestroyEntity(entity);
+		entityManager.DestroyEntity(entity);
 		componentManager.EntityDeleted(entity);
 	}
 }
@@ -74,7 +74,7 @@ void EntityComponentSystem::RegisterComponent()
 template <typename ComponentType>
 void EntityComponentSystem::AddComponent(Entity entity, ComponentType component)
 {
-	if (!entityHandler.EntityExists(entity))
+	if (!entityManager.EntityExists(entity))
 	{
 		return;
 	}
@@ -82,12 +82,12 @@ void EntityComponentSystem::AddComponent(Entity entity, ComponentType component)
 	componentManager.AddComponent<ComponentType>(entity, component);
 
 	// update entity signature
-	Signature entitySig = entityHandler.GetSignature(entity);
+	Signature entitySig = entityManager.GetSignature(entity);
 	int bitPosition = componentManager.GetBitPosition<ComponentType>();
 
 	entitySig.set(bitPosition);
 
-	entityHandler.SetSignature(entity, entitySig);
+	entityManager.SetSignature(entity, entitySig);
 
 	systemManager.EntitySignatureChanged(entity, entitySig);
 }
@@ -95,7 +95,7 @@ void EntityComponentSystem::AddComponent(Entity entity, ComponentType component)
 template <typename ComponentType>
 void EntityComponentSystem::RemoveComponent(Entity entity)
 {
-	if (entityHandler.EntityExists(entity))
+	if (entityManager.EntityExists(entity))
 	{
 		return;
 	}
@@ -103,12 +103,12 @@ void EntityComponentSystem::RemoveComponent(Entity entity)
 	componentManager.RemoveComponent<ComponentType>(entity);
 
 	// update entity signature
-	Signature entitySig = entityHandler.GetSignature(entity);
+	Signature entitySig = entityManager.GetSignature(entity);
 	int bitPosition = componentManager.GetBitPosition<ComponentType>();
 
 	entitySig.reset(bitPosition);
 
-	entityHandler.SetSignature(entity, entitySig);
+	entityManager.SetSignature(entity, entitySig);
 
 	systemManager.EntitySignatureChanged(entity, entitySig);
 }
@@ -116,7 +116,7 @@ void EntityComponentSystem::RemoveComponent(Entity entity)
 template <typename ComponentType>
 ComponentType* EntityComponentSystem::GetComponent(Entity entity)
 {
-	if (!entityHandler.EntityExists(entity))
+	if (!entityManager.EntityExists(entity))
 	{
 		return nullptr;
 	}
