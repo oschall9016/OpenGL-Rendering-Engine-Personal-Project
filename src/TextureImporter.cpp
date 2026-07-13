@@ -13,7 +13,7 @@
 
 std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, AssetManager& manager, bool needsFlipped)
 {
-	if(needsFlipped) stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(needsFlipped);
 
 	int width, height, nrChannels;
 	unsigned char* data;
@@ -21,6 +21,7 @@ std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path,
 	if (!data)
 	{
 		std::cout << "Failed to Import Texture: " << path << "\n";
+		stbi_image_free(data);
 		return nullptr;
 	}
 
@@ -31,6 +32,7 @@ std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path,
 	else
 	{
 		std::cout << "Unrecognized Channel Count" << "\n";
+		stbi_image_free(data);
 		return nullptr;
 	}
 
@@ -52,6 +54,41 @@ std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path,
 
 	// free image
 	stbi_image_free(data);
+
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>(path, ID, width, height);
+	return texture;
+}
+
+std::shared_ptr<Texture> TextureImporter::ImportCubemapTexture(const std::string& path, std::vector<std::string>& cubeFaces, AssetManager& manager, bool needsFlipped)
+{
+	stbi_set_flip_vertically_on_load(needsFlipped);
+
+	unsigned int ID;
+	glGenTextures(1, &ID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
+
+	int width, height, nrChannels;
+	unsigned char* data;
+	for (int i = 0; i < cubeFaces.size(); i++)
+	{
+		data = stbi_load(cubeFaces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (!data)
+		{
+			std::cout << "Failed to Import Cubemap Texture: " << cubeFaces[i] << "\n";
+			stbi_image_free(data);
+			return nullptr;
+		}
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		stbi_image_free(data);
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>(path, ID, width, height);
 	return texture;
