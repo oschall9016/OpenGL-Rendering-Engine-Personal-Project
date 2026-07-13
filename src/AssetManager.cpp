@@ -34,6 +34,27 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path, bool
 	return Textures.at(path);
 }
 
+std::shared_ptr<Texture> AssetManager::LoadCubeMapTexture(const std::string& path, std::vector<std::string>& cubeFaces, bool needsFlipped)
+{
+	// if texture is in the list
+	if (Textures.find(path) != Textures.end())
+	{
+		return Textures.at(path);
+	}
+
+	// texture not in list, needs imported
+	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportCubemapTexture(path, cubeFaces, *this, needsFlipped);
+	if (importedTexture == nullptr)
+	{
+		std::cout << "Cubemap Texture: " << path << " Failed To Load \n";
+		return nullptr;
+	}
+
+	Textures.insert({ path, importedTexture });
+	std::cout << "Loaded Cubemap Texture: " << path << "\n";
+	return Textures.at(path);
+}
+
 std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 {
 	// if model is in the list
@@ -95,6 +116,3 @@ std::shared_ptr<Shader> AssetManager::GetShader(const std::string& name)
 	std::cout << "Shader:" << name << " Not Found\n";
 	return nullptr;
 }
-
-
-
