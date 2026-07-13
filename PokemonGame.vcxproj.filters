@@ -90,6 +90,9 @@
     <ClCompile Include="src\DeltaTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\SDLWindow.h">
@@ -161,6 +164,9 @@
     <ClInclude Include="include\System.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="include\Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicFragment.fs">
@@ -185,6 +191,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\FramebufferFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\SkyboxVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\shaders\SkyboxFragment.fs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

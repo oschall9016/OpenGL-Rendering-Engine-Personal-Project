@@ -33,6 +33,7 @@
     <ClCompile Include="src\SDLInput.cpp" />
     <ClCompile Include="src\SDLWindow.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\s_Render.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureImporter.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="include\SDLInput.h" />
     <ClInclude Include="include\SDLWindow.h" />
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\Skybox.h" />
     <ClInclude Include="include\SparseSet.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\System.h" />
@@ -70,6 +72,8 @@
     <None Include="assets\shaders\BasicVertex.vs" />
     <None Include="assets\shaders\FramebufferFragment.fs" />
     <None Include="assets\shaders\FramebufferVertex.vs" />
+    <None Include="assets\shaders\SkyboxFragment.fs" />
+    <None Include="assets\shaders\SkyboxVertex.vs" />
     <None Include="assets\shaders\spriteFragment.fs" />
     <None Include="assets\shaders\spriteVertex.vs" />
   </ItemGroup>
