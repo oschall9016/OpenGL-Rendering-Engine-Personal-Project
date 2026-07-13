@@ -12,13 +12,14 @@ public:
 	void Bind();
 	void Unbind(int screenWidth, int screenHeight);
 
-	void renderFramebufferQuad(std::shared_ptr<Shader> shader);
-	unsigned int quickQuad();
-
 	const unsigned int& GetFramebufferID();
 	const unsigned int& GetTextureColorbufferID();
+	const unsigned int& GetQuadVAO();
 
 private:
+
+	unsigned int quickQuad();
+
 	unsigned int framebufferID;
 	unsigned int textureColorbufferID;
 
