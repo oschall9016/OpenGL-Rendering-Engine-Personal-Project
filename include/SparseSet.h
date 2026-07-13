@@ -67,7 +67,7 @@ void SparseSet<T>::Insert(Entity entity, T component)
 		return;
 	}
 
-	const auto pos = dense.size();
+	int pos = (int)dense.size();
 	dense.push_back(value);
 	sparse[value.entity] = pos;
 	
