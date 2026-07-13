@@ -43,9 +43,10 @@ Framebuffer::Framebuffer(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// TODO: delete VAO and VBO?
 Framebuffer::~Framebuffer()
 {
-	glDeleteFramebuffers(1, &framebufferID); // TODO: make sure im deleting other objects when i need to
+	glDeleteFramebuffers(1, &framebufferID);
 }
 
 void Framebuffer::Bind()
@@ -60,26 +61,9 @@ void Framebuffer::Unbind(int screenWidth, int screenHeight)
 	glViewport(0, 0, screenWidth, screenHeight);
 }
 
-void Framebuffer::renderFramebufferQuad(std::shared_ptr<Shader> shader)
-{
-
-	glDisable(GL_DEPTH_TEST); // makes sure quad isn't effected by depth test
-
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	shader->use();
-
-	// draw the quad
-	glBindVertexArray(quadVAO);
-	glBindTexture(GL_TEXTURE_2D, textureColorbufferID);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	glEnable(GL_DEPTH_TEST);
-}
-
 unsigned int Framebuffer::quickQuad()
 {
-	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+	float quadVertices[] = {
 		// positions   // texCoords
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		-1.0f, -1.0f,  0.0f, 0.0f,
@@ -112,4 +96,9 @@ const unsigned int& Framebuffer::GetFramebufferID()
 const unsigned int& Framebuffer::GetTextureColorbufferID()
 {
 	return textureColorbufferID;
+}
+
+const unsigned int& Framebuffer::GetQuadVAO()
+{
+	return quadVAO;
 }
