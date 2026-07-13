@@ -1,19 +1,9 @@
 #pragma once
 
 // Sparse Set Entity Component Sytstem
-// 
-// good cache locallity when systems use one component
-// but because each component's sparse set has a different order
-// multiple components in one system won't be perfectly lined up
-// so lookups and extra memory accesses will be needed
-
-// for maximum efficiency try to keep the necessary data packaged
-// in one component
 
 // a full architype ecs design might be overkill for this project's
-// goals but would be a fun future project for a heftier engine
-
-// TODO: change overall template names from T to something more descriptive
+// goals but would be a fun future project for a larger more efficient engine
 
 #include "Entity.h"
 #include "EntityHandler.h"
@@ -26,29 +16,29 @@
 class EntityComponentSystem
 {
 public:
-	EntityComponentSystem();
+	EntityComponentSystem(); // constructor
 
-	Entity CreateEntity();
+	Entity CreateEntity(); // register an entity with the EntityHandler
 
-	void DestroyEntity(Entity entity);
+	void DestroyEntity(Entity entity); // destroy entity and clear its data
 
-	template <typename T>
-	void RegisterComponent();
+	template <typename ComponentType>
+	void RegisterComponent(); // register a component with the ComponentManager
 
-	template <typename T>
-	void AddComponent(Entity entity, T component);
+	template <typename ComponentType>
+	void AddComponent(Entity entity, ComponentType component); // store a component for an entity in the ComponentManager
 
-	template <typename T>
-	void RemoveComponent(Entity entity);
+	template <typename ComponentType>
+	void RemoveComponent(Entity entity); // removes a component for an entity in the ComponentManager
 
-	template <typename T>
-	T* GetComponent(Entity entity);
+	template <typename ComponentType>
+	ComponentType* GetComponent(Entity entity); // get a pointer to an entities component from the ComponentManager
 
-	template <typename T>
-	std::shared_ptr<SparseSet<T>> GetComponentSet();
+	template <typename ComponentType>
+	std::shared_ptr<SparseSet<ComponentType>> GetComponentSet(); // get the specific SparseSet of a USS stored in componentArrays. TODO: remove this function 
 
-	template <typename SystemName, typename... ComponentNames>
-	std::shared_ptr<SystemName> RegisterSystem(std::shared_ptr<SystemName> system);
+	template <typename SystemName, typename... ComponentTypes>
+	std::shared_ptr<SystemName> RegisterSystem(std::shared_ptr<SystemName> system); // register a system for use with the SystemManager
 
 
 private:
@@ -68,32 +58,32 @@ inline Entity EntityComponentSystem::CreateEntity()
 
 inline void EntityComponentSystem::DestroyEntity(Entity entity)
 {
-	if (entityHandler.DoesEntityExist(entity))
+	if (entityHandler.EntityExists(entity))
 	{
 		entityHandler.DestroyEntity(entity);
 		componentManager.EntityDeleted(entity);
 	}
 }
 
-template <typename T>
+template <typename ComponentType>
 void EntityComponentSystem::RegisterComponent()
 {
-	componentManager.RegisterComponent<T>();
+	componentManager.RegisterComponent<ComponentType>();
 }
 
-template <typename T>
-void EntityComponentSystem::AddComponent(Entity entity, T component)
+template <typename ComponentType>
+void EntityComponentSystem::AddComponent(Entity entity, ComponentType component)
 {
-	if (!entityHandler.DoesEntityExist(entity)) // TODO: change name to EntityExists
+	if (!entityHandler.EntityExists(entity))
 	{
 		return;
 	}
 
-	componentManager.AddComponent<T>(entity, component);
+	componentManager.AddComponent<ComponentType>(entity, component);
 
 	// update entity signature
 	Signature entitySig = entityHandler.GetSignature(entity);
-	int bitPosition = componentManager.GetBitPosition<T>();
+	int bitPosition = componentManager.GetBitPosition<ComponentType>();
 
 	entitySig.set(bitPosition);
 
@@ -102,19 +92,19 @@ void EntityComponentSystem::AddComponent(Entity entity, T component)
 	systemManager.EntitySignatureChanged(entity, entitySig);
 }
 
-template <typename T>
+template <typename ComponentType>
 void EntityComponentSystem::RemoveComponent(Entity entity)
 {
-	if (entityHandler.DoesEntityExist(entity))
+	if (entityHandler.EntityExists(entity))
 	{
 		return;
 	}
 
-	componentManager.RemoveComponent<T>(entity);
+	componentManager.RemoveComponent<ComponentType>(entity);
 
 	// update entity signature
 	Signature entitySig = entityHandler.GetSignature(entity);
-	int bitPosition = componentManager.GetBitPosition<T>();
+	int bitPosition = componentManager.GetBitPosition<ComponentType>();
 
 	entitySig.reset(bitPosition);
 
@@ -123,28 +113,30 @@ void EntityComponentSystem::RemoveComponent(Entity entity)
 	systemManager.EntitySignatureChanged(entity, entitySig);
 }
 
-template <typename T>
-T* EntityComponentSystem::GetComponent(Entity entity)
+template <typename ComponentType>
+ComponentType* EntityComponentSystem::GetComponent(Entity entity)
 {
-	if (entityHandler.DoesEntityExist(entity))
+	if (!entityHandler.EntityExists(entity))
 	{
-		return componentManager.GetComponent<T>(entity);
+		return nullptr;
 	}
+
+	return componentManager.GetComponent<ComponentType>(entity);
 }
 
-template <typename T>
-std::shared_ptr<SparseSet<T>> EntityComponentSystem::GetComponentSet()
+template <typename ComponentType>
+std::shared_ptr<SparseSet<ComponentType>> EntityComponentSystem::GetComponentSet()
 {
-	return componentManager.GetComponentSet<T>();
+	return componentManager.GetComponentSet<ComponentType>();
 } 
 
-template <typename SystemName, typename... ComponentNames>
+template <typename SystemName, typename... ComponentTypes>
 std::shared_ptr<SystemName> EntityComponentSystem::RegisterSystem(std::shared_ptr<SystemName> system)
 {
 	Signature systemSignature;
 
 	// set signature by folding over each of the given components
-	(systemSignature.set(componentManager.GetBitPosition<ComponentNames>()), ...);
+	(systemSignature.set(componentManager.GetBitPosition<ComponentTypes>()), ...);
 
 	return systemManager.RegisterSystem<SystemName>(systemSignature, system);
 }
