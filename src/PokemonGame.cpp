@@ -13,10 +13,12 @@
 #include "c_Renderable.h"
 #include "s_Render.h"
 #include "Entity.h"
-#include "EntityHandler.h"
+#include "EntityManager.h"
 #include "SparseSet.h"
 #include "ComponentManager.h"
 #include "EntityComponentSystem.h"
+
+#include "Skybox.h"
 
 #include "Framebuffer.h"
 
@@ -24,6 +26,8 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
+#include <string>
 
 #include <glad/glad.h>
 
@@ -36,13 +40,13 @@ int main(int argc, char* args[])
     int windowWidth = 1920;
     int windowHeight = 1080;
 
-    float renderWidth = 256; //256
-    float renderHeight = 144; //144
+    int renderWidth = 256; //256
+    int renderHeight = 144; //144
 
     SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
     Camera camera;
-    camera.UpdateProjectionMatrix(glm::radians(45.0f), renderWidth, renderHeight);
+    camera.UpdateProjectionMatrix(glm::radians(45.0f), (float)renderWidth, (float)renderHeight);
 
     SDLInput input;
 
@@ -70,8 +74,21 @@ int main(int argc, char* args[])
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
 
     std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
+
+    std::shared_ptr<Shader> skyboxShader = aManager.LoadShader("SkyBoxShader", "assets/shaders/SkyboxVertex.vs", "assets/shaders/SkyboxFragment.fs");
+    std::vector<std::string> faces
+    {
+        "assets/Textures/skybox/right.jpg",
+        "assets/Textures/skybox/left.jpg",
+        "assets/Textures/skybox/top.jpg",
+        "assets/Textures/skybox/bottom.jpg",
+        "assets/Textures/skybox/front.jpg",
+        "assets/Textures/skybox/back.jpg"
+    };
+    std::shared_ptr<Texture> skyboxTexture = aManager.LoadCubeMapTexture("/assets/Textures/skybox", faces, false);
     /////////////////////// //////////// ///////////////////////////
 
+    Skybox skybox(skyboxTexture);
 
     Entity spriteEntity = ecs.CreateEntity(); // 0
     c_Renderable spriteRenderData = c_Renderable{testSpriteModel, testSpriteShader};
@@ -90,6 +107,7 @@ int main(int argc, char* args[])
     bool gameRunning = true;
     while (gameRunning)
     {
+
         dt.Update();
         
         pixelFramebuffer.Bind();
@@ -99,9 +117,11 @@ int main(int argc, char* args[])
 
         renderSystem->RenderEntitites();
 
+        renderer.RenderSkybox(skybox, *skyboxShader, camera);
+
         pixelFramebuffer.Unbind(windowWidth,windowHeight);
 
-        pixelFramebuffer.renderFramebufferQuad(framebufferShader);
+        renderer.RenderFramebufferQuad(pixelFramebuffer, *framebufferShader);
 
         input.updateKeyState();
 
