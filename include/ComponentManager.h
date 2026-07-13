@@ -16,19 +16,19 @@ public:
 	ComponentManager();
 
 	template <typename ComponentType>
-	void RegisterComponent(); // add a new component to the array
+	void RegisterComponent(); // add a new component set to the map
 
 	template <typename ComponentType>
-	const int GetBitPosition(); // returns the bit position for a given component
+	const int GetBitPosition(); // returns the bit position for a given component type
 
 	template <typename ComponentType>
-	void AddComponent(Entity entity, ComponentType component); // adds a component to the array for an entity
+	void AddComponent(Entity entity, ComponentType component); // adds a component to the component set for an entity
 
 	template<typename ComponentType>
-	void RemoveComponent(Entity entity); // removes a component from an array for an entity
+	void RemoveComponent(Entity entity); // removes a component from a component set for an entity
 
 	template <typename ComponentType>
-	ComponentType* GetComponent(Entity entity); // get a component from an array for an entity
+	ComponentType* GetComponent(Entity entity); // get a pointer to a component in a component set for an entity
 
 	void EntityDeleted(Entity entity); // remove all components from all arrays for an entity
 
