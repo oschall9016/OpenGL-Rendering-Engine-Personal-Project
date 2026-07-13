@@ -4,17 +4,17 @@
 #include "Entity.h"
 
 #include <bitset>
-#include <vector>
+#include <unordered_map>
 
-class EntityHandler
+class EntityManager
 {
 public:
-	EntityHandler();
+	EntityManager();
 	
 	Entity CreateEntity();
 	void DestroyEntity(Entity entity);
 
-	bool DoesEntityExist(Entity entity);
+	bool EntityExists(Entity entity);
 
 	void SetSignature(Entity entity, Signature signature);
 	
@@ -23,7 +23,7 @@ public:
 
 private:
 	std::queue<Entity> availableEntities;
-	std::vector<Signature> signatures;
+	std::unordered_map<Entity,Signature> signatures;
 	std::bitset<MAX_ENTITIES> livingEntitiesSet;
 
 	int livingEntities;

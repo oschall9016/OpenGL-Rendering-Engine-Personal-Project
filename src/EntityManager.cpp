@@ -1,10 +1,11 @@
-#include "EntityHandler.h"
+#include "EntityManager.h"
 #include "Entity.h"
 
 #include <queue>
 #include <iostream>
+#include <unordered_map>
 
-EntityHandler::EntityHandler()
+EntityManager::EntityManager()
 {
 	livingEntities = 0;
 	
@@ -15,7 +16,7 @@ EntityHandler::EntityHandler()
 	}
 }
 
-Entity EntityHandler::CreateEntity()
+Entity EntityManager::CreateEntity()
 {
 
 	// TODO: better error handling
@@ -29,44 +30,47 @@ Entity EntityHandler::CreateEntity()
 	availableEntities.pop();
 	livingEntitiesSet.set(id);
 	livingEntities++;
+
+	signatures.insert({ id, {} });
+
 	return id;
 }
 
-void EntityHandler::DestroyEntity(Entity entity)
+void EntityManager::DestroyEntity(Entity entity)
 {
 	if (livingEntitiesSet[entity] == 0) // kind of redundant
 	{
 		std::cout << "Entity Not Deleted: Entity Does Not Exist\n";
 		return;
 	}
-	signatures[entity].reset();
+	signatures.erase(entity);
 	availableEntities.push(entity);
 	livingEntitiesSet.reset(entity);
 	livingEntities--;
 }
 
-bool EntityHandler::DoesEntityExist(Entity entity)
+bool EntityManager::EntityExists(Entity entity)
 {
 	if (livingEntitiesSet[entity] == 1) return true;
 	else return false;
 }
 
-void EntityHandler::SetSignature(Entity entity, Signature signature)
+void EntityManager::SetSignature(Entity entity, Signature signature)
 {
-	if (!DoesEntityExist(entity))
+	if (!EntityExists(entity))
 	{
 		return;
 	}
-	signatures[entity] = signature;
+	signatures.at(entity) = signature;
 }
 
-Signature EntityHandler::GetSignature(Entity entity)
+Signature EntityManager::GetSignature(Entity entity)
 {
-	if (!DoesEntityExist(entity))
+	if (!EntityExists(entity))
 	{
 		return {};
 	}
 
-	return signatures[entity];
+	return signatures.at(entity);
 }
 
