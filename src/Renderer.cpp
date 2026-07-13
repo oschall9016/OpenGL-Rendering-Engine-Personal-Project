@@ -5,6 +5,9 @@
 #include "Texture.h"
 #include "Shader.h"
 
+#include "Framebuffer.h"
+#include "Skybox.h"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -55,4 +58,38 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 	glBindVertexArray(0);
 
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
+{
+
+	glDisable(GL_DEPTH_TEST); // makes sure quad isn't effected by depth test
+
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	shader.use();
+
+	// draw the quad
+	glBindVertexArray(framebuffer.GetQuadVAO());
+	glBindTexture(GL_TEXTURE_2D, framebuffer.GetTextureColorbufferID());
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Renderer::RenderSkybox(Skybox& skybox, Shader& shader, Camera& camera)
+{
+	// draw skybox as last
+	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+	shader.use();
+	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+	shader.setMat4("view", view);
+	shader.setMat4("projection", camera.GetProjectionMatrix());
+	// skybox cube
+	glBindVertexArray(skybox.GetCubeVAO());
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.GetTextureID());
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthFunc(GL_LESS); // set depth function back to default
 }
