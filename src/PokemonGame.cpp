@@ -110,16 +110,15 @@ int main(int argc, char* args[])
 
         dt.Update();
         
-        pixelFramebuffer.Bind();
+        pixelFramebuffer.Bind(); //
 
-        glClearColor(0.1f, 0.6f, 0.9f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        renderer.Clear();
 
         renderSystem->RenderEntitites();
 
         renderer.RenderSkybox(skybox, *skyboxShader, camera);
 
-        pixelFramebuffer.Unbind(windowWidth,windowHeight);
+        pixelFramebuffer.Unbind(windowWidth,windowHeight); //
 
         renderer.RenderFramebufferQuad(pixelFramebuffer, *framebufferShader);
 
