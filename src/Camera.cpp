@@ -32,9 +32,9 @@ glm::mat4& Camera::GetViewMatrix()
 	return view;
 }
 
-void Camera::UpdateProjectionMatrix(float fov, float screenWidth, float screenHeight)
+void Camera::UpdateProjectionMatrix(float fovDegrees, float screenWidth, float screenHeight)
 {
-	projection = glm::perspective(fov, screenWidth/screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(fovDegrees), screenWidth/screenHeight, 0.1f, 100.0f);
 }
 
 glm::mat4& Camera::GetProjectionMatrix()

@@ -46,7 +46,7 @@ int main(int argc, char* args[])
     SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
     Camera camera;
-    camera.UpdateProjectionMatrix(glm::radians(45.0f), (float)renderWidth, (float)renderHeight);
+    camera.UpdateProjectionMatrix(45.0f, (float)renderWidth, (float)renderHeight);
 
     SDLInput input;
 
