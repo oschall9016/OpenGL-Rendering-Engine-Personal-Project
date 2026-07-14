@@ -24,7 +24,7 @@ public:
 	void UpdateViewMatrix();
 	glm::mat4& GetViewMatrix();
 
-	void UpdateProjectionMatrix(float fov, float screenWidth, float screenHeight);
+	void UpdateProjectionMatrix(float fovDegrees, float screenWidth, float screenHeight);
 	glm::mat4& GetProjectionMatrix();
 	
 	void ProcessInput(SDLInput input, float deltaTime);
