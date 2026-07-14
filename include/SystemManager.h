@@ -12,8 +12,8 @@ class SystemManager
 public:
 	SystemManager();
 
-	template <typename T>
-	std::shared_ptr<T> RegisterSystem(Signature signature, std::shared_ptr<T> system);
+	template <typename SystemName>
+	std::shared_ptr<SystemName> RegisterSystem(Signature signature, std::shared_ptr<SystemName> system); // add a system and signature to the corresponding maps to be updated
 
 	void EntityDestroyed(Entity entity); // remove entity from all systems
 	void EntitySignatureChanged(Entity entity, Signature entitySignature); // check if entity needs to be added to or removed from all systems
@@ -25,10 +25,10 @@ private:
 
 inline SystemManager::SystemManager(){}
 
-template <typename T>
-std::shared_ptr<T> SystemManager::RegisterSystem(Signature signature, std::shared_ptr<T> system)
+template <typename SystemName>
+std::shared_ptr<SystemName> SystemManager::RegisterSystem(Signature signature, std::shared_ptr<SystemName> system)
 {
-	std::string systemName = typeid(T).name();
+	std::string systemName = typeid(SystemName).name();
 
 	typeSystemMap.insert({ systemName, system });
 	typeSignatureMap.insert({ systemName, signature });
