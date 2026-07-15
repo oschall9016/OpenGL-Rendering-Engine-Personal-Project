@@ -77,7 +77,7 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 	return Models.at(path); 
 }
 
-std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, const Model model)
+std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, std::shared_ptr<Model> model)
 {
 	// if model is in the list
 	if (Models.find(name) != Models.end())
@@ -85,8 +85,7 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, const Mo
 		return Models.at(name);
 	}
 
-	std::shared_ptr<Model> importedModel = std::make_shared<Model>(model);
-	Models.insert({ name, importedModel });
+	Models.insert({ name, model });
 	std::cout << "Loaded Model: " << name << "\n";
 	return Models.at(name);
 }

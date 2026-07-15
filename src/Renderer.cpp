@@ -27,11 +27,11 @@ void Renderer::Clear()
 
 void Renderer::RenderModel(Model& model, Shader& shader)
 {
-	std::vector<Mesh>& meshes = model.GetMeshes();
+	std::vector<std::shared_ptr<Mesh>>& meshes = model.GetMeshes();
 
 	for(unsigned int i = 0; i < meshes.size(); i++)
 	{
-		RenderMesh(meshes[i], shader);
+		RenderMesh(*meshes[i], shader);
 	}
 }
 
@@ -85,17 +85,18 @@ void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
 
 void Renderer::RenderSkybox(Skybox& skybox, Shader& shader, Camera& camera)
 {
-	// draw skybox as last
-	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+	glDepthFunc(GL_LEQUAL);  
+
 	shader.use();
-	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 	shader.setMat4("view", view);
 	shader.setMat4("projection", camera.GetProjectionMatrix());
-	// skybox cube
+
 	glBindVertexArray(skybox.GetCubeVAO());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.GetTextureID());
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
-	glDepthFunc(GL_LESS); // set depth function back to default
+
+	glDepthFunc(GL_LESS); 
 }
