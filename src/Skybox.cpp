@@ -8,13 +8,14 @@
 
 Skybox::Skybox(std::shared_ptr<Texture> texture)
 {
-    cubeVAO = QuickCube();
+    QuickCube();
     this->texture = texture;
 }
 
 Skybox::~Skybox()
 {
 	glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteBuffers(1, &cubeVBO);
 }
 
 const unsigned int& Skybox::GetCubeVAO()
@@ -27,7 +28,7 @@ const unsigned int& Skybox::GetTextureID()
     return texture->GetID();
 }
 
-unsigned int Skybox::QuickCube()
+void Skybox::QuickCube()
 {
     float skyboxVertices[] = {
         // positions          
@@ -75,7 +76,6 @@ unsigned int Skybox::QuickCube()
     };
 
     // generate buffers
-    unsigned int cubeVAO, cubeVBO;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);
 
@@ -89,5 +89,6 @@ unsigned int Skybox::QuickCube()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-    return cubeVAO;
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -31,6 +31,7 @@ Shader::Shader(const std::string& vertShaderPath, const std::string& fragShaderP
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
@@ -42,6 +43,7 @@ Shader::Shader(const std::string& vertShaderPath, const std::string& fragShaderP
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
@@ -56,9 +58,16 @@ Shader::Shader(const std::string& vertShaderPath, const std::string& fragShaderP
     if (!success)
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::LINK_FAILED\n" << infoLog << std::endl;
     }
+
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+}
+
+Shader::~Shader()
+{
+    glDeleteProgram(ID);
 }
 
 void Shader::use()

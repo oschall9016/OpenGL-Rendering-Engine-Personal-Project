@@ -18,12 +18,12 @@ public:
 
 private:
 
-	unsigned int quickQuad();
+	void quickQuad();
 
 	unsigned int framebufferID;
 	unsigned int textureColorbufferID;
 
-	unsigned int quadVAO;
+	unsigned int quadVAO, quadVBO, RBO;
 
 	int width;
 	int height;

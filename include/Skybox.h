@@ -19,9 +19,9 @@ public:
 
 private:
 
-	unsigned int QuickCube();
+	void QuickCube();
 
 	std::shared_ptr<Texture> texture;
 
-	unsigned int cubeVAO;
+	unsigned int cubeVAO, cubeVBO;
 };

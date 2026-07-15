@@ -11,6 +11,8 @@ class Shader
 public:
 
 	Shader(const std::string& vertShaderPath, const std::string& fragShaderPath);
+	~Shader();
+
 	void use();
 	unsigned int getID() const;
 
