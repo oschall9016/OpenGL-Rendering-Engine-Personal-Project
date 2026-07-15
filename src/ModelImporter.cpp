@@ -30,7 +30,7 @@ std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
 		std::cout << "Failed to Load Model: " << importer.GetErrorString() << "\n";
 	}
 
-	std::vector<Mesh> meshes;
+	std::vector<std::shared_ptr<Mesh>> meshes;
 
 	TraverseAssimpScene(scene, meshes);
 
@@ -40,7 +40,7 @@ std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
 
 }
 
-void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>& meshes)
+void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<std::shared_ptr<Mesh>>& meshes)
 {
 
 	std::stack<aiNode*> nodeStack;
@@ -55,7 +55,7 @@ void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>&
 		for (unsigned int i = 0; i < curNode->mNumMeshes; i++)
 		{
 			unsigned int meshIndex = curNode->mMeshes[i];
-			Mesh tempMesh = CreateMesh(scene, scene->mMeshes[meshIndex]);
+			std::shared_ptr<Mesh> tempMesh = CreateMesh(scene, scene->mMeshes[meshIndex]);
 			meshes.push_back(tempMesh);
 		}
 
@@ -67,7 +67,7 @@ void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<Mesh>&
 	}
 }
 
-Mesh ModelImporter::CreateMesh(const aiScene* scene, aiMesh* mesh)
+std::shared_ptr<Mesh> ModelImporter::CreateMesh(const aiScene* scene, aiMesh* mesh)
 {
 	std::vector<Vertex> tempVertices;
 	std::vector<unsigned int> tempIndices;
@@ -126,7 +126,7 @@ Mesh ModelImporter::CreateMesh(const aiScene* scene, aiMesh* mesh)
 	std::vector<std::shared_ptr<Texture>> diffuseTextures = importTextures(mat, aiTextureType_DIFFUSE);
 	tempTextures.insert(tempTextures.end(), diffuseTextures.begin(), diffuseTextures.end());
 
-	return Mesh(tempVertices, tempIndices, tempTextures);
+	return std::make_shared<Mesh>(tempVertices, tempIndices, tempTextures);
 }
 
 std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* mat, aiTextureType type)

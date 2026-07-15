@@ -15,7 +15,7 @@ public:
 	std::shared_ptr<Texture> LoadCubeMapTexture(const std::string& path, std::vector<std::string>& cubeFaces, bool needsFlipped);
 
 	std::shared_ptr<Model> LoadModel(const std::string& path);
-	std::shared_ptr<Model> LoadModel(const std::string& name, const Model model);
+	std::shared_ptr<Model> LoadModel(const std::string& name, std::shared_ptr<Model> model);
 
 	std::shared_ptr<Shader> LoadShader(const std::string& name, const std::string& vPath, const std::string& fPath);
 	std::shared_ptr<Shader> GetShader(const std::string& name);

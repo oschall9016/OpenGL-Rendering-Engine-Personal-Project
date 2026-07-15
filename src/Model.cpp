@@ -13,17 +13,17 @@
 
 #include <stb_image.h>
 
-Model::Model(std::vector<Mesh> meshes)
+Model::Model(std::vector<std::shared_ptr<Mesh>> meshes)
 {
 	this->meshes = meshes;
 }
 
-std::vector<Mesh>& Model::GetMeshes()
+std::vector<std::shared_ptr<Mesh>>& Model::GetMeshes()
 {
 	return meshes;
 }
 
-Model Model::CreateQuad(std::shared_ptr<Texture> texture)
+std::shared_ptr<Model> Model::CreateQuad(std::shared_ptr<Texture> texture)
 {
 	glm::vec3 positions[] = {
 		{  0.5f,  0.5f, 0.0f },  // top right
@@ -56,9 +56,9 @@ Model Model::CreateQuad(std::shared_ptr<Texture> texture)
 
 	std::vector<std::shared_ptr<Texture>> textures = { texture };
 
-	Mesh quadMesh(vertices, indices, textures);
+	std::shared_ptr<Mesh> quadMesh = std::make_shared<Mesh>(vertices, indices, textures);
 	
-	std::vector<Mesh> quadMeshVector = { quadMesh };
+	std::vector<std::shared_ptr<Mesh>> quadMeshVector = { quadMesh };
 
-	return Model(quadMeshVector);
+	return std::make_shared<Model>(quadMeshVector);
 }

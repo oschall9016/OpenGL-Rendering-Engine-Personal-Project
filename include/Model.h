@@ -7,15 +7,16 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 class Model
 {
 public:
-	Model(std::vector<Mesh> meshes);
+	Model(std::vector<std::shared_ptr<Mesh>> meshes);
 
-	std::vector<Mesh>& GetMeshes();
+	std::vector<std::shared_ptr<Mesh>>& GetMeshes();
 
-	static Model CreateQuad(std::shared_ptr<Texture> texture);
+	static std::shared_ptr<Model> CreateQuad(std::shared_ptr<Texture> texture);
 private:
-	std::vector<Mesh> meshes;
+	std::vector<std::shared_ptr<Mesh>> meshes;
 };
