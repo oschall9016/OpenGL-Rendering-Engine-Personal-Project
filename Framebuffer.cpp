@@ -12,7 +12,7 @@ Framebuffer::Framebuffer(int width, int height)
 	this->height = height;
 
 	// create fullscreen quad
-	quadVAO = quickQuad();
+	quickQuad();
 
 	// generate framebuffer
 	glGenFramebuffers(1, &framebufferID);
@@ -29,12 +29,11 @@ Framebuffer::Framebuffer(int width, int height)
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbufferID, 0);
 
 	// create renderbuffer object for depth
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height); // what is GL_DEPTH24_STENCIl8?
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -43,10 +42,13 @@ Framebuffer::Framebuffer(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-// TODO: delete VAO and VBO?
 Framebuffer::~Framebuffer()
 {
 	glDeleteFramebuffers(1, &framebufferID);
+	glDeleteTextures(1, &textureColorbufferID);
+	glDeleteVertexArrays(1, &quadVAO);
+	glDeleteBuffers(1, &quadVBO);
+	glDeleteRenderbuffers(1, &RBO);
 }
 
 void Framebuffer::Bind()
@@ -61,7 +63,7 @@ void Framebuffer::Unbind(int screenWidth, int screenHeight)
 	glViewport(0, 0, screenWidth, screenHeight);
 }
 
-unsigned int Framebuffer::quickQuad()
+void Framebuffer::quickQuad()
 {
 	float quadVertices[] = {
 		// positions   // texCoords
@@ -73,19 +75,23 @@ unsigned int Framebuffer::quickQuad()
 		 1.0f, -1.0f,  1.0f, 0.0f,
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
-	unsigned int quadVAO, quadVBO;
+
 	glGenVertexArrays(1, &quadVAO);
 	glGenBuffers(1, &quadVBO);
+
 	glBindVertexArray(quadVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	return quadVAO;
-
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 const unsigned int& Framebuffer::GetFramebufferID()

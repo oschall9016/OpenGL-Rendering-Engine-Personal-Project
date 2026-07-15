@@ -6,6 +6,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <iostream>
 
 Mesh::Mesh(std::vector<Vertex> vertices,std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures)
 {
@@ -14,6 +15,13 @@ Mesh::Mesh(std::vector<Vertex> vertices,std::vector<unsigned int> indices, std::
 	this->textures = textures;
 
 	setUpMesh();
+}
+
+Mesh::~Mesh()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 }
 
 const std::vector<Vertex>& Mesh::GetVertices()
@@ -63,5 +71,6 @@ void Mesh::setUpMesh()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
 
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
