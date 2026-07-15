@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\DeltaTime.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
