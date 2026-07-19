@@ -39,9 +39,6 @@
     <ClCompile Include="src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PokemonGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\SDLWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

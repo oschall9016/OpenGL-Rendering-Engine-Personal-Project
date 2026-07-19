@@ -3,5 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="../PokemonGameTest/PokemonGameTest.vcxproj" Id="8e6963bc-2467-4cca-9e46-dc6c68c78d77" />
+  <Project Path="../RenderingEngineLibrary/RenderingEngineLibrary.vcxproj" Id="b0134c9f-8af7-4db8-b919-3f1535d9f47c" />
   <Project Path="PokemonGame.vcxproj" Id="001151d5-636f-4740-801c-91844a3344c5" />
 </Solution>
