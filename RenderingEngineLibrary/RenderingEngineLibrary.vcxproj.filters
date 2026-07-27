@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Assets">
+      <UniqueIdentifier>{daa8576e-282d-42ff-a8f9-1571ae282a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS">
+      <UniqueIdentifier>{f2ab2514-e7e7-4813-852f-f65cc8b8968a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Components">
+      <UniqueIdentifier>{75b9887b-55fe-4443-ae28-5bf612305d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Systems">
+      <UniqueIdentifier>{dc7eae47-b4d3-4c82-96d3-b96dddc37fa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Assets">
+      <UniqueIdentifier>{54c25a3e-1da4-48ab-a901-92d909f52ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{26cd5ad0-de7b-40da-b241-a803779ef8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Systems">
+      <UniqueIdentifier>{6cec3816-f499-49c3-9245-033c918e73f1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\assets\AssetManager.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\Mesh.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\Model.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\ModelImporter.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\Shader.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\Texture.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assets\TextureImporter.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\ComponentManager.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\Entity.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\EntityComponentSystem.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\EntityManager.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\SparseSet.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\System.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\SystemManager.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\components\c_Renderable.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ecs\systems\s_Render.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DeltaTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Framebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SDLInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SDLWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeltaTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDLInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDLWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_add.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\AssetManager.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\Mesh.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\Model.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\ModelImporter.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\Shader.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\Texture.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets\TextureImporter.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\EntityManager.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs\systems\s_Render.cpp">
+      <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\shaders\BasicBackpackFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\BasicBackpackVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\BasicFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\BasicVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\FramebufferFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\FramebufferVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\SkyboxFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\SkyboxVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\spriteFragment.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\spriteVertex.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

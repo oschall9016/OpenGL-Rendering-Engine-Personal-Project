@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\assets\AssetManager.h" />
+    <ClInclude Include="include\assets\Mesh.h" />
+    <ClInclude Include="include\assets\Model.h" />
+    <ClInclude Include="include\assets\ModelImporter.h" />
+    <ClInclude Include="include\assets\Shader.h" />
+    <ClInclude Include="include\assets\Texture.h" />
+    <ClInclude Include="include\assets\TextureImporter.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\DeltaTime.h" />
+    <ClInclude Include="include\ecs\ComponentManager.h" />
+    <ClInclude Include="include\ecs\components\c_Renderable.h" />
+    <ClInclude Include="include\ecs\Entity.h" />
+    <ClInclude Include="include\ecs\EntityComponentSystem.h" />
+    <ClInclude Include="include\ecs\EntityManager.h" />
+    <ClInclude Include="include\ecs\SparseSet.h" />
+    <ClInclude Include="include\ecs\System.h" />
+    <ClInclude Include="include\ecs\SystemManager.h" />
+    <ClInclude Include="include\ecs\systems\s_Render.h" />
+    <ClInclude Include="include\Framebuffer.h" />
+    <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\SDLInput.h" />
+    <ClInclude Include="include\SDLWindow.h" />
+    <ClInclude Include="include\Skybox.h" />
+    <ClInclude Include="include\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\assets\AssetManager.cpp" />
+    <ClCompile Include="src\assets\Mesh.cpp" />
+    <ClCompile Include="src\assets\Model.cpp" />
+    <ClCompile Include="src\assets\ModelImporter.cpp" />
+    <ClCompile Include="src\assets\Shader.cpp" />
+    <ClCompile Include="src\assets\Texture.cpp" />
+    <ClCompile Include="src\assets\TextureImporter.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DeltaTime.cpp" />
+    <ClCompile Include="src\ecs\EntityManager.cpp" />
+    <ClCompile Include="src\ecs\systems\s_Render.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\SDLInput.cpp" />
+    <ClCompile Include="src\SDLWindow.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\stb_add.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\shaders\BasicBackpackFragment.fs" />
+    <None Include="..\assets\shaders\BasicBackpackVertex.vs" />
+    <None Include="..\assets\shaders\BasicFragment.fs" />
+    <None Include="..\assets\shaders\BasicVertex.vs" />
+    <None Include="..\assets\shaders\FramebufferFragment.fs" />
+    <None Include="..\assets\shaders\FramebufferVertex.vs" />
+    <None Include="..\assets\shaders\SkyboxFragment.fs" />
+    <None Include="..\assets\shaders\SkyboxVertex.vs" />
+    <None Include="..\assets\shaders\spriteFragment.fs" />
+    <None Include="..\assets\shaders\spriteVertex.vs" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b0134c9f-8af7-4db8-b919-3f1535d9f47c}</ProjectGuid>
+    <RootNamespace>RenderingEngineLibrary</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\lib_stuff\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib_stuff\libs;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\assets;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs\components;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs\systems;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+    <Lib>
+      <AdditionalDependencies>glfw3.lib;SDL2.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
