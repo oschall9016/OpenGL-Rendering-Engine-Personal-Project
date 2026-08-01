@@ -34,6 +34,12 @@
     <Filter Include="Source Files\Animations">
       <UniqueIdentifier>{6764b5fd-09f0-4bcd-8836-46685cab7750}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\World">
+      <UniqueIdentifier>{6f64a6e3-515b-47af-8dc3-d92a6d5ee2bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\World">
+      <UniqueIdentifier>{7a51d3f4-db25-4bea-b480-c63d875d9e9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -53,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="src\animations\OverworldSpriteMovementAnimation.cpp">
       <Filter>Source Files\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\Tilemap.cpp">
+      <Filter>Source Files\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="include\animations\OverworldSpriteMovementAnimation.h">
       <Filter>Header Files\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="include\world\Tilemap.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="include\world\Tile.h">
+      <Filter>Header Files\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

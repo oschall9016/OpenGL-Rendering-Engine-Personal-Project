@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\components;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\systems;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\animations;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\assets;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\components;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\systems;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\animations;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\assets;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\world;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +157,7 @@
     <ClCompile Include="src\PokemonGameDemo1.cpp" />
     <ClCompile Include="src\systems\system_Movement.cpp" />
     <ClCompile Include="src\systems\system_RenderEntities.cpp" />
+    <ClCompile Include="src\world\Tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\animations\OverworldSpriteMovementAnimation.h" />
@@ -167,6 +168,8 @@
     <ClInclude Include="include\PokemonGameDemo1.h" />
     <ClInclude Include="include\systems\system_Movement.h" />
     <ClInclude Include="include\systems\system_RenderEntities.h" />
+    <ClInclude Include="include\world\Tile.h" />
+    <ClInclude Include="include\world\Tilemap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicBackpackFragment.fs" />
