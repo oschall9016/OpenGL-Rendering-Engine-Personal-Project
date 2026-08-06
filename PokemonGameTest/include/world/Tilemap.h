@@ -13,11 +13,12 @@ public:
 	const Tile& GetTile(int row, int col);
 	void SetTileSignature(int row, int col, TileSignature newsig);
 
+	int mapRows, mapCols;
+
 	// debug
 	void PrintTilemap();
 	
 private:
 	std::vector<Tile> map;
-	int mapRows, mapCols;
-
+	
 };
