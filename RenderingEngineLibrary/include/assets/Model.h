@@ -17,6 +17,7 @@ public:
 	std::vector<std::shared_ptr<Mesh>>& GetMeshes();
 
 	static std::shared_ptr<Model> CreateQuad(std::shared_ptr<Texture> texture);
+	static std::shared_ptr<Model> CreateEmptyQuad();
 private:
 	std::vector<std::shared_ptr<Mesh>> meshes;
 };

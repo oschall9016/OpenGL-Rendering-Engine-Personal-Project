@@ -62,3 +62,43 @@ std::shared_ptr<Model> Model::CreateQuad(std::shared_ptr<Texture> texture)
 
 	return std::make_shared<Model>(quadMeshVector);
 }
+
+std::shared_ptr<Model> Model::CreateEmptyQuad() //TODO: dont need a seperate function for this
+{
+	glm::vec3 positions[] = {
+		{  0.5f,  0.5f, 0.0f },  // top right
+		{  0.5f, -0.5f, 0.0f },  // bottom right
+		{ -0.5f, -0.5f, 0.0f },  // bottom left
+		{ -0.5f,  0.5f, 0.0f }   // top left 
+	};
+
+	glm::vec2 texCoords[] =
+	{
+		{1.0f, 1.0f}, // top right
+		{1.0f, 0.0f}, // bottom right
+		{0.0f, 0.0f}, // bottom left
+		{0.0f, 1.0f}  // top left
+	};
+
+	std::vector<Vertex> vertices = // no normals
+	{
+		{positions[0],glm::vec3(0.0f),texCoords[0]},
+		{positions[1],glm::vec3(0.0f),texCoords[1]},
+		{positions[2],glm::vec3(0.0f),texCoords[2]},
+		{positions[3],glm::vec3(0.0f),texCoords[3]}
+	};
+
+	std::vector<unsigned int> indices =
+	{
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+
+	std::vector<std::shared_ptr<Texture>> textures = { };
+
+	std::shared_ptr<Mesh> quadMesh = std::make_shared<Mesh>(vertices, indices, textures);
+
+	std::vector<std::shared_ptr<Mesh>> quadMeshVector = { quadMesh };
+
+	return std::make_shared<Model>(quadMeshVector);
+}
