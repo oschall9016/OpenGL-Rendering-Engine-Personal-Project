@@ -110,3 +110,31 @@ void Camera::ProcessMouse(Sint32 x, Sint32 y)
 
 	UpdateViewMatrix();
 }
+
+void Camera::SetPitchAngle(float pitchDegrees)
+{
+	pitch = pitchDegrees;
+
+	if (pitch > 89.0f) pitch = 89.0f;
+	if (pitch < -89.0f) pitch = -89.0f;
+
+	glm::vec3 newFront;
+	newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	newFront.y = sin(glm::radians(pitch));
+	newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	newFront = glm::normalize(newFront);
+
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	front = newFront;
+	right = glm::normalize(glm::cross(front, worldUp));
+	up = glm::normalize(glm::cross(right, front));
+
+	UpdateViewMatrix();
+}
+
+void Camera::SetPosition(float x, float y, float z)
+{
+	position = glm::vec3(x, y, z);
+	UpdateViewMatrix();
+}

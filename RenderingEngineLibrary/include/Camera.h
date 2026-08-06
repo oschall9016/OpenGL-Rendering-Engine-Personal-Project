@@ -29,6 +29,9 @@ public:
 	
 	void ProcessInput(SDLInput input, float deltaTime);
 	void ProcessMouse(Sint32 x, Sint32 y);
+
+	void SetPitchAngle(float pitchDegrees);
+	void SetPosition(float x, float y, float z);
 	
 	
 private:
