@@ -28,23 +28,51 @@
 
 #include "OverworldSpriteMovementAnimation.h"
 
+#include "Tilemap.h" // TODO: one word or two
+#include "GameMap.h"
+
 #include <memory>
 #include <vector>
 #include <string>
+#include <cmath>
+
+#include <glm/glm.hpp>
 
 PokemonGameDemo1::PokemonGameDemo1()
 {
     /////////////////////// Initialization //////////////////////////
+    
     int windowWidth = 1920;
     int windowHeight = 1080;
 
-    int renderWidth = 256; //256
-    int renderHeight = 144; //144
+    int renderWidth = 480; // 427
+    int renderHeight = 270; // 240
 
     SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
     Camera camera;
     camera.UpdateProjectionMatrix(45.0f, (float)renderWidth, (float)renderHeight);
+
+    // center the player sprite
+
+    float cameraAngle = 45.0f; // amount camera is angled down at player
+    float cameraFOV = 45.0f; // TODO: make FOV a member of camera for easier changing e.g. change the UpdateProjectionMatrix function
+
+    float billboardSize = 1.0f; // in world coords
+    float spriteSize = 32.0f; // in pixels
+
+    // finds the distance at which the sprite is exactly 32x32 pixels in the window
+    float screenScale = billboardSize * ((float)renderHeight / spriteSize);
+    float cameraDistance = (screenScale / 2.0f) / std::tan(glm::radians(cameraFOV / 2.0f));
+
+    // centers the camera on the player sprite
+    float yOffset = std::sin(glm::radians(90.0f - cameraAngle)) * cameraDistance;
+    float zOffset = std::cos(glm::radians(90.0f - cameraAngle)) * cameraDistance;
+    
+    camera.SetPosition(0.0f, yOffset, zOffset);
+    camera.SetPitchAngle(-cameraAngle);
+
+    //
 
     SDLInput input;
     DeltaTime dt;
@@ -54,6 +82,7 @@ PokemonGameDemo1::PokemonGameDemo1()
 
     
     /////////////////////// Asset Loading //////////////////////////
+    
     //std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
 
     //std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/testmodel2/Test Model.obj"); //"assets/models/backpack/backpack.obj"
@@ -76,6 +105,8 @@ PokemonGameDemo1::PokemonGameDemo1()
         "assets/Textures/skybox/back.jpg"
     };
     std::shared_ptr<Texture> skyboxTexture = aManager.LoadCubeMapTexture("/assets/Textures/skybox", faces, false);
+
+    std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
     
     /////////////////////// ECS Setup ///////////////////////////
 
@@ -117,13 +148,21 @@ PokemonGameDemo1::PokemonGameDemo1()
     ecs.AddComponent<component_Movement>(playerEntity, playerMovementData);
 
     /////////////////////// Other Features ///////////////////////////
+    
     Framebuffer pixelFramebuffer(renderWidth, renderHeight);
     Skybox skybox(skyboxTexture);
 
-    int animTimer = 0; 
+    int tileRows = 5;
+    int tileCols = 5;
+
+    Tilemap tilemap(tileRows, tileCols);
+    GameMap gameMap(tilemap, Model::CreateEmptyQuad(),worldShader);
 
     /////////////////////// Main Game Loop ///////////////////////////
+    
+    int animTimer = 0;
     bool gameRunning = true;
+
     while (gameRunning)
     {
 
@@ -139,6 +178,8 @@ PokemonGameDemo1::PokemonGameDemo1()
             entityMovementSystem->Update();
             animTimer = 0;
         }
+
+        gameMap.DrawGameMap(renderer,camera);
    
         entityRenderSystem->RenderEntities();
 
