@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -157,6 +157,7 @@
     <ClCompile Include="src\PokemonGameDemo1.cpp" />
     <ClCompile Include="src\systems\system_Movement.cpp" />
     <ClCompile Include="src\systems\system_RenderEntities.cpp" />
+    <ClCompile Include="src\world\GameMap.cpp" />
     <ClCompile Include="src\world\Tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,7 @@
     <ClInclude Include="include\PokemonGameDemo1.h" />
     <ClInclude Include="include\systems\system_Movement.h" />
     <ClInclude Include="include\systems\system_RenderEntities.h" />
+    <ClInclude Include="include\world\GameMap.h" />
     <ClInclude Include="include\world\Tile.h" />
     <ClInclude Include="include\world\Tilemap.h" />
   </ItemGroup>

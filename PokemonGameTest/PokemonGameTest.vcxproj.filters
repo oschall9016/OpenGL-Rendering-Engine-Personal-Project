@@ -63,6 +63,9 @@
     <ClCompile Include="src\world\Tilemap.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\GameMap.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\PokemonGameDemo1.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files\World</Filter>
     </ClInclude>
     <ClInclude Include="include\world\Tile.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="include\world\GameMap.h">
       <Filter>Header Files\World</Filter>
     </ClInclude>
   </ItemGroup>
