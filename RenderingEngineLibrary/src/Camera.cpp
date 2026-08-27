@@ -48,22 +48,22 @@ void Camera::ProcessKeyboard(Camera_Direction direction, float deltaTime)
 	float cameraSpeed = speed * deltaTime;
 	switch (direction)
 	{
-	case FORWARD:
+	case Camera_Direction::FORWARD:
 		position += front * cameraSpeed;
 		break;
-	case BACKWARD:
+	case Camera_Direction::BACKWARD:
 		position -= front * cameraSpeed;
 		break;
-	case LEFT:
+	case Camera_Direction::LEFT:
 		position -= right * cameraSpeed;
 		break;
-	case RIGHT:
+	case Camera_Direction::RIGHT:
 		position += right * cameraSpeed;
 		break;
-	case UP:
+	case Camera_Direction::UP:
 		position += up * cameraSpeed;
 		break;
-	case DOWN:
+	case Camera_Direction::DOWN:
 		position -= up * cameraSpeed;
 		break;
 	}
@@ -73,17 +73,17 @@ void Camera::ProcessKeyboard(Camera_Direction direction, float deltaTime)
 
 void Camera::ProcessInput(SDLInput input, float deltaTime)
 {
-	if (input.isKeyPressed(SDL_SCANCODE_W)) ProcessKeyboard(FORWARD, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_W)) ProcessKeyboard(Camera_Direction::FORWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_S)) ProcessKeyboard(BACKWARD, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_S)) ProcessKeyboard(Camera_Direction::BACKWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_A)) ProcessKeyboard(LEFT, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_A)) ProcessKeyboard(Camera_Direction::LEFT, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_D)) ProcessKeyboard(RIGHT, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_D)) ProcessKeyboard(Camera_Direction::RIGHT, deltaTime);
 	
-	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) ProcessKeyboard(UP, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) ProcessKeyboard(Camera_Direction::UP, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) ProcessKeyboard(DOWN, deltaTime);
+	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) ProcessKeyboard(Camera_Direction::DOWN, deltaTime);
 	
 }
 
@@ -111,6 +111,11 @@ void Camera::ProcessMouse(Sint32 x, Sint32 y)
 	UpdateViewMatrix();
 }
 
+const glm::vec3 Camera::GetPosition()
+{
+	return position;
+}
+
 void Camera::SetPitchAngle(float pitchDegrees)
 {
 	pitch = pitchDegrees;
@@ -136,5 +141,11 @@ void Camera::SetPitchAngle(float pitchDegrees)
 void Camera::SetPosition(float x, float y, float z)
 {
 	position = glm::vec3(x, y, z);
+	UpdateViewMatrix();
+}
+
+void Camera::SetPosition(glm::vec3 newPos)
+{
+	position = newPos;
 	UpdateViewMatrix();
 }
