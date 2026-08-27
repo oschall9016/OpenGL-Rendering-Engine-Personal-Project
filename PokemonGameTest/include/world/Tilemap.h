@@ -10,7 +10,7 @@ public:
 	Tilemap(std::vector<Tile> map, int rows, int cols);
 	Tilemap(int rows, int cols);
 
-	const Tile& GetTile(int row, int col);
+	Tile& GetTile(int row, int col);
 	void SetTileSignature(int row, int col, TileSignature newsig);
 
 	int mapRows, mapCols;

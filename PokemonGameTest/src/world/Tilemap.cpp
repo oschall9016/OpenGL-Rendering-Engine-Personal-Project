@@ -25,7 +25,7 @@ Tilemap::Tilemap(int rows, int cols)
 }
 
  // TODO: check if tile not found 
-const Tile& Tilemap::GetTile(int row, int col)
+Tile& Tilemap::GetTile(int row, int col)
 {
 	return map[(row * mapCols) + col];
 }
