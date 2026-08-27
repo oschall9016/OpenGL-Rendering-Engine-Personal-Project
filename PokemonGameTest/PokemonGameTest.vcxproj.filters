@@ -51,12 +51,6 @@
     <ClCompile Include="src\systems\system_RenderEntities.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\system_Movement.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteAnimation.cpp">
-      <Filter>Source Files\Animations</Filter>
-    </ClCompile>
     <ClCompile Include="src\animations\OverworldSpriteMovementAnimation.cpp">
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
@@ -65,6 +59,21 @@
     </ClCompile>
     <ClCompile Include="src\world\GameMap.cpp">
       <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\system_player_inputDetection.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\system_player_moveTilePosition.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\system_player_moveRenderPosition.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\system_player_playAnimation.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\animations\SpriteAnimation.cpp">
+      <Filter>Source Files\Animations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,12 +87,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\systems\system_RenderEntities.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="include\components\component_Movement.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\systems\system_Movement.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="include\animations\SpriteAnimation.h">
@@ -100,6 +103,27 @@
     </ClInclude>
     <ClInclude Include="include\world\GameMap.h">
       <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\component_tilemapPosition.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\systems\system_player_inputDetection.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\component_player_currentState.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\systems\system_player_moveTilePosition.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\systems\system_player_moveRenderPosition.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\systems\system_player_playAnimation.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\component_player_animations.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

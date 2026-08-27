@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\components;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\systems;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\animations;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\assets;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\world;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\components;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\systems;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\animations;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\assets;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\ecs;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\PokemonGameTest\include\world;C:\Users\skygu\Documents\Dev Stuff\PokemonGame\RenderingEngineLibrary\include\sdl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,11 +151,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="src\animations\OverworldSpriteMovementAnimation.cpp" />
+    <ClCompile Include="src\animations\SpriteAnimation.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PokemonGameDemo1.cpp" />
-    <ClCompile Include="src\systems\system_Movement.cpp" />
+    <ClCompile Include="src\systems\system_player_inputDetection.cpp" />
+    <ClCompile Include="src\systems\system_player_moveRenderPosition.cpp" />
+    <ClCompile Include="src\systems\system_player_moveTilePosition.cpp" />
+    <ClCompile Include="src\systems\system_player_playAnimation.cpp" />
     <ClCompile Include="src\systems\system_RenderEntities.cpp" />
     <ClCompile Include="src\world\GameMap.cpp" />
     <ClCompile Include="src\world\Tilemap.cpp" />
@@ -164,10 +167,15 @@
     <ClInclude Include="include\animations\OverworldSpriteMovementAnimation.h" />
     <ClInclude Include="include\animations\SpriteAnimation.h" />
     <ClInclude Include="include\components\component_Model.h" />
-    <ClInclude Include="include\components\component_Movement.h" />
+    <ClInclude Include="include\components\component_player_animations.h" />
+    <ClInclude Include="include\components\component_player_currentState.h" />
+    <ClInclude Include="include\components\component_tilemapPosition.h" />
     <ClInclude Include="include\components\component_Transform.h" />
     <ClInclude Include="include\PokemonGameDemo1.h" />
-    <ClInclude Include="include\systems\system_Movement.h" />
+    <ClInclude Include="include\systems\system_player_inputDetection.h" />
+    <ClInclude Include="include\systems\system_player_moveRenderPosition.h" />
+    <ClInclude Include="include\systems\system_player_moveTilePosition.h" />
+    <ClInclude Include="include\systems\system_player_playAnimation.h" />
     <ClInclude Include="include\systems\system_RenderEntities.h" />
     <ClInclude Include="include\world\GameMap.h" />
     <ClInclude Include="include\world\Tile.h" />
