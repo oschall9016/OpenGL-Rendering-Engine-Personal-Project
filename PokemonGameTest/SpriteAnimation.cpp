@@ -12,6 +12,12 @@ void SpriteAnimation::SetCurrentFrame(int frame)
 
 void SpriteAnimation::Update()
 {
-	if (currFrameIndex + 1 >= frames.size()) currFrameIndex = 0;
-	else currFrameIndex++;
+	if (currFrameIndex + 1 >= frames.size())
+	{
+		currFrameIndex = 0;
+	}
+	else
+	{	
+		currFrameIndex++;
+	}
 }
