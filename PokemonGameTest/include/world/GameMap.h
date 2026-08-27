@@ -16,6 +16,8 @@ class GameMap
 public:
 	GameMap(Tilemap& tileMap, std::shared_ptr<Model> quad, std::shared_ptr<Shader> shader);
 
+	Tilemap& GetTilemap();
+
 	void DrawGameMap(Renderer& renderer, Camera& camera);
 
 private:
