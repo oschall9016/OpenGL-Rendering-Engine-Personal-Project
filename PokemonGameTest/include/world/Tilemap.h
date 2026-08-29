@@ -7,13 +7,13 @@
 class Tilemap
 {
 public:
-	Tilemap(std::vector<Tile> map, int rows, int cols);
-	Tilemap(int rows, int cols);
+	Tilemap(std::vector<Tile> map, int x, int z);
+	Tilemap(int x, int z);
 
-	Tile& GetTile(int row, int col);
-	void SetTileSignature(int row, int col, TileSignature newsig);
+	Tile& GetTile(int x, int z);
+	void SetTileSignature(int x, int z, TileSignature newsig);
 
-	int mapRows, mapCols;
+	int mapXSize, mapZSize;
 
 	// debug
 	void PrintTilemap();

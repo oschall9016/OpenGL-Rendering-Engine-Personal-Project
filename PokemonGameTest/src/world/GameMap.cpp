@@ -10,7 +10,7 @@
 
 #include <glm/glm.hpp>
 
-GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Model> quad, std::shared_ptr<Shader> shader) : tileMap(tileMap)
+GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Model> quad, std::shared_ptr<Shader> shader) : tilemap(tileMap)
 {
 	this->quad = quad;
 	this->shader = shader;
@@ -18,22 +18,26 @@ GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Model> quad, std::shared_ptr<
 
 Tilemap& GameMap::GetTilemap()
 {
-	return tileMap;
+	return tilemap;
 }
 
 void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 {
 	glm::mat4 modelMat = glm::mat4(1.0f);
-	modelMat = glm::translate(modelMat, glm::vec3(tileMap.mapCols/2, -0.5, tileMap.mapRows/2 - 0.3)); // why 0.3? do the actual math
+	modelMat = glm::translate(modelMat,glm::vec3((tilemap.mapXSize - 1) / 2.0f,-1.0f,(tilemap.mapZSize - 1) / 2.0f));
 	modelMat = glm::rotate(modelMat, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
-	modelMat = glm::scale(modelMat, glm::vec3(tileMap.mapCols, tileMap.mapRows, 0.0));
+	modelMat = glm::scale(modelMat, glm::vec3(tilemap.mapXSize, tilemap.mapZSize, 0.0));
 	
-	shader->use();
+	shader->Bind();
 
 	shader->setMat4("model", modelMat);
 	shader->setMat4("view", camera.GetViewMatrix());
 	shader->setMat4("projection", camera.GetProjectionMatrix());
 
-	renderer.RenderModel(*quad, *shader);
+	shader->setFloat("mapXSize", (float)tilemap.mapXSize);
+	shader->setFloat("mapZSize", (float)tilemap.mapZSize);
 
+	shader->Unbind();
+
+	renderer.RenderModel(*quad, *shader);
 }

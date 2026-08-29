@@ -91,15 +91,15 @@ void system_player_moveTilePosition::Update(double dt)
 bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* tilemapPosition, float x, float z)
 {
 
-	int mapCols = tilemapPosition->currentMap->mapCols;
-	int mapRows = tilemapPosition->currentMap->mapRows;
+	float mapXSize = (float)tilemapPosition->currentMap->mapXSize;
+	float mapZSize = (float)tilemapPosition->currentMap->mapZSize;
 
-	if (x < 0 || z < 0 || x >= mapCols || z >= mapRows)
+	if (x < 0 || z < 0 || x >= mapXSize || z >= mapZSize)
 	{
 		return false;
 	}
 
-	Tile tile = tilemapPosition->currentMap->GetTile(z,x);
+	Tile tile = tilemapPosition->currentMap->GetTile((int)x,(int)z);
 	
 	if (tile.signature == COLLIDER)
 	{

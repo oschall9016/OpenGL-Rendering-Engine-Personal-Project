@@ -4,20 +4,20 @@
 #include <array>
 #include <iostream>
 
-Tilemap::Tilemap(std::vector<Tile> tileMap, int rows, int cols)
+Tilemap::Tilemap(std::vector<Tile> tileMap, int x, int z)
 {
 	map = tileMap;
-	mapRows = rows;
-	mapCols = cols;
+	mapXSize = x;
+	mapZSize = z;
 }
 
-Tilemap::Tilemap(int rows, int cols)
+Tilemap::Tilemap(int x, int z)
 {
-	mapRows = rows;
-	mapCols = cols;
+	mapXSize = x;
+	mapZSize = z;
 
 	// fills map with walkable tiles
-	for (int i = 0; i < rows * cols; i++)
+	for (int i = 0; i < x * z; i++)
 	{
 		Tile newTile;
 		map.push_back(newTile);
@@ -25,25 +25,25 @@ Tilemap::Tilemap(int rows, int cols)
 }
 
  // TODO: check if tile not found 
-Tile& Tilemap::GetTile(int row, int col)
+Tile& Tilemap::GetTile(int x, int z)
 {
-	return map[(row * mapCols) + col];
+	return map[(z * mapXSize) + x];
 }
 
-void Tilemap::SetTileSignature(int row, int col, TileSignature newsig)
+void Tilemap::SetTileSignature(int x, int z, TileSignature newsig)
 {
-	Tile& tile = map[(row * mapCols) + col];
+	Tile& tile = map[(z * mapXSize) + x];
 	tile.signature = newsig;
 }
 
 // debug
 void Tilemap::PrintTilemap()
 {
-	for (int i = 0; i < mapRows; i++)
+	for (int i = 0; i < mapZSize; i++)
 	{
 		std::cout << "\n";
 
-		for (int j = 0; j < mapCols; j++)
+		for (int j = 0; j < mapXSize; j++)
 		{
 			Tile tile = GetTile(i, j);
 
