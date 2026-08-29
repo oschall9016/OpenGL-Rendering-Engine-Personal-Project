@@ -28,7 +28,7 @@ void s_Render::RenderEntitites()
 		std::shared_ptr<Model> model = ecs.GetComponent<c_Renderable>(entity)->model; // TODO: add better error checking for when wrong type is given
 		std::shared_ptr<Shader> shader = ecs.GetComponent<c_Renderable>(entity)->shader;
 
-		shader->use();
+		shader->Bind();
 
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = camera.GetProjectionMatrix();
@@ -45,5 +45,7 @@ void s_Render::RenderEntitites()
 		shader->setMat4("model", modelMat);
 
 		renderer.RenderModel(*model, *shader);
+
+		shader->Unbind();
 	}
 }
