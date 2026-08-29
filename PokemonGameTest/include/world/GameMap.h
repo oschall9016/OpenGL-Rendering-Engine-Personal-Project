@@ -22,7 +22,7 @@ public:
 
 private:
 
-	Tilemap& tileMap;
+	Tilemap& tilemap;
 	
 	std::shared_ptr<Model> quad;
 	std::shared_ptr<Shader> shader;
