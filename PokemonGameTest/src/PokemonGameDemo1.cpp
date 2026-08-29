@@ -36,7 +36,7 @@
 #include "component_player_animations.h"
 
 
-#include "Tilemap.h" // TODO: one word or two
+#include "Tilemap.h"
 #include "GameMap.h"
 
 #include <memory>
@@ -70,7 +70,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     float cameraAngle = 45.0f; // amount camera is angled down at player
     float cameraFOV = 45.0f; // TODO: make FOV a member of camera for easier changing e.g. change the UpdateProjectionMatrix function
 
-    float billboardSize = 1.0f; // in world coords
+    float billboardSize = 1.8f; // in world coords
     float spriteSize = 32.0f; // in pixels
 
     // finds the distance at which the sprite is exactly 32x32 pixels in the window
@@ -100,8 +100,10 @@ PokemonGameDemo1::PokemonGameDemo1()
     //std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/backpack/backpack.obj");   
 
     std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/HeroSpriteTestOneRow.png", true);
+    std::shared_ptr<Texture> otherSpriteTexture = aManager.LoadTexture("assets/sprites/Sprite-0001.png", true);
     std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
+    std::shared_ptr<Model> otherSpriteModel = aManager.LoadModel("OtherModel", Model::CreateQuad(otherSpriteTexture));
 
     std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
 
@@ -121,8 +123,8 @@ PokemonGameDemo1::PokemonGameDemo1()
     
     /////////////////////// GameMap Setup //////////////////////////
 
-    int tileRows = 5;
-    int tileCols = 5;
+    int tileRows = 10;
+    int tileCols = 10;
 
     Tilemap tilemap(tileRows, tileCols);
     GameMap gameMap(tilemap, Model::CreateEmptyQuad(), worldShader);
@@ -196,7 +198,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_Model playerModelData = component_Model{ testSpriteModel, testSpriteShader };
     ecs.AddComponent<component_Model>(playerEntity, playerModelData);
 
-    component_Transform playerTransformData; // use defaults
+    component_Transform playerTransformData = { .scale{1.8f} }; // use defaults
     ecs.AddComponent<component_Transform>(playerEntity, playerTransformData);
 
     component_player_currentState playerStateData; // use defaults
@@ -207,6 +209,14 @@ PokemonGameDemo1::PokemonGameDemo1()
 
     component_player_animations playerAnimationData; // use defaults
     ecs.AddComponent<component_player_animations>(playerEntity, playerAnimationData);
+
+    ////// test
+    Entity testEntity = ecs.CreateEntity(); // 1
+    component_Model testModelData = component_Model{ otherSpriteModel, testSpriteShader };
+    ecs.AddComponent<component_Model>(testEntity, testModelData);
+    component_Transform testTransformData = { .scale{1.8f} }; // use defaults
+    ecs.AddComponent<component_Transform>(testEntity, testTransformData);
+
 
     /////////////////////// Other Features ///////////////////////////
     
