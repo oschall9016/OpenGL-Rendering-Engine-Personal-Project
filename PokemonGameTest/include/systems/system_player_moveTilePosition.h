@@ -22,6 +22,8 @@ public:
 
 private:
 
+	void EnterWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition);
+	void ExitWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition, float stepSize);
 	bool CheckCollision(component_tilemapPosition* tilemapPosition, float x, float z);
 
 	EntityComponentSystem& ecs;
