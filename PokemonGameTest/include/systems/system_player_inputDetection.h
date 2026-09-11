@@ -18,10 +18,8 @@ public:
 	system_player_inputDetection(EntityComponentSystem& ecs, SDLInput& input);
 	void Update(float dt);
 private:
-	void updateComponent(component_player_currentState* state, Input_Direction direction);
+	void updateComponent(component_player_currentState* state, Input_Direction direction, Key_State keyState);
 	
 	EntityComponentSystem& ecs;
 	SDLInput& input;
-
-	float holdTimer = 0.0f;
 };
