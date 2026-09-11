@@ -75,6 +75,9 @@
     <ClCompile Include="src\animations\SpriteAnimation.cpp">
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
+    <ClCompile Include="src\world\GameWorld.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\PokemonGameDemo1.h">
@@ -125,6 +128,12 @@
     <ClInclude Include="include\components\component_player_animations.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\world\GameWorld.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="include\world\Warp.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicBackpackFragment.fs">
@@ -155,6 +164,12 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="assets\shaders\spriteVertex.vs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\v_default.vs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\f_default.fs">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

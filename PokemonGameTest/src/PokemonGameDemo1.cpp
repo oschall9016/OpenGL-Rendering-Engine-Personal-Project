@@ -35,9 +35,11 @@
 #include "component_tilemapPosition.h"
 #include "component_player_animations.h"
 
-
+// world stuff
+#include "Tile.h"
 #include "Tilemap.h"
 #include "GameMap.h"
+#include "GameWorld.h"
 
 #include <memory>
 #include <vector>
@@ -105,6 +107,8 @@ PokemonGameDemo1::PokemonGameDemo1()
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
     std::shared_ptr<Model> otherSpriteModel = aManager.LoadModel("OtherModel", Model::CreateQuad(otherSpriteTexture));
 
+    std::shared_ptr<Model> cubeModel = aManager.LoadModel("CubeModel", Model::CreateEmptyCube());
+
     std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
 
     std::shared_ptr<Shader> skyboxShader = aManager.LoadShader("SkyBoxShader", "assets/shaders/SkyboxVertex.vs", "assets/shaders/SkyboxFragment.fs");
@@ -120,14 +124,47 @@ PokemonGameDemo1::PokemonGameDemo1()
     std::shared_ptr<Texture> skyboxTexture = aManager.LoadCubeMapTexture("/assets/Textures/skybox", faces, false);
 
     std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
+    std::shared_ptr<Shader> defaultShader = aManager.LoadShader("DefaultShader", "assets/shaders/v_default.vs", "assets/shaders/f_default.fs");
     
     /////////////////////// GameMap Setup //////////////////////////
 
-    int tileRows = 10;
-    int tileCols = 10;
+    float tileRows = 10;
+    float tileCols = 10;
 
     Tilemap tilemap(tileRows, tileCols);
     GameMap gameMap(tilemap, Model::CreateEmptyQuad(), worldShader);
+
+    WarpDestination map1Destination = { &gameMap, 9, 0 };
+
+    tilemap.SetTileSignature(2, 2, COLLIDER);
+
+    tilemap.SetTileSignature(9, 0, WARP, 0);
+
+    //
+
+    float tileRows2 = 5;
+    float tileCols2 = 5;
+
+    Tilemap tilemap2(tileRows2, tileCols2);
+    GameMap gameMap2(tilemap2, Model::CreateEmptyQuad(), worldShader);
+
+    WarpDestination map2Destination = { &gameMap2, 4, 0 };
+
+    tilemap2.SetTileSignature(4, 0, WARP, 0);
+
+    //
+
+    Warp map1map2Warp = { {map1Destination,map2Destination} };
+
+    tilemap.mapWarps.push_back(&map1map2Warp);
+    tilemap2.mapWarps.push_back(&map1map2Warp);
+
+    GameWorld world;
+
+    world.gameMaps.push_back(&gameMap);
+    world.gameMaps.push_back(&gameMap2);
+
+    world.currentMap = world.gameMaps[0];
 
     /////////////////////// ECS Setup //////////////////////////////
 
@@ -204,20 +241,39 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_player_currentState playerStateData; // use defaults
     ecs.AddComponent<component_player_currentState>(playerEntity, playerStateData);
 
-    component_tilemapPosition playerTileData = {0.0f, 0.0f, &gameMap.GetTilemap()};
+    component_tilemapPosition playerTileData = {0.0f, 0.0f, &gameMap.GetTilemap(),&world};
     ecs.AddComponent<component_tilemapPosition>(playerEntity, playerTileData);
 
     component_player_animations playerAnimationData; // use defaults
     ecs.AddComponent<component_player_animations>(playerEntity, playerAnimationData);
 
-    ////// test
+    ////// test sprite
+    /*
     Entity testEntity = ecs.CreateEntity(); // 1
     component_Model testModelData = component_Model{ otherSpriteModel, testSpriteShader };
     ecs.AddComponent<component_Model>(testEntity, testModelData);
-    component_Transform testTransformData = { .scale{1.8f} }; // use defaults
+    component_Transform testTransformData = { .position{2.0f,0.0f,2.0f}, .scale{1.8f} };
     ecs.AddComponent<component_Transform>(testEntity, testTransformData);
 
+    ////// test walls
+    Entity cube = ecs.CreateEntity(); // 2 top
+    component_Model cubeModelData = component_Model{ cubeModel, defaultShader };
+    ecs.AddComponent<component_Model>(cube, cubeModelData);
+    component_Transform cubeTransformData = { .position{4.5f, 1.5f, -0.5f}, .scale{10.0f, 5.0f, 0.1f} };
+    ecs.AddComponent<component_Transform>(cube, cubeTransformData);
 
+    Entity cube2 = ecs.CreateEntity(); // 3 left
+    component_Model cubeModelData2 = component_Model{ cubeModel, defaultShader };
+    ecs.AddComponent<component_Model>(cube2, cubeModelData2);
+    component_Transform cubeTransformData2 = { .position{-0.5f, 1.5f, 4.5f}, .scale{0.1f, 5.0f, 10.0f,} };
+    ecs.AddComponent<component_Transform>(cube2, cubeTransformData2);
+
+    Entity cube3 = ecs.CreateEntity(); // 4 right
+    component_Model cubeModelData3 = component_Model{ cubeModel, defaultShader };
+    ecs.AddComponent<component_Model>(cube3, cubeModelData3);
+    component_Transform cubeTransformData3 = { .position{9.5f, 1.5f, 4.5f,}, .scale{0.1f, 5.0f, 10.0f} };
+    ecs.AddComponent<component_Transform>(cube3, cubeTransformData3);
+    */
     /////////////////////// Other Features ///////////////////////////
     
     Framebuffer pixelFramebuffer(renderWidth, renderHeight);
@@ -247,7 +303,8 @@ PokemonGameDemo1::PokemonGameDemo1()
 
         renderer.Clear();
 
-        gameMap.DrawGameMap(renderer,camera);
+        //gameMap.DrawGameMap(renderer,camera);
+        world.currentMap->DrawGameMap(renderer, camera);
    
         entityRenderSystem->RenderEntities();
 
@@ -258,7 +315,7 @@ PokemonGameDemo1::PokemonGameDemo1()
         renderer.RenderFramebufferQuad(pixelFramebuffer, *framebufferShader);
 
         //camera.ProcessInput(input, dt.Get());
-        //camera.ProcessMouse(input.getMouseX(), input.getMouseY());
+        //camera.ProcessMouse(sdlManager.input.getMouseX(), sdlManager.input.getMouseY());
 
         sdlManager.window.SwapBuffers();
     }
