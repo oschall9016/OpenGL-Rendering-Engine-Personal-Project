@@ -1,17 +1,18 @@
 #include "Tilemap.h"
 #include "Tile.h"
+#include "Warp.h"
 
 #include <array>
 #include <iostream>
 
-Tilemap::Tilemap(std::vector<Tile> tileMap, int x, int z)
+Tilemap::Tilemap(std::vector<Tile> tileMap, float x, float z)
 {
-	map = tileMap;
+	mapTiles = tileMap;
 	mapXSize = x;
 	mapZSize = z;
 }
 
-Tilemap::Tilemap(int x, int z)
+Tilemap::Tilemap(float x, float z)
 {
 	mapXSize = x;
 	mapZSize = z;
@@ -20,20 +21,23 @@ Tilemap::Tilemap(int x, int z)
 	for (int i = 0; i < x * z; i++)
 	{
 		Tile newTile;
-		map.push_back(newTile);
+		mapTiles.push_back(newTile);
 	}
 }
 
  // TODO: check if tile not found 
-Tile& Tilemap::GetTile(int x, int z)
+Tile& Tilemap::GetTile(float x, float z)
 {
-	return map[(z * mapXSize) + x];
+	return mapTiles[(z * mapXSize) + x];
 }
 
-void Tilemap::SetTileSignature(int x, int z, TileSignature newsig)
+// TODO: make sure warp index is set when signature is WARP
+void Tilemap::SetTileSignature(float x, float z, TileSignature newsig, int newWarpIndex)
 {
-	Tile& tile = map[(z * mapXSize) + x];
+	Tile& tile = mapTiles[(z * mapXSize) + x];
 	tile.signature = newsig;
+	tile.warpIndex = newWarpIndex;
+
 }
 
 // debug
@@ -47,7 +51,7 @@ void Tilemap::PrintTilemap()
 		{
 			Tile tile = GetTile(i, j);
 
-			if (tile.signature == WALKABLE) std::cout << "0";
+			if (tile.signature & WALKABLE) std::cout << "0";
 			else std::cout << "1";
 
 			std::cout << " ";
