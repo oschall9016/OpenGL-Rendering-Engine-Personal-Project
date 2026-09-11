@@ -30,9 +30,10 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 		auto tilePosition = ecs.GetComponent<component_tilemapPosition>(entity);
 		auto transform = ecs.GetComponent<component_Transform>(entity);
 		auto currentState = ecs.GetComponent<component_player_currentState>(entity);
-
-		float totalDistance = 1.0f;
-		float totalTime = currentState->moveSpeed; // need to catch up before the next movement event
+	
+		// calculate amount of distance to move this frame
+		float totalDistance = 1.0f; // world unit
+		float totalTime = currentState->moveSpeed;
 
 		float speed = totalDistance / totalTime;
 		float stepSize = speed * dt;
@@ -42,6 +43,28 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 
 		auto& renderX = transform->position.x;
 		auto& renderZ = transform->position.z;
+
+		// player warped so teleport position
+		if (currentState->warping)
+		{
+			
+			// isolate camera follow distance
+			auto cPosition = camera.GetPosition();
+			float cameraZOffset = cPosition.z - renderZ;
+
+			// teleport billboard
+			renderX = tileX;
+			renderZ = tileZ;
+
+			// teleport camera
+			cPosition.x = renderX;
+			cPosition.z = tileZ + cameraZOffset;
+			camera.SetPosition(cPosition);
+
+			currentState->movementVisualsSynced = true;
+
+			continue;
+		}
 
 		if (tileX > renderX)
 		{
@@ -65,13 +88,16 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 			renderZ = std::max(renderZ - stepSize, tileZ);
 		}
 
+		// lock movement until visuals and gameplay are synced
 		if (tileX == renderX && tileZ == renderZ)
 		{
 			currentState->movementVisualsSynced = true;
+			currentState->inputLocked = false;
 		}
 		else
 		{
 			currentState->movementVisualsSynced = false;
+			currentState->inputLocked = true;
 		}
 
 	}
