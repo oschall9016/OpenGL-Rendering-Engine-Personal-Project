@@ -5,6 +5,9 @@
 #include "component_player_currentState.h"
 #include "component_tilemapPosition.h"
 
+#include "Tile.h"
+#include "Warp.h"
+
 #include <iostream>
 #include <cmath>
 
@@ -27,16 +30,37 @@ void system_player_moveTilePosition::Update(double dt)
 		auto& inputDirection = currentState->currentDirection;
 		auto& spriteDirection = currentState->spriteDirection;
 
-		// only allow movement when time equal to the movespeed has passed
 		float cooldownTime = currentState->moveSpeed;
+	
+		auto& tileX = tilemapPosition->currentX;
+		auto& tileZ = tilemapPosition->currentZ;
 
-		if (inputDirection != spriteDirection && currentState->currentAction == Input_Action::STANDING && currentState->keyState == Key_State::RELEASED)
+		float stepSize = 1.0f;
+
+		// we are in a warp tile, step off it
+		if (currentState->warping)
+		{
+			ExitWarp(currentState, tilemapPosition, stepSize);
+			continue;
+		}
+
+		// we stepped on a warp tile, warp to new position
+		if (tilemapPosition->currentTileMap->GetTile(tileX, tileZ).signature & WARP)
+		{
+			EnterWarp(currentState, tilemapPosition);
+			continue;
+
+		}
+
+		// if the sprite is facing a different direction, change direction instead of moving
+		if (inputDirection != spriteDirection && currentState->keyState == Key_State::RELEASED)
 		{
 			spriteDirection = inputDirection;
 			currentState->moveRequest = false;
 			continue;
 		}
 
+		// only allow movement when time equal to the movespeed has passed
 		if (moveCooldown < cooldownTime)
 		{
 			moveCooldown += dt;
@@ -50,27 +74,23 @@ void system_player_moveTilePosition::Update(double dt)
 			continue;
 		}
 		
-		auto& tileX = tilemapPosition->currentX;
-		auto& tileZ = tilemapPosition->currentZ;
-
-		float stepSize = 1.0f;
-
-		if (inputDirection == Input_Direction::UP && CheckCollision(tilemapPosition, tileX, tileZ - stepSize) && (inputDirection == currentState->spriteDirection || currentState->keyState == Key_State::HELD))
+		// check collision and move if able
+		if (inputDirection == Input_Direction::UP && CheckCollision(tilemapPosition, tileX, tileZ - stepSize))
 		{
 			tileZ -= stepSize;
 		}
 
-		else if (inputDirection == Input_Direction::DOWN && CheckCollision(tilemapPosition, tileX, tileZ + stepSize) && (inputDirection == currentState->spriteDirection || currentState->keyState == Key_State::HELD))
+		else if (inputDirection == Input_Direction::DOWN && CheckCollision(tilemapPosition, tileX, tileZ + stepSize))
 		{
 			tileZ += stepSize;
 		}
 
-		else if (inputDirection == Input_Direction::LEFT && CheckCollision(tilemapPosition, tileX - stepSize, tileZ) && (inputDirection == currentState->spriteDirection || currentState->keyState == Key_State::HELD))
+		else if (inputDirection == Input_Direction::LEFT && CheckCollision(tilemapPosition, tileX - stepSize, tileZ))
 		{
 			tileX -= stepSize;
 		}
 
-		else if (inputDirection == Input_Direction::RIGHT && CheckCollision(tilemapPosition, tileX + stepSize, tileZ) && (inputDirection == currentState->spriteDirection || currentState->keyState == Key_State::HELD))
+		else if (inputDirection == Input_Direction::RIGHT && CheckCollision(tilemapPosition, tileX + stepSize, tileZ))
 		{
 			tileX += stepSize;
 		}
@@ -80,28 +100,99 @@ void system_player_moveTilePosition::Update(double dt)
 		// request has been processed
 		currentState->moveRequest = false;
 		
-		
-
+		// debug
 		std::cout << "\n";
 		std::cout << "[ " << tilemapPosition->currentX << " , " << tilemapPosition->currentZ << " ]";
 		std::cout << "\n";
 	}
 }
 
+void system_player_moveTilePosition::EnterWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition)
+{
+	currentState->warping = true;
+	currentState->inputLocked = true;
+
+	auto& tileX = tilemapPosition->currentX;
+	auto& tileZ = tilemapPosition->currentZ;
+
+	// get tile's warp index
+	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
+
+	// get warp struct from list
+	auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+
+	// swap current position to other side of warp
+	warp->currentIndex = 1 - warp->currentIndex;
+
+	// update currentMap
+	tilemapPosition->gameWorld->currentMap = warp->destinations[warp->currentIndex].gameMap;
+
+	// update tilemap
+	tilemapPosition->currentTileMap = &tilemapPosition->gameWorld->currentMap->GetTilemap();
+
+	// update character position
+	tileX = warp->destinations[warp->currentIndex].x;
+	tileZ = warp->destinations[warp->currentIndex].z;
+}
+
+void system_player_moveTilePosition::ExitWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition, float stepSize)
+{
+	auto& tileX = tilemapPosition->currentX;
+	auto& tileZ = tilemapPosition->currentZ;
+
+	auto& spriteDirection = currentState->spriteDirection;
+	auto& inputDirection = currentState->currentDirection;
+
+	// get tile's warp index
+	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
+
+	// get warp struct from list
+	auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+
+	// move one step in the exit direction
+	// NOTE: currently bypasses collision detection
+	switch (warp->destinations[warp->currentIndex].exitDirection)
+	{
+	case Exit_Direction::UP:
+		spriteDirection = Input_Direction::UP;
+		inputDirection = Input_Direction::UP;
+		tileZ -= stepSize;
+		break;
+	case Exit_Direction::DOWN:
+		spriteDirection = Input_Direction::DOWN;
+		inputDirection = Input_Direction::DOWN;
+		tileZ += stepSize;
+		break;
+	case Exit_Direction::LEFT:
+		spriteDirection = Input_Direction::LEFT;
+		inputDirection = Input_Direction::LEFT;
+		tileX -= stepSize;
+		break;
+	case Exit_Direction::RIGHT:
+		spriteDirection = Input_Direction::RIGHT;
+		inputDirection = Input_Direction::RIGHT;
+		tileX += stepSize;
+		break;
+	}
+
+	currentState->inputLocked = false;
+	currentState->warping = false;
+}
+
 bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* tilemapPosition, float x, float z)
 {
 
-	float mapXSize = (float)tilemapPosition->currentMap->mapXSize;
-	float mapZSize = (float)tilemapPosition->currentMap->mapZSize;
+	float mapXSize = (float)tilemapPosition->currentTileMap->mapXSize;
+	float mapZSize = (float)tilemapPosition->currentTileMap->mapZSize;
 
 	if (x < 0 || z < 0 || x >= mapXSize || z >= mapZSize)
 	{
 		return false;
 	}
 
-	Tile tile = tilemapPosition->currentMap->GetTile((int)x,(int)z);
+	Tile tile = tilemapPosition->currentTileMap->GetTile(x,z);
 	
-	if (tile.signature == COLLIDER)
+	if (tile.signature & COLLIDER)
 	{
 		return false;
 	}
