@@ -18,6 +18,7 @@ public:
 
 	static std::shared_ptr<Model> CreateQuad(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Model> CreateEmptyQuad();
+	static std::shared_ptr<Model> CreateEmptyCube();
 private:
 	std::vector<std::shared_ptr<Mesh>> meshes;
 };
