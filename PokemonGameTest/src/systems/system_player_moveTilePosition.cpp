@@ -34,6 +34,7 @@ void system_player_moveTilePosition::Update(double dt)
 	
 		auto& tileX = tilemapPosition->currentX;
 		auto& tileZ = tilemapPosition->currentZ;
+		auto& tileY = tilemapPosition->currentY;
 
 		float stepSize = 1.0f;
 
@@ -45,7 +46,7 @@ void system_player_moveTilePosition::Update(double dt)
 		}
 
 		// we stepped on a warp tile, warp to new position
-		if (tilemapPosition->currentTileMap->GetTile(tileX, tileZ).signature & WARP)
+		if (tilemapPosition->currentTileMap->GetTile(tileX, tileZ).signature & Tile_Type::WARP)
 		{
 			EnterWarp(currentState, tilemapPosition);
 			continue;
@@ -74,7 +75,7 @@ void system_player_moveTilePosition::Update(double dt)
 			continue;
 		}
 		
-		// check collision and move if able
+		// check collision and move horizontally if able
 		if (inputDirection == Input_Direction::UP && CheckCollision(tilemapPosition, tileX, tileZ - stepSize))
 		{
 			tileZ -= stepSize;
@@ -95,15 +96,19 @@ void system_player_moveTilePosition::Update(double dt)
 			tileX += stepSize;
 		}
 	
+		// move vertically
+		tileY = tilemapPosition->currentTileMap->GetTileHeight(tileX, tileZ);
+		
+		
 		currentState->spriteDirection = inputDirection;
 
 		// request has been processed
 		currentState->moveRequest = false;
 		
 		// debug
-		std::cout << "\n";
-		std::cout << "[ " << tilemapPosition->currentX << " , " << tilemapPosition->currentZ << " ]";
-		std::cout << "\n";
+		//std::cout << "\n";
+		//std::cout << "[ " << tilemapPosition->currentX << " , " << tilemapPosition->currentZ << " ]";
+		//std::cout << "\n";
 	}
 }
 
@@ -190,14 +195,28 @@ bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* t
 		return false;
 	}
 
-	Tile tile = tilemapPosition->currentTileMap->GetTile(x,z);
-	
-	if (tile.signature & COLLIDER)
+	Tile currentTile = tilemapPosition->currentTileMap->GetTile(tilemapPosition->currentX, tilemapPosition->currentZ);
+	Tile nextTile = tilemapPosition->currentTileMap->GetTile(x, z);
+
+	float currTileHeight = tilemapPosition->currentTileMap->GetTileHeight(tilemapPosition->currentX, tilemapPosition->currentZ);
+	float nextTileHeight = tilemapPosition->currentTileMap->GetTileHeight(x, z);
+
+	auto& tileY = tilemapPosition->currentY;
+
+	bool heightDiffIs1 = std::abs(nextTileHeight - currTileHeight) == 1.0f;
+	bool heightDiffUnderPoint5 = std::abs(nextTileHeight - currTileHeight) <= 0.5f;
+	bool bothSlopes = nextTile.signature & Tile_Type::SLOPE && currentTile.signature & Tile_Type::SLOPE;
+
+	if (nextTile.signature & Tile_Type::COLLIDER)
 	{
 		return false;
 	}
+	else if (bothSlopes)
+	{
+		return heightDiffIs1;
+	}
 	else
 	{
-		return true;
+		return heightDiffUnderPoint5;
 	}
 }

@@ -33,6 +33,7 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 	
 		// calculate amount of distance to move this frame
 		float totalDistance = 1.0f; // world unit
+
 		float totalTime = currentState->moveSpeed;
 
 		float speed = totalDistance / totalTime;
@@ -41,16 +42,21 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 		auto& tileX = tilePosition->currentX;
 		auto& tileZ = tilePosition->currentZ;
 
+		auto tileY = tilePosition->currentY;
+
 		auto& renderX = transform->position.x;
 		auto& renderZ = transform->position.z;
 
+		auto& renderY = transform->position.y;
+
+		auto cPosition = camera.GetPosition();
+		float cameraZOffset = cPosition.z - renderZ;
 		// player warped so teleport position
 		if (currentState->warping)
 		{
 			
 			// isolate camera follow distance
-			auto cPosition = camera.GetPosition();
-			float cameraZOffset = cPosition.z - renderZ;
+			
 
 			// teleport billboard
 			renderX = tileX;
@@ -66,29 +72,54 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 			continue;
 		}
 
+		// horizontal movement
+
+		// right
 		if (tileX > renderX)
 		{
 			renderX = std::min(renderX + stepSize, tileX);
-			camera.SetPosition(renderX, camera.GetPosition().y, camera.GetPosition().z);
+			camera.SetPosition(renderX, cPosition.y, cPosition.z); // TODO: replace with cPosition
 		}
+
+		// left
 		else if (tileX < renderX)
 		{
 			renderX = std::max(renderX - stepSize, tileX);
-			camera.SetPosition(renderX, camera.GetPosition().y, camera.GetPosition().z);
-		}
-		else if (tileZ > renderZ)
-		{
-			camera.SetPosition(camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z + std::min(stepSize, tileZ - renderZ));
-			renderZ = std::min(renderZ + stepSize, tileZ);
-			
-		}
-		else if (tileZ < renderZ)
-		{
-			camera.SetPosition(camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z - std::min(stepSize, renderZ - tileZ));
-			renderZ = std::max(renderZ - stepSize, tileZ);
+			camera.SetPosition(renderX, cPosition.y, cPosition.z);
 		}
 
-		// lock movement until visuals and gameplay are synced
+		// down
+		else if (tileZ > renderZ)
+		{
+			renderZ = std::min(renderZ + stepSize, tileZ);
+			camera.SetPosition(cPosition.x, cPosition.y,  renderZ + cameraZOffset);
+		}
+
+		// up
+		else if (tileZ < renderZ)
+		{
+			renderZ = std::max(renderZ - stepSize, tileZ);
+			camera.SetPosition(cPosition.x, cPosition.y, renderZ + cameraZOffset);
+		}
+
+		// vertical movement
+		float cameraYOffset = cPosition.y - renderY;
+		cPosition = camera.GetPosition();
+
+		if (tileY > renderY)
+		{
+			renderY = std::min(renderY + stepSize, tileY);
+
+			camera.SetPosition(cPosition.x,renderY + cameraYOffset,cPosition.z);
+		}
+		else if (tileY < renderY)
+		{
+			renderY = std::max(renderY - stepSize, tileY);
+
+			camera.SetPosition(cPosition.x, renderY + cameraYOffset, cPosition.z);
+		}
+
+		// lock input until visuals and gameplay are synced
 		if (tileX == renderX && tileZ == renderZ)
 		{
 			currentState->movementVisualsSynced = true;
@@ -99,6 +130,10 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 			currentState->movementVisualsSynced = false;
 			currentState->inputLocked = true;
 		}
+
+		std::cout << "\n";
+		std::cout << "[ " << transform->position.x << " , " << transform->position.y << " , " << transform->position.z << " ]";
+		std::cout << "\n";
 
 	}
 }

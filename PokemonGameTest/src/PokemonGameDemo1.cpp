@@ -37,6 +37,7 @@
 
 // world stuff
 #include "Tile.h"
+#include "Slope.h"
 #include "Tilemap.h"
 #include "GameMap.h"
 #include "GameWorld.h"
@@ -68,7 +69,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     camera.UpdateProjectionMatrix(45.0f, (float)renderWidth, (float)renderHeight);
 
     // center the player sprite
-
+    
     float cameraAngle = 45.0f; // amount camera is angled down at player
     float cameraFOV = 45.0f; // TODO: make FOV a member of camera for easier changing e.g. change the UpdateProjectionMatrix function
 
@@ -85,7 +86,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     
     camera.SetPosition(0.0f, yOffset, zOffset);
     camera.SetPitchAngle(-cameraAngle);
-
+    
     //
 
     DeltaTime dt;
@@ -136,9 +137,21 @@ PokemonGameDemo1::PokemonGameDemo1()
 
     WarpDestination map1Destination = { &gameMap, 9, 0 };
 
-    tilemap.SetTileSignature(2, 2, COLLIDER);
+    tilemap.SetTileHeight(2, 2, 1);
+    tilemap.SetTileHeight(2, 3, 1);
+    tilemap.SetTileHeight(2, 4, 1);
 
-    tilemap.SetTileSignature(9, 0, WARP, 0);
+    tilemap.SetTileHeight(3, 2, 2);
+    tilemap.SetTileHeight(3, 3, 2);
+    tilemap.SetTileHeight(3, 4, 2);
+
+    tilemap.SetTileSignature(9, 0, Tile_Type::WARP, 0);
+
+    tilemap.SetSlope(1.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    tilemap.SetSlope(2.0f, 4.0f, false, Rotate_Direction::RIGHT);
+
+    tilemap.SetSlope(3.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    tilemap.SetSlope(4.0f, 4.0f, false, Rotate_Direction::RIGHT);
 
     //
 
@@ -150,7 +163,7 @@ PokemonGameDemo1::PokemonGameDemo1()
 
     WarpDestination map2Destination = { &gameMap2, 4, 0 };
 
-    tilemap2.SetTileSignature(4, 0, WARP, 0);
+    tilemap2.SetTileSignature(4, 0, Tile_Type::WARP, 0);
 
     //
 
@@ -235,7 +248,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_Model playerModelData = component_Model{ testSpriteModel, testSpriteShader };
     ecs.AddComponent<component_Model>(playerEntity, playerModelData);
 
-    component_Transform playerTransformData = { .scale{1.8f} }; // use defaults
+    component_Transform playerTransformData = { .scale{1.8f} };
     ecs.AddComponent<component_Transform>(playerEntity, playerTransformData);
 
     component_player_currentState playerStateData; // use defaults
@@ -314,7 +327,7 @@ PokemonGameDemo1::PokemonGameDemo1()
 
         renderer.RenderFramebufferQuad(pixelFramebuffer, *framebufferShader);
 
-        //camera.ProcessInput(input, dt.Get());
+        //camera.ProcessInput(sdlManager.input, dt.Get());
         //camera.ProcessMouse(sdlManager.input.getMouseX(), sdlManager.input.getMouseY());
 
         sdlManager.window.SwapBuffers();

@@ -180,6 +180,7 @@
     <ClInclude Include="include\systems\system_RenderEntities.h" />
     <ClInclude Include="include\world\GameMap.h" />
     <ClInclude Include="include\world\GameWorld.h" />
+    <ClInclude Include="include\world\Slope.h" />
     <ClInclude Include="include\world\Tile.h" />
     <ClInclude Include="include\world\Tilemap.h" />
     <ClInclude Include="include\world\Warp.h" />
