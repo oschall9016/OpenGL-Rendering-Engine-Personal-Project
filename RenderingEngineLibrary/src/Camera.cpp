@@ -73,17 +73,17 @@ void Camera::ProcessKeyboard(Camera_Direction direction, float deltaTime)
 
 void Camera::ProcessInput(SDLInput input, float deltaTime)
 {
-	if (input.isKeyPressed(SDL_SCANCODE_W)) ProcessKeyboard(Camera_Direction::FORWARD, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_W)) ProcessKeyboard(Camera_Direction::FORWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_S)) ProcessKeyboard(Camera_Direction::BACKWARD, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_S)) ProcessKeyboard(Camera_Direction::BACKWARD, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_A)) ProcessKeyboard(Camera_Direction::LEFT, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_A)) ProcessKeyboard(Camera_Direction::LEFT, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_D)) ProcessKeyboard(Camera_Direction::RIGHT, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_D)) ProcessKeyboard(Camera_Direction::RIGHT, deltaTime);
 	
-	if (input.isKeyPressed(SDL_SCANCODE_SPACE)) ProcessKeyboard(Camera_Direction::UP, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_SPACE)) ProcessKeyboard(Camera_Direction::UP, deltaTime);
 
-	if (input.isKeyPressed(SDL_SCANCODE_LCTRL)) ProcessKeyboard(Camera_Direction::DOWN, deltaTime);
+	if (input.isKeyHeld(SDL_SCANCODE_LCTRL)) ProcessKeyboard(Camera_Direction::DOWN, deltaTime);
 	
 }
 
