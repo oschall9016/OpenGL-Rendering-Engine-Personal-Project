@@ -10,4 +10,6 @@ struct component_tilemapPosition
 
 	Tilemap* currentTileMap = nullptr;
 	GameWorld* gameWorld = nullptr;
+
+	float currentY = 0.0f;
 };
