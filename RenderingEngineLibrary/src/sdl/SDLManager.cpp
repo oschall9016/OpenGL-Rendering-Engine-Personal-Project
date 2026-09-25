@@ -11,6 +11,7 @@ void SDLManager::ManageEvents()
 {
 
 	input.updateLastFrameKeyStates();
+	input.updateMousePosition();
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
@@ -23,8 +24,6 @@ void SDLManager::ManageEvents()
 		case SDL_KEYUP:
 			input.setKeyPressed(e.key.keysym.scancode, false);
 			break;
-		case SDL_MOUSEMOTION:
-			input.updateMousePosition();
 		}
 	}
 }
