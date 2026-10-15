@@ -40,12 +40,12 @@ void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 				glm::vec3 slopeTilePos = glm::vec3(pos.x, pos.y - 0.5f, pos.z); // slopes tiles are at height + 1 logically, but should appear at height visually
 				glm::vec3 slopePos = glm::vec3(pos.x, pos.y, pos.z);
 
-				DrawTile(slopeTilePos, camera, renderer);
+				DrawTile(tile, slopeTilePos, camera, renderer);
 				DrawSlope(slopePos, slope, camera, renderer);
 			}
 			else
 			{
-				DrawTile(pos, camera, renderer);
+				DrawTile(tile, pos, camera, renderer);
 			}
 
 
@@ -55,7 +55,7 @@ void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 
 }
 
-void GameMap::DrawTile(glm::vec3 pos, Camera& camera, Renderer& renderer)
+void GameMap::DrawTile(Tile tile, glm::vec3 pos, Camera& camera, Renderer& renderer)
 {
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	modelMat = glm::translate(modelMat, pos);
@@ -67,8 +67,7 @@ void GameMap::DrawTile(glm::vec3 pos, Camera& camera, Renderer& renderer)
 	shader->setMat4("view", camera.GetViewMatrix());
 	shader->setMat4("projection", camera.GetProjectionMatrix());
 
-	shader->setFloat("x", pos.x);
-	shader->setFloat("z", pos.z);
+	shader->setFloat("texIndex", tile.textureIndex);
 
 	shader->Unbind();
 

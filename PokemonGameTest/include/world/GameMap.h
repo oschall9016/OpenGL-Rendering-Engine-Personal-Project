@@ -21,7 +21,7 @@ public:
 
 	void DrawGameMap(Renderer& renderer, Camera& camera);
 
-	void DrawTile(glm::vec3 pos, Camera& camera, Renderer& renderer);
+	void DrawTile(Tile tile, glm::vec3 pos, Camera& camera, Renderer& renderer);
 	void DrawSlope(glm::vec3 pos, Slope slope, Camera& camera, Renderer& renderer);
 
 private:
