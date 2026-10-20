@@ -16,6 +16,9 @@ class GameMap
 {
 public:
 	GameMap(Tilemap& tileMap, std::shared_ptr<Model> quad, std::shared_ptr<Shader> shader);
+	~GameMap();
+
+	void InitInstancedMapData();
 
 	Tilemap& GetTilemap();
 
@@ -30,5 +33,11 @@ private:
 	
 	std::shared_ptr<Model> quad;
 	std::shared_ptr<Shader> shader;
-	
+
+	std::vector<glm::mat4> modelMatrices;
+	std::vector<float> textureIds; 
+
+	unsigned int modelMatVBO;
+	unsigned int textureVBO;
+
 };

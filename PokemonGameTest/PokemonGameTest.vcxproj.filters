@@ -137,6 +137,9 @@
     <ClInclude Include="include\world\Slope.h">
       <Filter>Header Files\World</Filter>
     </ClInclude>
+    <ClInclude Include="assets\shaders\TileTextureMap.h">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\BasicBackpackFragment.fs">
@@ -173,6 +176,12 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="assets\shaders\f_default.fs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\f_tile.fs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\v_tile.vs">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

@@ -58,8 +58,8 @@ PokemonGameDemo1::PokemonGameDemo1()
     int windowWidth = 1920;
     int windowHeight = 1080;
 
-    int renderWidth = 640; // 480
-    int renderHeight = 360; // 270
+    int renderWidth = 640; // 480 640
+    int renderHeight = 360; // 270 360
 
     SDLManager sdlManager(windowWidth, windowHeight, "Cool Window");
 
@@ -124,16 +124,19 @@ PokemonGameDemo1::PokemonGameDemo1()
     };
     std::shared_ptr<Texture> skyboxTexture = aManager.LoadCubeMapTexture("/assets/Textures/skybox", faces, false);
 
-    std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
+    //std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/BasicVertex.vs", "assets/shaders/BasicFragment.fs");
+    std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/v_tile.vs", "assets/shaders/f_tile.fs");
     std::shared_ptr<Shader> defaultShader = aManager.LoadShader("DefaultShader", "assets/shaders/v_default.vs", "assets/shaders/f_default.fs");
+
+    std::shared_ptr<Texture> tileTexture = aManager.LoadTexture("assets/Textures/PokeTiles.png", false);
     
     /////////////////////// GameMap Setup //////////////////////////
 
-    float tileRows = 10;
-    float tileCols = 10;
+    float tileRows = 500; // upper limit 3800 x 3800, ~14,440,000 tiles
+    float tileCols = 500;
 
     Tilemap tilemap(tileRows, tileCols);
-    GameMap gameMap(tilemap, Model::CreateEmptyQuad(), worldShader);
+    GameMap gameMap(tilemap, Model::CreateQuad(tileTexture), worldShader);
 
     WarpDestination map1Destination = { &gameMap, 9, 0 };
 
@@ -260,33 +263,6 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_player_animations playerAnimationData; // use defaults
     ecs.AddComponent<component_player_animations>(playerEntity, playerAnimationData);
 
-    ////// test sprite
-    /*
-    Entity testEntity = ecs.CreateEntity(); // 1
-    component_Model testModelData = component_Model{ otherSpriteModel, testSpriteShader };
-    ecs.AddComponent<component_Model>(testEntity, testModelData);
-    component_Transform testTransformData = { .position{2.0f,0.0f,2.0f}, .scale{1.8f} };
-    ecs.AddComponent<component_Transform>(testEntity, testTransformData);
-
-    ////// test walls
-    Entity cube = ecs.CreateEntity(); // 2 top
-    component_Model cubeModelData = component_Model{ cubeModel, defaultShader };
-    ecs.AddComponent<component_Model>(cube, cubeModelData);
-    component_Transform cubeTransformData = { .position{4.5f, 1.5f, -0.5f}, .scale{10.0f, 5.0f, 0.1f} };
-    ecs.AddComponent<component_Transform>(cube, cubeTransformData);
-
-    Entity cube2 = ecs.CreateEntity(); // 3 left
-    component_Model cubeModelData2 = component_Model{ cubeModel, defaultShader };
-    ecs.AddComponent<component_Model>(cube2, cubeModelData2);
-    component_Transform cubeTransformData2 = { .position{-0.5f, 1.5f, 4.5f}, .scale{0.1f, 5.0f, 10.0f,} };
-    ecs.AddComponent<component_Transform>(cube2, cubeTransformData2);
-
-    Entity cube3 = ecs.CreateEntity(); // 4 right
-    component_Model cubeModelData3 = component_Model{ cubeModel, defaultShader };
-    ecs.AddComponent<component_Model>(cube3, cubeModelData3);
-    component_Transform cubeTransformData3 = { .position{9.5f, 1.5f, 4.5f,}, .scale{0.1f, 5.0f, 10.0f} };
-    ecs.AddComponent<component_Transform>(cube3, cubeTransformData3);
-    */
     /////////////////////// Other Features ///////////////////////////
     
     Framebuffer pixelFramebuffer(renderWidth, renderHeight);
@@ -316,7 +292,6 @@ PokemonGameDemo1::PokemonGameDemo1()
 
         renderer.Clear();
 
-        //gameMap.DrawGameMap(renderer,camera);
         world.currentMap->DrawGameMap(renderer, camera);
    
         entityRenderSystem->RenderEntities();

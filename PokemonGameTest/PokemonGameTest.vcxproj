@@ -165,6 +165,7 @@
     <ClCompile Include="src\world\Tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="assets\shaders\TileTextureMap.h" />
     <ClInclude Include="include\animations\OverworldSpriteMovementAnimation.h" />
     <ClInclude Include="include\animations\SpriteAnimation.h" />
     <ClInclude Include="include\components\component_Model.h" />
@@ -193,11 +194,13 @@
     <None Include="assets\shaders\FramebufferFragment.fs" />
     <None Include="assets\shaders\FramebufferVertex.vs" />
     <None Include="assets\shaders\f_default.fs" />
+    <None Include="assets\shaders\f_tile.fs" />
     <None Include="assets\shaders\SkyboxFragment.fs" />
     <None Include="assets\shaders\SkyboxVertex.vs" />
     <None Include="assets\shaders\spriteFragment.fs" />
     <None Include="assets\shaders\spriteVertex.vs" />
     <None Include="assets\shaders\v_default.vs" />
+    <None Include="assets\shaders\v_tile.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,20 +1,20 @@
 #version 330 core
 
-out vec4 FragColor;
 
 in vec2 TexCoords;
+in float texIndex;
+
+out vec4 FragColor;
 
 uniform sampler2D material_texture_diffuse1;
-
-uniform float texIndex;
 
 void main()
 {
 	vec2 uv = TexCoords;
 
 	// size of texture sheet
-	float sheetX = 20.0;
-	float sheetY = 17.0;
+	float sheetX = 40.0;
+	float sheetY = 34.0;
 
 	// seperate texIndex into x and y
 	float xIndex = mod(texIndex, sheetX);
@@ -26,7 +26,7 @@ void main()
 
 	// translate to given texIndex
 	uv.x += xIndex / sheetX;
-	uv.y += (1.0 - yIndex) / sheetY; // swap rows to make 0,0 top left
+	uv.y += yIndex / sheetY; 
 
 	vec4 textureColor = texture(material_texture_diffuse1, uv);
 

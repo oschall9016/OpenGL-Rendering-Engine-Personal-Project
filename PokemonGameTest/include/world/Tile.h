@@ -20,5 +20,5 @@ struct Tile
 {
 	uint16_t warpIndex = NO_WARP;
 	uint8_t signature = Tile_Type::WALKABLE;
-	uint16_t textureIndex = 64;
+	float textureIndex = 46.0f;
 };
