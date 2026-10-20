@@ -16,6 +16,9 @@ public:
 	void RenderModel(Model& model, Shader& shader);
 	void RenderMesh(Mesh& mesh, Shader& shader);
 
+	void RenderModelInstanced(Model& model, Shader& shader, unsigned int amount);
+	void RenderMeshInstanced(Mesh& mesh, Shader& shader, unsigned int amount);
+
 	void Clear();
 
 	void RenderFramebufferQuad(Framebuffer& framebuffer, Shader& shader);

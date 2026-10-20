@@ -68,6 +68,48 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 	shader.Unbind();
 }
 
+void Renderer::RenderModelInstanced(Model& model, Shader& shader, unsigned int amount)
+{
+	std::vector<std::shared_ptr<Mesh>>& meshes = model.GetMeshes();
+
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		RenderMeshInstanced(*meshes[i], shader, amount);
+	}
+}
+
+void Renderer::RenderMeshInstanced(Mesh& mesh, Shader& shader, unsigned int amount)
+{
+	const std::vector<std::shared_ptr<Texture>>& textures = mesh.getTextures();
+	const unsigned int& VAO = mesh.GetVAO();
+	const std::vector<unsigned int>& indices = mesh.getIndices();
+
+	shader.Bind();
+
+	unsigned int diffuseNr = 1;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		std::string number;
+		std::string name = "texture_diffuse";
+		number = std::to_string(diffuseNr++);
+
+		// now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.getID(), (name + number).c_str()), i);
+		// and finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, textures[i]->GetID());
+
+	}
+
+	glBindVertexArray(VAO);
+	glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0, amount);
+	glBindVertexArray(0);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	shader.Unbind();
+}
+
 void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
 {
 
