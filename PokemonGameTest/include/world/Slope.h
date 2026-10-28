@@ -12,6 +12,5 @@ enum class Rotate_Direction
 struct Slope
 {
 	Rotate_Direction direction;
+	float textureIndex = 76.0f;
 };
-
-// maybe seperate set functions

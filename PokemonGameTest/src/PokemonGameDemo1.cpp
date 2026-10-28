@@ -136,25 +136,25 @@ PokemonGameDemo1::PokemonGameDemo1()
     float tileCols = 500;
 
     Tilemap tilemap(tileRows, tileCols);
-    GameMap gameMap(tilemap, Model::CreateQuad(tileTexture), worldShader);
+    GameMap gameMap(tilemap, tileTexture, worldShader);
 
     WarpDestination map1Destination = { &gameMap, 9, 0 };
 
-    tilemap.SetTileHeight(2, 2, 1);
-    tilemap.SetTileHeight(2, 3, 1);
-    tilemap.SetTileHeight(2, 4, 1);
+    gameMap.SetTileHeight(2, 2, 1);
+    gameMap.SetTileHeight(2, 3, 1);
+    gameMap.SetTileHeight(2, 4, 1);
 
-    tilemap.SetTileHeight(3, 2, 2);
-    tilemap.SetTileHeight(3, 3, 2);
-    tilemap.SetTileHeight(3, 4, 2);
+    gameMap.SetTileHeight(3, 2, 2);
+    gameMap.SetTileHeight(3, 3, 2);
+    gameMap.SetTileHeight(3, 4, 2);
 
     tilemap.SetTileSignature(9, 0, Tile_Type::WARP, 0);
 
-    tilemap.SetSlope(1.0f, 4.0f, false, Rotate_Direction::RIGHT);
-    tilemap.SetSlope(2.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    gameMap.SetSlope(1.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    gameMap.SetSlope(2.0f, 4.0f, false, Rotate_Direction::RIGHT);
 
-    tilemap.SetSlope(3.0f, 4.0f, false, Rotate_Direction::RIGHT);
-    tilemap.SetSlope(4.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    gameMap.SetSlope(3.0f, 4.0f, false, Rotate_Direction::RIGHT);
+    gameMap.SetSlope(4.0f, 4.0f, false, Rotate_Direction::RIGHT);
 
     //
 
@@ -162,7 +162,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     float tileCols2 = 5;
 
     Tilemap tilemap2(tileRows2, tileCols2);
-    GameMap gameMap2(tilemap2, Model::CreateEmptyQuad(), worldShader);
+    GameMap gameMap2(tilemap2, tileTexture, worldShader);
 
     WarpDestination map2Destination = { &gameMap2, 4, 0 };
 
