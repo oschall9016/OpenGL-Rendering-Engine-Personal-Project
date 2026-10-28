@@ -11,7 +11,7 @@
 #include <iostream>
 #include <memory>
 
-std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, AssetManager& manager, bool needsFlipped)
+std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path, bool needsFlipped)
 {
 	stbi_set_flip_vertically_on_load(needsFlipped);
 
@@ -59,7 +59,7 @@ std::shared_ptr<Texture> TextureImporter::ImportTexture(const std::string& path,
 	return texture;
 }
 
-std::shared_ptr<Texture> TextureImporter::ImportCubemapTexture(const std::string& path, std::vector<std::string>& cubeFaces, AssetManager& manager, bool needsFlipped)
+std::shared_ptr<Texture> TextureImporter::ImportCubemapTexture(const std::string& path, std::vector<std::string>& cubeFaces, bool needsFlipped)
 {
 	stbi_set_flip_vertically_on_load(needsFlipped);
 
