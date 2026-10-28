@@ -22,7 +22,7 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path, bool
 	}
 
 	// texture not in list, needs imported
-	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportTexture(path, *this, needsFlipped);
+	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportTexture(path, needsFlipped);
 	if (importedTexture == nullptr)
 	{
 		std::cout << "Texture: " << path << " Failed To Load \n";
@@ -43,7 +43,7 @@ std::shared_ptr<Texture> AssetManager::LoadCubeMapTexture(const std::string& pat
 	}
 
 	// texture not in list, needs imported
-	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportCubemapTexture(path, cubeFaces, *this, needsFlipped);
+	std::shared_ptr<Texture> importedTexture = TextureImporter::ImportCubemapTexture(path, cubeFaces, needsFlipped);
 	if (importedTexture == nullptr)
 	{
 		std::cout << "Cubemap Texture: " << path << " Failed To Load \n";
