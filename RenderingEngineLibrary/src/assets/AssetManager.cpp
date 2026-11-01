@@ -55,7 +55,7 @@ std::shared_ptr<Texture> AssetManager::LoadCubeMapTexture(const std::string& pat
 	return Textures.at(path);
 }
 
-std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
+std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path, bool flipTextures)
 {
 	// if model is in the list
 	if (Models.find(path) != Models.end())
@@ -65,7 +65,7 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path)
 
 	// model not in list, needs imported
 	ModelImporter mImporter(*this);
-	std::shared_ptr<Model> importedModel = mImporter.ImportModel(path);
+	std::shared_ptr<Model> importedModel = mImporter.ImportModel(path, flipTextures);
 	if (importedModel == nullptr)
 	{
 		std::cout << "Model: " << path << " Failed To Load \n";
