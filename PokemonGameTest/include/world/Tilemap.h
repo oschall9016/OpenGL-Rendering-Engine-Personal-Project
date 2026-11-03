@@ -21,6 +21,8 @@ public:
 	void SetTileFlag(float x, float z, bool removeFlag, Tile_Type newType, uint16_t newWarpIndex = NO_WARP);
 	void SetTileHeight(float x, float z, float height);
 
+	void SetTileTextureIndex(float x, float z, float texIndex);
+
 	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
 	void SetCollider(float x, float z, bool removeCollider);
 	void SetWarp(float x, float z, bool removeWarp);

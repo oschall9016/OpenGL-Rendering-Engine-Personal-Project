@@ -111,9 +111,41 @@ void Tilemap::SetSlope(float x, float z, bool removeSlope, Rotate_Direction dire
 	heightMap[tileIndex] += 0.5f;
 }
 
+void Tilemap::SetCollider(float x, float z, bool removeCollider)
+{
+	Tile& tile = mapTiles[(z * mapXSize) + x];
+
+	if (removeCollider)
+	{
+		// make sure the flag is set
+		if (tile.signature & Tile_Type::COLLIDER) // do i need to do this?
+		{
+			tile.signature &= ~Tile_Type::COLLIDER;
+		}
+
+		if (Tile_Type::COLLIDER & Tile_Type::WARP)
+		{
+			tile.warpIndex = NO_WARP;
+		}
+	}
+	else
+	{
+		tile.signature |= Tile_Type::COLLIDER;
+	}
+
+}
+
 void Tilemap::SetTileHeight(float x, float z, float height)
 {
 	heightMap[(z * mapXSize) + x] = height;
+}
+
+void Tilemap::SetTileTextureIndex(float x, float z, float texIndex)
+{
+	float tileIndex = (z * mapXSize) + x;
+	Tile& tile = mapTiles[tileIndex];
+
+	tile.textureIndex = texIndex;
 }
 
 float Tilemap::GetTileHeight(float x, float z)

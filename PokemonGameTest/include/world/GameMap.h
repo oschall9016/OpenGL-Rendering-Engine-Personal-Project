@@ -9,14 +9,22 @@
 #include "Renderer.h"
 #include "Camera.h"
 
+#include "Model.h"
+
+#include "component_Transform.h"
+
 #include <vector>
 #include <memory>
+#include <string>
 
 class GameMap
 {
 public:
-	GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet, std::shared_ptr<Shader> shader);
+	GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet);
+	GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet, std::string mapPath);
 	~GameMap();
+
+	void ReadMapFromFile(std::string mapPath);
 
 	void InitInstancedMapData();
 
@@ -27,7 +35,7 @@ public:
 
 	void DrawGameMap(Renderer& renderer, Camera& camera);
 
-	void DrawSlope(glm::vec3 pos, Slope slope, Camera& camera, Renderer& renderer);
+	void AddMapModel(std::shared_ptr<Model> model, component_Transform transform);
 
 private:
 
@@ -40,8 +48,13 @@ private:
 	
 	std::shared_ptr<Model> quad;
 	std::shared_ptr<Model> slopeQuad;
-	std::shared_ptr<Shader> shader;
+
+	std::shared_ptr<Shader> tileShader;
+	std::shared_ptr<Shader> modelShader;
 	
+	std::vector<std::shared_ptr<Model>> mapModels;
+	std::vector<component_Transform> mapModelTransforms;
+
 	std::vector<glm::mat4> tileModelMats;
 	std::vector<float> tileTextureIds;
 

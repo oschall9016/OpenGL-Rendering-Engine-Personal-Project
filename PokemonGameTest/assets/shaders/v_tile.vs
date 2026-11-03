@@ -9,7 +9,7 @@ uniform mat4 view;
 uniform mat4 projection;
 
 out vec2 TexCoords;
-out float texIndex;
+flat out float texIndex;
 
 void main()
 {

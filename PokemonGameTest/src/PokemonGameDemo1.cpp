@@ -97,7 +97,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     
     /////////////////////// Asset Loading //////////////////////////
     
-    //std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
+    std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
 
     //std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/testmodel2/Test Model.obj"); //"assets/models/backpack/backpack.obj"
     //std::shared_ptr<Model> backpackModel = aManager.LoadModel("assets/models/backpack/backpack.obj");   
@@ -129,32 +129,25 @@ PokemonGameDemo1::PokemonGameDemo1()
     std::shared_ptr<Shader> defaultShader = aManager.LoadShader("DefaultShader", "assets/shaders/v_default.vs", "assets/shaders/f_default.fs");
 
     std::shared_ptr<Texture> tileTexture = aManager.LoadTexture("assets/Textures/PokeTiles.png", false);
+
+    std::shared_ptr<Model> testTreeModel = aManager.LoadModel("assets/models/PokemonTree1/PokemonTree1.obj", true);
     
     /////////////////////// GameMap Setup //////////////////////////
 
-    float tileRows = 500; // upper limit 3800 x 3800, ~14,440,000 tiles
-    float tileCols = 500;
+    float tileRows = 10; // upper limit 3800 x 3800, ~14,440,000 tiles
+    float tileCols = 10;
 
     Tilemap tilemap(tileRows, tileCols);
-    GameMap gameMap(tilemap, tileTexture, worldShader);
+    GameMap gameMap(tilemap, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
 
     WarpDestination map1Destination = { &gameMap, 9, 0 };
 
-    gameMap.SetTileHeight(2, 2, 1);
-    gameMap.SetTileHeight(2, 3, 1);
-    gameMap.SetTileHeight(2, 4, 1);
+    component_Transform treeTransformData = { .position{3.0f, 1.1f, 3.0f} , .scale{0.1f} };
+    gameMap.AddMapModel(testTreeModel, treeTransformData);
 
-    gameMap.SetTileHeight(3, 2, 2);
-    gameMap.SetTileHeight(3, 3, 2);
-    gameMap.SetTileHeight(3, 4, 2);
+    component_Transform treeTransformData2 = { .position{6.0f, 1.1f, 6.0f} , .scale{0.1f} };
+    gameMap.AddMapModel(testTreeModel, treeTransformData2);
 
-    tilemap.SetTileSignature(9, 0, Tile_Type::WARP, 0);
-
-    gameMap.SetSlope(1.0f, 4.0f, false, Rotate_Direction::RIGHT);
-    gameMap.SetSlope(2.0f, 4.0f, false, Rotate_Direction::RIGHT);
-
-    gameMap.SetSlope(3.0f, 4.0f, false, Rotate_Direction::RIGHT);
-    gameMap.SetSlope(4.0f, 4.0f, false, Rotate_Direction::RIGHT);
 
     //
 
@@ -162,7 +155,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     float tileCols2 = 5;
 
     Tilemap tilemap2(tileRows2, tileCols2);
-    GameMap gameMap2(tilemap2, tileTexture, worldShader);
+    GameMap gameMap2(tilemap2, tileTexture);
 
     WarpDestination map2Destination = { &gameMap2, 4, 0 };
 
