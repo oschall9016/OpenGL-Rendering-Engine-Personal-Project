@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-enum Camera_Direction
+enum class Camera_Direction
 {
 	FORWARD,
 	BACKWARD,
@@ -29,6 +29,12 @@ public:
 	
 	void ProcessInput(SDLInput input, float deltaTime);
 	void ProcessMouse(Sint32 x, Sint32 y);
+
+	const glm::vec3 GetPosition();
+
+	void SetPitchAngle(float pitchDegrees);
+	void SetPosition(float x, float y, float z);
+	void SetPosition(glm::vec3 newPos);
 	
 	
 private:

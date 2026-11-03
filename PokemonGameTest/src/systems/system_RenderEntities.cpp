@@ -17,7 +17,7 @@ void system_RenderEntities::RenderEntities()
 		auto rotation = ecs.GetComponent<component_Transform>(entity)->rotation;
 		auto scale = ecs.GetComponent<component_Transform>(entity)->scale;
 
-		shader->use();
+		shader->Bind();
 
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = camera.GetProjectionMatrix();
@@ -34,5 +34,7 @@ void system_RenderEntities::RenderEntities()
 		shader->setMat4("model", modelMat);
 
 		renderer.RenderModel(*model, *shader);
+
+		shader->Unbind();
 	}
 }

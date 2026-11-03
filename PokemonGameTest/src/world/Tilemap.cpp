@@ -1,57 +1,154 @@
 #include "Tilemap.h"
 #include "Tile.h"
+#include "Warp.h"
 
 #include <array>
 #include <iostream>
+#include <cstdint> 
 
-Tilemap::Tilemap(std::vector<Tile> tileMap, int rows, int cols)
+Tilemap::Tilemap(std::vector<Tile> tileMap, float x, float z)
 {
-	map = tileMap;
-	mapRows = rows;
-	mapCols = cols;
+	mapTiles = tileMap;
+	mapXSize = x;
+	mapZSize = z;
+
+	heightMap.resize(mapXSize * mapZSize);
 }
 
-Tilemap::Tilemap(int rows, int cols)
+Tilemap::Tilemap(float x, float z)
 {
-	mapRows = rows;
-	mapCols = cols;
+	mapXSize = x;
+	mapZSize = z;
 
 	// fills map with walkable tiles
-	for (int i = 0; i < rows * cols; i++)
+	for (int i = 0; i < x * z; i++)
 	{
 		Tile newTile;
-		map.push_back(newTile);
+		mapTiles.push_back(newTile);
 	}
+
+	heightMap.resize(mapXSize * mapZSize);
 }
 
- // TODO: check if tile not found 
-const Tile& Tilemap::GetTile(int row, int col)
+// TODO: check if tile not found 
+Tile& Tilemap::GetTile(float x, float z)
 {
-	return map[(row * mapCols) + col];
+	return mapTiles[(z * mapXSize) + x];
 }
 
-void Tilemap::SetTileSignature(int row, int col, TileSignature newsig)
+// TODO: make sure warp index is set when signature is WARP
+void Tilemap::SetTileSignature(float x, float z, uint8_t newSig, uint16_t newWarpIndex)
 {
-	Tile& tile = map[(row * mapCols) + col];
-	tile.signature = newsig;
-}
+	Tile& tile = mapTiles[(z * mapXSize) + x];
 
-// debug
-void Tilemap::PrintTilemap()
-{
-	for (int i = 0; i < mapRows; i++)
+	tile.signature = newSig;
+
+	if (newSig & Tile_Type::WARP)
 	{
-		std::cout << "\n";
+		tile.warpIndex = newWarpIndex;
+	}
 
-		for (int j = 0; j < mapCols; j++)
+	// cant be walkable and collider at the same time
+	if (newSig & Tile_Type::COLLIDER)
+	{
+		tile.signature &= ~Tile_Type::WALKABLE;
+	}
+	else if (newSig & Tile_Type::WALKABLE)
+	{
+		tile.signature &= ~Tile_Type::COLLIDER;
+	}
+
+}
+
+void Tilemap::SetTileFlag(float x, float z, bool removeFlag, Tile_Type newType, uint16_t newWarpIndex)
+{
+	Tile& tile = mapTiles[(z * mapXSize) + x];
+
+	if (removeFlag)
+	{
+		// make sure the flag is set
+		if (tile.signature & newType) // do i need to do this?
 		{
-			Tile tile = GetTile(i, j);
+			tile.signature &= ~newType;
+		}
 
-			if (tile.signature == WALKABLE) std::cout << "0";
-			else std::cout << "1";
-
-			std::cout << " ";
+		if (newType & Tile_Type::WARP)
+		{
+			tile.warpIndex = NO_WARP;
 		}
 	}
-	std::cout << "\n";
+	else
+	{
+		tile.signature |= newType;
+	}
+
+	if (newType & Tile_Type::WARP)
+	{
+		tile.warpIndex = newWarpIndex;
+	}
+
+	// cant be walkable and collider at the same time
+	if (newType & Tile_Type::COLLIDER)
+	{
+		tile.signature &= ~Tile_Type::WALKABLE;
+	}
+	else if (newType & Tile_Type::WALKABLE)
+	{
+		tile.signature &= ~Tile_Type::COLLIDER;
+	}
+}
+
+// TODO: removal
+void Tilemap::SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction)
+{
+	float tileIndex = (z * mapXSize) + x;
+	Tile& tile = mapTiles[tileIndex];
+
+	tile.signature |= Tile_Type::SLOPE;
+
+	slopes.insert({ tileIndex, Slope{ direction } });
+
+	heightMap[tileIndex] += 0.5f;
+}
+
+void Tilemap::SetCollider(float x, float z, bool removeCollider)
+{
+	Tile& tile = mapTiles[(z * mapXSize) + x];
+
+	if (removeCollider)
+	{
+		// make sure the flag is set
+		if (tile.signature & Tile_Type::COLLIDER) // do i need to do this?
+		{
+			tile.signature &= ~Tile_Type::COLLIDER;
+		}
+
+		if (Tile_Type::COLLIDER & Tile_Type::WARP)
+		{
+			tile.warpIndex = NO_WARP;
+		}
+	}
+	else
+	{
+		tile.signature |= Tile_Type::COLLIDER;
+	}
+
+}
+
+void Tilemap::SetTileHeight(float x, float z, float height)
+{
+	heightMap[(z * mapXSize) + x] = height;
+}
+
+void Tilemap::SetTileTextureIndex(float x, float z, float texIndex)
+{
+	float tileIndex = (z * mapXSize) + x;
+	Tile& tile = mapTiles[tileIndex];
+
+	tile.textureIndex = texIndex;
+}
+
+float Tilemap::GetTileHeight(float x, float z)
+{
+	return heightMap[(z * mapXSize) + x];
 }

@@ -1,6 +1,7 @@
 #include "DeltaTime.h"
 #include <SDL2/SDL.h>
 
+#include <iostream>
 DeltaTime::DeltaTime()
 {
 	currentFrame = 0.0f;
@@ -14,7 +15,7 @@ const float DeltaTime::Get() //TODO look into use of const
 }
 void DeltaTime::Update()
 {
-	currentFrame = SDL_GetTicks() / 1000.0f;
+	currentFrame = SDL_GetTicks() / 1000.0f; // milliseconds
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 }

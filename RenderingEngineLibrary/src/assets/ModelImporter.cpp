@@ -18,7 +18,7 @@
 
 ModelImporter::ModelImporter(AssetManager& manager) : manager(manager){}
 
-std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
+std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path, bool needsFlipped)
 {
 	this->path = path;
 	Assimp::Importer importer;
@@ -32,7 +32,7 @@ std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
 
 	std::vector<std::shared_ptr<Mesh>> meshes;
 
-	TraverseAssimpScene(scene, meshes);
+	TraverseAssimpScene(scene, meshes, needsFlipped);
 
 	std::shared_ptr<Model> model = make_shared<Model>(meshes);
 
@@ -40,7 +40,7 @@ std::shared_ptr<Model> ModelImporter::ImportModel(const std::string& path)
 
 }
 
-void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<std::shared_ptr<Mesh>>& meshes)
+void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<std::shared_ptr<Mesh>>& meshes, bool needsFlipped)
 {
 
 	std::stack<aiNode*> nodeStack;
@@ -55,7 +55,7 @@ void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<std::s
 		for (unsigned int i = 0; i < curNode->mNumMeshes; i++)
 		{
 			unsigned int meshIndex = curNode->mMeshes[i];
-			std::shared_ptr<Mesh> tempMesh = CreateMesh(scene, scene->mMeshes[meshIndex]);
+			std::shared_ptr<Mesh> tempMesh = CreateMesh(scene, scene->mMeshes[meshIndex], needsFlipped);
 			meshes.push_back(tempMesh);
 		}
 
@@ -67,7 +67,7 @@ void ModelImporter::TraverseAssimpScene(const aiScene* scene, std::vector<std::s
 	}
 }
 
-std::shared_ptr<Mesh> ModelImporter::CreateMesh(const aiScene* scene, aiMesh* mesh)
+std::shared_ptr<Mesh> ModelImporter::CreateMesh(const aiScene* scene, aiMesh* mesh, bool needsFlipped)
 {
 	std::vector<Vertex> tempVertices;
 	std::vector<unsigned int> tempIndices;
@@ -123,13 +123,13 @@ std::shared_ptr<Mesh> ModelImporter::CreateMesh(const aiScene* scene, aiMesh* me
 	std::vector<std::shared_ptr<Texture>> tempTextures;
 
 	// diffuse
-	std::vector<std::shared_ptr<Texture>> diffuseTextures = importTextures(mat, aiTextureType_DIFFUSE);
+	std::vector<std::shared_ptr<Texture>> diffuseTextures = importTextures(mat, aiTextureType_DIFFUSE, needsFlipped);
 	tempTextures.insert(tempTextures.end(), diffuseTextures.begin(), diffuseTextures.end());
 
 	return std::make_shared<Mesh>(tempVertices, tempIndices, tempTextures);
 }
 
-std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* mat, aiTextureType type)
+std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* mat, aiTextureType type, bool needsFlipped)
 {
 	std::vector<std::shared_ptr<Texture>> tempTextures;
 
@@ -145,7 +145,7 @@ std::vector<std::shared_ptr<Texture>> ModelImporter::importTextures(aiMaterial* 
 		absPath += "/" + fileName;
 
 		// load texture from manager
-		tempTextures.push_back(manager.LoadTexture(absPath, false));
+		tempTextures.push_back(manager.LoadTexture(absPath, needsFlipped));
 	}
 	return tempTextures;
 }

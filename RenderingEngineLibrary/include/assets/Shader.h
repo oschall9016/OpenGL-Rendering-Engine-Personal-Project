@@ -13,7 +13,8 @@ public:
 	Shader(const std::string& vertShaderPath, const std::string& fragShaderPath);
 	~Shader();
 
-	void use();
+	void Bind();
+	void Unbind();
 	unsigned int getID() const;
 
 	void setBool(const std::string& name, bool value) const;

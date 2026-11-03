@@ -42,7 +42,7 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 	const unsigned int& VAO = mesh.GetVAO();
 	const std::vector<unsigned int>& indices = mesh.getIndices();
 
-	shader.use();
+	shader.Bind();
 
 	unsigned int diffuseNr = 1;
 	for (unsigned int i = 0; i < textures.size(); i++)
@@ -64,6 +64,50 @@ void Renderer::RenderMesh(Mesh& mesh, Shader& shader)
 	glBindVertexArray(0);
 
 	glActiveTexture(GL_TEXTURE0);
+
+	shader.Unbind();
+}
+
+void Renderer::RenderModelInstanced(Model& model, Shader& shader, unsigned int amount)
+{
+	std::vector<std::shared_ptr<Mesh>>& meshes = model.GetMeshes();
+
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		RenderMeshInstanced(*meshes[i], shader, amount);
+	}
+}
+
+void Renderer::RenderMeshInstanced(Mesh& mesh, Shader& shader, unsigned int amount)
+{
+	const std::vector<std::shared_ptr<Texture>>& textures = mesh.getTextures();
+	const unsigned int& VAO = mesh.GetVAO();
+	const std::vector<unsigned int>& indices = mesh.getIndices();
+
+	shader.Bind();
+
+	unsigned int diffuseNr = 1;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		std::string number;
+		std::string name = "texture_diffuse";
+		number = std::to_string(diffuseNr++);
+
+		// now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.getID(), (name + number).c_str()), i);
+		// and finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, textures[i]->GetID());
+
+	}
+
+	glBindVertexArray(VAO);
+	glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0, amount);
+	glBindVertexArray(0);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	shader.Unbind();
 }
 
 void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
@@ -73,7 +117,7 @@ void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	shader.use();
+	shader.Bind();
 
 	// draw the quad
 	glBindVertexArray(framebuffer.GetQuadVAO());
@@ -81,13 +125,16 @@ void Renderer::RenderFramebufferQuad(Framebuffer& framebuffer,Shader& shader)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glEnable(GL_DEPTH_TEST);
+
+	shader.Unbind();
 }
 
 void Renderer::RenderSkybox(Skybox& skybox, Shader& shader, Camera& camera)
 {
 	glDepthFunc(GL_LEQUAL);  
 
-	shader.use();
+	shader.Bind();
+	
 	glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 	shader.setMat4("view", view);
 	shader.setMat4("projection", camera.GetProjectionMatrix());
@@ -99,4 +146,6 @@ void Renderer::RenderSkybox(Skybox& skybox, Shader& shader, Camera& camera)
 	glBindVertexArray(0);
 
 	glDepthFunc(GL_LESS); 
+	
+	shader.Unbind();
 }

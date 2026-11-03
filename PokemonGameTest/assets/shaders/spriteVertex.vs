@@ -18,19 +18,19 @@ void main()
    // NOTE: GLSL is [column][row]
 
    // column 0
-   modelViewMat[0][0] = 1;
+   modelViewMat[0][0] = length(model[0].xyz);
    modelViewMat[0][1] = 0;
    modelViewMat[0][2] = 0;
 
    // column 1
    modelViewMat[1][0] = 0;
-   modelViewMat[1][1] = 1;
+   modelViewMat[1][1] = length(model[1].xyz);
    modelViewMat[1][2] = 0;
 
    // column 2
    modelViewMat[2][0] = 0;
    modelViewMat[2][1] = 0;
-   modelViewMat[2][2] = 1;
+   modelViewMat[2][2] = length(model[2].xyz);
 
    gl_Position = projection * modelViewMat * vec4(aPos, 1.0);
    TexCoord = aTexCoord;

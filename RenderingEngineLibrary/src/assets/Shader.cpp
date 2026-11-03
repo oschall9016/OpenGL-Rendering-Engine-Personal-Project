@@ -70,9 +70,14 @@ Shader::~Shader()
     glDeleteProgram(ID);
 }
 
-void Shader::use()
+void Shader::Bind()
 {
     glUseProgram(ID);
+}
+
+void Shader::Unbind()
+{
+    glUseProgram(0);
 }
 
 unsigned int Shader::getID() const

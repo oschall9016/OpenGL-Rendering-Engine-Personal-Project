@@ -1,23 +1,43 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
+#include <cstdint> 
 
 #include "Tile.h"
+#include "Warp.h"
+#include "Slope.h"
 
 class Tilemap
 {
 public:
-	Tilemap(std::vector<Tile> map, int rows, int cols);
-	Tilemap(int rows, int cols);
+	Tilemap(std::vector<Tile> mapTiles, float x, float z);
+	Tilemap(float x, float z);
 
-	const Tile& GetTile(int row, int col);
-	void SetTileSignature(int row, int col, TileSignature newsig);
+	Tile& GetTile(float x, float z);
+	float GetTileHeight(float x, float z);
 
-	// debug
-	void PrintTilemap();
+	void SetTileSignature(float x, float z, uint8_t newSig, uint16_t newWarpIndex = NO_WARP);
+	void SetTileFlag(float x, float z, bool removeFlag, Tile_Type newType, uint16_t newWarpIndex = NO_WARP);
+	void SetTileHeight(float x, float z, float height);
+
+	void SetTileTextureIndex(float x, float z, float texIndex);
+
+	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
+	void SetCollider(float x, float z, bool removeCollider);
+	void SetWarp(float x, float z, bool removeWarp);
 	
-private:
-	std::vector<Tile> map;
-	int mapRows, mapCols;
 
+	float mapXSize, mapZSize;
+	
+	std::vector<Tile> mapTiles;
+	std::vector<float> heightMap;
+
+	std::unordered_map<float,Slope> slopes = {};
+
+	std::vector<Warp*> mapWarps = {};
+
+private:
+
+	
 };
