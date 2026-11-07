@@ -1,0 +1,42 @@
+# Blender 5.2.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl gateway_a
+Ns 122.500015
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.806452 0.806452 0.806452
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd gateway_a.png
+
+newmtl gateway_b
+Ns 122.500015
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.806452 0.806452 0.806452
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd gateway_b.png
+
+newmtl gateway_c
+Ns 122.500015
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.806452 0.806452 0.806452
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd gateway_c.png
+
+newmtl h_kage
+Ns 122.500015
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 1.000000 1.000000 1.000000
+Ni 1.500000
+illum 1
+map_Kd h_kage.png
+map_d h_kage.png
