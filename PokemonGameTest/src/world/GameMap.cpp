@@ -87,7 +87,7 @@ void GameMap::ReadMapFromFile(std::string mapPath)
 		switch (tileOptions[2][0]) // only one character
 		{
 		case 'C':
-			//tilemap.SetCollider
+			tilemap.SetCollider(tileX, tileZ, false);
 			break;
 		case 'U':
 			SetSlope(tileX, tileZ, false, Rotate_Direction::UP);
@@ -267,6 +267,10 @@ void GameMap::SetSlope(float x, float z, bool removeSlope, Rotate_Direction dire
 
 void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 {
+	// enable transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// render tiles and slopes
 	tileShader->Bind();
 
@@ -306,7 +310,7 @@ void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 		renderer.RenderModel(*mapModels[i], *modelShader);
 	}
 
-	
+	glDisable(GL_BLEND);
 }
 
 glm::mat4 GameMap::createTileModelMat(float x, float z, float height)
