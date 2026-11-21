@@ -44,7 +44,7 @@ glm::mat4& Camera::GetProjectionMatrix()
 
 void Camera::ProcessKeyboard(Camera_Direction direction, float deltaTime)
 {
-	float speed = 2.5f;
+	float speed = 10.0f;
 	float cameraSpeed = speed * deltaTime;
 	switch (direction)
 	{
