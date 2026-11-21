@@ -50,20 +50,19 @@
 #include <iostream>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 PokemonGameDemo1::PokemonGameDemo1()
 {
     /////////////////////// Initialization /////////////////////////
     
-    int windowWidth = 1920;
+    int windowWidth = 1440; // keep 4x3 to match render w/h
     int windowHeight = 1080;
 
-    int renderWidth = 640; // 480 640
-    int renderHeight = 360; // 270 360
+    int renderWidth = 400; // 256 <- ds resolution feels a little too zoomed in
+    int renderHeight = 300; // 192
 
     SDLManager sdlManager(windowWidth, windowHeight, "Cool Window");
-
-    //SDLWindow window(windowWidth, windowHeight, "Cool Window");
 
     Camera camera;
     camera.UpdateProjectionMatrix(45.0f, (float)renderWidth, (float)renderHeight);
@@ -84,7 +83,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     float yOffset = std::sin(glm::radians(90.0f - cameraAngle)) * cameraDistance;
     float zOffset = std::cos(glm::radians(90.0f - cameraAngle)) * cameraDistance;
     
-    camera.SetPosition(0.0f, yOffset, zOffset);
+    camera.SetPosition(2.0f, yOffset, 2.0f + zOffset);
     camera.SetPitchAngle(-cameraAngle);
     
     //
@@ -131,16 +130,36 @@ PokemonGameDemo1::PokemonGameDemo1()
     std::shared_ptr<Texture> tileTexture = aManager.LoadTexture("assets/Textures/PokeTiles.png", false);
 
     std::shared_ptr<Model> testTreeModel = aManager.LoadModel("assets/models/PokemonTree1/PokemonTree1.obj", true);
+    std::shared_ptr<Model> wallModel = aManager.LoadModel("assets/models/PokemonWall1/PokemonWall1.obj", true);
+    std::shared_ptr<Model> constructHouseModel = aManager.LoadModel("assets/models/PokemonBuildingConstruction/PokemonBuildingConstruction.obj", true);
+    std::shared_ptr<Model> brownContainerModel = aManager.LoadModel("assets/models/PokemonContainerBrown/PokemonContainerBrown.obj", true);
+    std::shared_ptr<Model> orangeContainerModel = aManager.LoadModel("assets/models/PokemonContainerOrange/PokemonContainerOrange.obj", true);
+    std::shared_ptr<Model> archModel = aManager.LoadModel("assets/models/PokemonArch/PokemonArch.obj", true);
+    std::shared_ptr<Model> tankModel = aManager.LoadModel("assets/models/PokemonTank1/PokemonTank1.obj", true);
+    std::shared_ptr<Model> bulldozerModel = aManager.LoadModel("assets/models/PokemonBulldozer/PokemonBulldozer.obj", true);
+    std::shared_ptr<Model> beamsModel = aManager.LoadModel("assets/models/PokemonBeams/PokemonBeams.obj", true);
+    std::shared_ptr<Model> lampModel = aManager.LoadModel("assets/models/PokemonLamp1/PokemonLamp1.obj", true);
+    std::shared_ptr<Model> buildingAspertiaModel = aManager.LoadModel("assets/models/PokemonBuildingAspertia1/PokemonBuildingAspertia1.obj", true);
+    std::shared_ptr<Model> buildingBlackCityModel = aManager.LoadModel("assets/models/PokemonBuildingBlackCity1/PokemonBuildingBlackCity1.obj", true);
+    std::shared_ptr<Model> buildingMallModel = aManager.LoadModel("assets/models/PokemonBuildingMall/PokemonBuildingMall.obj", true);
+    std::shared_ptr<Model> buildingRoute41 = aManager.LoadModel("assets/models/PokemonBuildingRoute41/PokemonBuildingRoute41.obj", true);
+    std::shared_ptr<Model> treeBlockModel = aManager.LoadModel("assets/models/PokemonTreeBlock/PokemonTreeBlock.obj", true);
+    std::shared_ptr<Model> treeBlockSmallModel = aManager.LoadModel("assets/models/PokemonTreeBlockSmall/PokemonTreeBlockSmall.obj", true);
+
+    std::shared_ptr<Texture> signTexture = aManager.LoadTexture("assets/Textures/thanks.jpeg", true);
+    std::shared_ptr<Model> signModel = aManager.LoadModel("SignModel", Model::CreateQuad(signTexture));
+
+    std::shared_ptr<Model> twistMountainInteriorModel = aManager.LoadModel("assets/models/PokemonInteriorTwistMountain1/PokemonInteriorTwistMountain1.obj",true);
     
     /////////////////////// GameMap Setup //////////////////////////
 
-    float tileRows = 10; // upper limit 3800 x 3800, ~14,440,000 tiles
-    float tileCols = 10;
+    float tileRows = 200; // upper limit 3800 x 3800, ~14,440,000 tiles
+    float tileCols = 65; // -135
 
     Tilemap tilemap(tileRows, tileCols);
     GameMap gameMap(tilemap, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
 
-    WarpDestination map1Destination = { &gameMap, 9, 0 };
+    WarpDestination map1Destination = { &gameMap, 27, 40 };
 
     component_Transform treeTransformData = { .position{3.0f, 1.1f, 3.0f} , .scale{0.1f} };
     gameMap.AddMapModel(testTreeModel, treeTransformData);
@@ -148,22 +167,184 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_Transform treeTransformData2 = { .position{6.0f, 1.1f, 6.0f} , .scale{0.1f} };
     gameMap.AddMapModel(testTreeModel, treeTransformData2);
 
+    // place walls
+    float wallXLineup = 2.43f;
+    float wallXSize = 6.4f;
 
+    // left walls
+    for (int i = 0; i < 3; i++)
+    {
+        component_Transform WallTransformData = { .position{16.05f - (wallXSize * (float)i), -1.0f, 51.0f} , .scale{0.1f} }; 
+        gameMap.AddMapModel(wallModel, WallTransformData);
+    }
+
+    // middle walls
+    for (int i = 0; i < 10; i++)
+    {
+        component_Transform WallTransformData = { .position{35.0f + wallXLineup + (wallXSize * (float)i), -1.0f, 51.0f} , .scale{0.1f} }; 
+        gameMap.AddMapModel(wallModel, WallTransformData);
+    }
+    component_Transform WallTransformData2 = { .position{35.0f + wallXLineup * 0.545 + (wallXSize * 10.0f), -1.0f, 51.0f} , .scale{0.063f, 0.1f, 0.1f} }; 
+    gameMap.AddMapModel(wallModel, WallTransformData2);
+
+    // right walls
+    for (int i = 0; i < 4; i++)
+    {
+        component_Transform WallTransformData = { .position{106.05f + wallXLineup + (wallXSize * (float)i), -1.0f, 51.0f} , .scale{0.1f} };
+        gameMap.AddMapModel(wallModel, WallTransformData);
+    }
+
+    //// construction area
+    component_Transform constructHouseTransformData = { .position{26.4f, -1.0f, 39.3f} , .scale{0.07f} };
+    gameMap.AddMapModel(constructHouseModel, constructHouseTransformData);
+
+    glm::quat rot90Y = glm::angleAxis(glm::radians(90.0f),glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::quat rotN90Y = glm::angleAxis(glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::quat rot45Y = glm::angleAxis(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::quat rotN45X = glm::angleAxis(glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::quat rot180Y = glm::angleAxis(glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // back containers
+    component_Transform brownContainerTransformData = { .position{22.4f, -1.0f, 34.0f}, .rotation{rot90Y}, .scale{0.11f} };
+    gameMap.AddMapModel(orangeContainerModel, brownContainerTransformData);
+
+    component_Transform brownContainerTransformData2 = { .position{28.8f, -1.0f, 34.0f}, .rotation{rot90Y}, .scale{0.07f} };
+    gameMap.AddMapModel(brownContainerModel, brownContainerTransformData2);
+
+    // right containers
+    component_Transform brownContainerTransformData3 = { .position{35.0f, -1.0f, 36.0f}, .rotation{rot45Y}, .scale{0.07f} };
+    gameMap.AddMapModel(brownContainerModel, brownContainerTransformData3);
+
+    component_Transform brownContainerTransformData4 = { .position{36.0f, -1.0f, 42.2f}, .scale{0.11f} };
+    gameMap.AddMapModel(orangeContainerModel, brownContainerTransformData4);
+
+    // left containers
+    component_Transform brownContainerTransformData5 = { .position{18.1f, -1.0f, 39.2f}, .scale{0.07f} };
+    gameMap.AddMapModel(brownContainerModel, brownContainerTransformData5);
+
+    component_Transform brownContainerTransformData6 = { .position{18.1f, -1.0f, 46.2f}, .scale{0.07f} };
+    gameMap.AddMapModel(brownContainerModel, brownContainerTransformData6);
+
+    // top containers
+    component_Transform brownContainerTransformData7 = { .position{18.1f, 2.4f, 43.2f}, .scale{0.11f} };
+    gameMap.AddMapModel(orangeContainerModel, brownContainerTransformData7);
+
+    component_Transform brownContainerTransformData8 = { .position{28.8f, 2.4f, 34.0f}, .rotation{rot90Y}, .scale{0.07f} };
+    gameMap.AddMapModel(brownContainerModel, brownContainerTransformData8);
     //
 
-    float tileRows2 = 5;
-    float tileCols2 = 5;
+    component_Transform archTransformData = { .position{27.0f, -1.0f, 50.4f}, .rotation{rot90Y}, .scale{0.09f} };
+    gameMap.AddMapModel(archModel, archTransformData);
+
+    component_Transform tankTransformData = { .position{37.0f, -1.0f, 47.5f}, .scale{0.1f} };
+    gameMap.AddMapModel(tankModel, tankTransformData);
+    component_Transform tankTransformData2 = { .position{17.0f, -1.0f, 34.5f}, .scale{0.1f} };
+    gameMap.AddMapModel(tankModel, tankTransformData2);
+
+    component_Transform bulldozerTransformData = { .position{31.5f, -1.0f, 39.0f}, .rotation{rotN90Y}, .scale{0.07f} };
+    gameMap.AddMapModel(bulldozerModel, bulldozerTransformData);
+
+    component_Transform beamsTransformData = { .position{21.8f, -1.0f, 39.0f}, .rotation{rot45Y}, .scale{0.07f} };
+    gameMap.AddMapModel(beamsModel, beamsTransformData);
+
+    //// street
+    component_Transform beamsTransformData2 = { .position{19.0f, -1.0f, 53.5f}, .scale{0.05f} };
+    gameMap.AddMapModel(beamsModel, beamsTransformData2);
+
+    component_Transform beamsTransformData3 = { .position{110.0f, -1.0f, 53.5f}, .scale{0.05f} };
+    gameMap.AddMapModel(beamsModel, beamsTransformData3);
+
+    // street lights
+    for (int i = 0; i < 10; i++)
+    {
+        component_Transform lampTransformData = { .position{35.0f + (i * 10), -1.0f, 55.0f}, .scale{0.07f} };
+        gameMap.AddMapModel(lampModel, lampTransformData);
+    }
+
+    // buildings
+    component_Transform buildingAspertiaTransformData = { .position{43.0f, -1.0f, 44.0f}, .scale{0.15f} };
+    gameMap.AddMapModel(buildingAspertiaModel, buildingAspertiaTransformData);
+
+    component_Transform buildingBlackCityTransformData = { .position{57.0f, -1.0f, 41.5f}, .scale{0.15f} };
+    gameMap.AddMapModel(buildingBlackCityModel, buildingBlackCityTransformData);
+
+    component_Transform buildingMallTransformData = { .position{77.0f, -1.0f, 39.0f}, .scale{0.15f} };
+    gameMap.AddMapModel(buildingMallModel, buildingMallTransformData);
+
+    component_Transform WallTransformData3 = { .position{100.45f, -1.0f, 42.9f}, .scale{0.06f, 0.11f, 0.1f} };
+    gameMap.AddMapModel(wallModel, WallTransformData3);
+
+    component_Transform WallTransformData4 = { .position{99.0f, -1.0f, 37.45f}, .rotation{rotN90Y}, .scale{0.14f, 0.11f, 0.1f} };
+    gameMap.AddMapModel(wallModel, WallTransformData4);
+
+    component_Transform WallTransformData5 = { .position{108.8f, -1.0f, 38.2f}, .rotation{rot90Y}, .scale{0.14f, 0.11f, 0.1f} };
+    gameMap.AddMapModel(wallModel, WallTransformData5);
+
+    component_Transform WallTransformData6 = { .position{103.45f, -2.3f, 42.9f}, .scale{0.03f, 0.11f, 0.1f} };
+    gameMap.AddMapModel(wallModel, WallTransformData6);
+
+    component_Transform WallTransformData7 = { .position{107.25f, -1.0f, 42.9f}, .scale{0.06f, 0.11f, 0.1f} };
+    gameMap.AddMapModel(wallModel, WallTransformData7);
+
+    //// trees
+
+    // back left
+    for (int i = 0; i < 5; i++)
+    {
+        component_Transform treeBlockTransformData = { .position{3.0f, 1.1f, 3.0f + (i * 6.0f)} , .scale{0.1f}};
+        gameMap.AddMapModel(treeBlockModel, treeBlockTransformData);
+    }
+
+    // left
+    for (int i = 0; i < 3; i++)
+    {
+        component_Transform treeBlockSmallTransformData = { .position{3.0f, 1.1f, 33.0f + (i * 6.0f)} , .scale{0.1f}};
+        gameMap.AddMapModel(treeBlockSmallModel, treeBlockSmallTransformData);
+    }
+
+    component_Transform treeBlockSmallTransformData = { .position{37.0f, 1.1f, 33.0f} , .scale{0.1f} };
+    gameMap.AddMapModel(treeBlockSmallModel, treeBlockSmallTransformData);
+
+    component_Transform treeBlockTransformData = { .position{85.0f, 1.1f, 30.0f}, .rotation{rot90Y}, .scale{0.1f} };
+    gameMap.AddMapModel(treeBlockModel, treeBlockTransformData);
+
+    for (int i = 0; i < 2; i++)
+    {
+        component_Transform treeBlockTransformData = { .position{91.5f + (i * 6.0f), 1.1f, 47.0f}, .rotation{rot90Y}, .scale{0.1f} };
+        gameMap.AddMapModel(treeBlockModel, treeBlockTransformData);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        component_Transform treeBlockTransformData = { .position{114.0f + (i * 6.0f), 1.1f, 47.0f}, .rotation{rot90Y}, .scale{0.1f} };
+        gameMap.AddMapModel(treeBlockModel, treeBlockTransformData);
+    }
+
+    //// sign
+    component_Transform signTransformData = { .position{104.1f, 3.0f, 20.9f}, .rotation{rotN45X}, .scale{10.0f} };
+    gameMap.AddMapModel(signModel, signTransformData);
+
+    /////////////////////////////////////////////////////////////////////////////////
+
+    float tileRows2 = 7;
+    float tileCols2 = 9;
 
     Tilemap tilemap2(tileRows2, tileCols2);
-    GameMap gameMap2(tilemap2, tileTexture);
+    GameMap gameMap2(tilemap2, tileTexture, "assets/WorldFiles/InteriorExample.txt");
 
-    WarpDestination map2Destination = { &gameMap2, 4, 0 };
+    WarpDestination map2Destination = { &gameMap2, 3, 8, Exit_Direction::UP };
 
-    tilemap2.SetTileSignature(4, 0, Tile_Type::WARP, 0);
+    tilemap.SetTileSignature(27, 40, Tile_Type::WARP, 0);
+    tilemap2.SetTileSignature(2, 8, Tile_Type::WARP, 0);
+    tilemap2.SetTileSignature(3, 8, Tile_Type::WARP, 0);
+    tilemap2.SetTileSignature(4, 8, Tile_Type::WARP, 0);
+
+    component_Transform twistTransformData = { .position{8.0f, -0.7f, 7.5f}, .scale{0.06f} };
+    gameMap2.AddMapModel(twistMountainInteriorModel, twistTransformData);
 
     //
 
-    Warp map1map2Warp = { {map1Destination,map2Destination} };
+    Warp map1map2Warp = { {map2Destination, map1Destination} }; // spawn in map 2
 
     tilemap.mapWarps.push_back(&map1map2Warp);
     tilemap2.mapWarps.push_back(&map1map2Warp);
@@ -173,7 +354,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     world.gameMaps.push_back(&gameMap);
     world.gameMaps.push_back(&gameMap2);
 
-    world.currentMap = world.gameMaps[0];
+    world.currentMap = world.gameMaps[1];
 
     /////////////////////// ECS Setup //////////////////////////////
 
@@ -244,13 +425,13 @@ PokemonGameDemo1::PokemonGameDemo1()
     component_Model playerModelData = component_Model{ testSpriteModel, testSpriteShader };
     ecs.AddComponent<component_Model>(playerEntity, playerModelData);
 
-    component_Transform playerTransformData = { .scale{1.8f} };
+    component_Transform playerTransformData = { .position{2.0f, 0.0f, 2.0f}, .scale{1.8f} };
     ecs.AddComponent<component_Transform>(playerEntity, playerTransformData);
 
     component_player_currentState playerStateData; // use defaults
     ecs.AddComponent<component_player_currentState>(playerEntity, playerStateData);
 
-    component_tilemapPosition playerTileData = {0.0f, 0.0f, &gameMap.GetTilemap(),&world};
+    component_tilemapPosition playerTileData = {2.0f, 2.0f, &world.currentMap->GetTilemap(),&world};
     ecs.AddComponent<component_tilemapPosition>(playerEntity, playerTileData);
 
     component_player_animations playerAnimationData; // use defaults
@@ -289,7 +470,7 @@ PokemonGameDemo1::PokemonGameDemo1()
    
         entityRenderSystem->RenderEntities();
 
-        renderer.RenderSkybox(skybox, *skyboxShader, camera);
+        //renderer.RenderSkybox(skybox, *skyboxShader, camera);
 
         pixelFramebuffer.Unbind(windowWidth, windowHeight); //
 
