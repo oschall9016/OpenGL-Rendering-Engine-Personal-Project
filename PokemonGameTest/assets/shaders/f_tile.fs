@@ -29,5 +29,11 @@ void main()
 
 	vec4 textureColor = texture(material_texture_diffuse1, uv);
 
+	// transparency
+	if(textureColor.a < 0.1)
+	{
+		discard;
+	}
+
 	FragColor = textureColor;
 }
