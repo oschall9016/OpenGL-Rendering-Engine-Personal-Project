@@ -130,10 +130,6 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 			currentState->movementVisualsSynced = false;
 			currentState->inputLocked = true;
 		}
-
-		std::cout << "\n";
-		std::cout << "[ " << transform->position.x << " , " << transform->position.y << " , " << transform->position.z << " ]";
-		std::cout << "\n";
-
+	
 	}
 }
