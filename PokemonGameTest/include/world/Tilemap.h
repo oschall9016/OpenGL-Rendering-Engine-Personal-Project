@@ -25,7 +25,7 @@ public:
 
 	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
 	void SetCollider(float x, float z, bool removeCollider);
-	void SetWarp(float x, float z, bool removeWarp);
+	void SetWarp(float x, float z, bool removeWarp, uint16_t warpIndex);
 	
 
 	float mapXSize, mapZSize;
@@ -35,7 +35,7 @@ public:
 
 	std::unordered_map<float,Slope> slopes = {};
 
-	std::vector<Warp*> mapWarps = {};
+	std::vector<Warp> mapWarps = {};
 
 private:
 

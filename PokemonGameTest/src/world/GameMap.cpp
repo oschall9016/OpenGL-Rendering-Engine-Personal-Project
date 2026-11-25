@@ -20,8 +20,10 @@
 #include <iostream>
 #include <sstream>
 
-GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet) : tilemap(tileMap)
+GameMap::GameMap(std::string mapName, Tilemap tilemap, std::shared_ptr<Texture> tileSheet) : tilemap(tilemap)
 {
+	this->mapName = mapName;
+
 	quad = Model::CreateQuad(tileSheet);
 	slopeQuad = Model::CreateQuad(tileSheet);
 
@@ -31,8 +33,10 @@ GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet) : tilemap
 	InitInstancedMapData();
 }
 
-GameMap::GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet, std::string mapPath) : tilemap(tileMap)
+GameMap::GameMap(std::string mapName, Tilemap tilemap, std::shared_ptr<Texture> tileSheet, std::string mapPath) : tilemap(tilemap)
 {
+	this->mapName = mapName;
+
 	quad = Model::CreateQuad(tileSheet);
 	slopeQuad = Model::CreateQuad(tileSheet);
 
@@ -115,6 +119,11 @@ GameMap::~GameMap()
 Tilemap& GameMap::GetTilemap()
 {
 	return tilemap;
+}
+
+std::string& GameMap::GetMapName()
+{
+	return mapName;
 }
 
 void GameMap::InitInstancedMapData()

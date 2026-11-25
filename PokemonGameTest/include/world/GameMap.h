@@ -20,8 +20,8 @@
 class GameMap
 {
 public:
-	GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet);
-	GameMap(Tilemap& tileMap, std::shared_ptr<Texture> tileSheet, std::string mapPath);
+	GameMap(std::string mapName, Tilemap tilemap, std::shared_ptr<Texture> tileSheet);
+	GameMap(std::string mapName, Tilemap tilemap, std::shared_ptr<Texture> tileSheet, std::string mapPath);
 	~GameMap();
 
 	void ReadMapFromFile(std::string mapPath);
@@ -29,6 +29,7 @@ public:
 	void InitInstancedMapData();
 
 	Tilemap& GetTilemap();
+	std::string& GetMapName();
 
 	void SetTileHeight(float x, float z, float height);
 	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
@@ -44,7 +45,9 @@ private:
 
 	void createPosTexBuffer(unsigned int& posVBO, unsigned int& texVBO, std::vector<glm::mat4>& posMats, std::vector<float>& texIDs);
 
-	Tilemap& tilemap;
+	std::string mapName;
+
+	Tilemap tilemap;
 	
 	std::shared_ptr<Model> quad;
 	std::shared_ptr<Model> slopeQuad;

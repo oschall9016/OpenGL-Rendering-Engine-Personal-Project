@@ -117,22 +117,30 @@ void Tilemap::SetCollider(float x, float z, bool removeCollider)
 
 	if (removeCollider)
 	{
-		// make sure the flag is set
-		if (tile.signature & Tile_Type::COLLIDER) // do i need to do this?
-		{
-			tile.signature &= ~Tile_Type::COLLIDER;
-		}
-
-		if (Tile_Type::COLLIDER & Tile_Type::WARP)
-		{
-			tile.warpIndex = NO_WARP;
-		}
+		tile.signature &= ~Tile_Type::COLLIDER;
 	}
 	else
 	{
 		tile.signature |= Tile_Type::COLLIDER;
 	}
 
+}
+
+void  Tilemap::SetWarp(float x, float z, bool removeWarp, uint16_t warpIndex)
+{
+	float tileIndex = (z * mapXSize) + x;
+	Tile& tile = mapTiles[tileIndex];
+
+	if (removeWarp)
+	{
+		tile.signature &= ~Tile_Type::WARP;
+		tile.warpIndex = NO_WARP;
+	}
+	else
+	{
+		tile.signature |= Tile_Type::WARP;
+		tile.warpIndex = warpIndex;
+	}
 }
 
 void Tilemap::SetTileHeight(float x, float z, float height)

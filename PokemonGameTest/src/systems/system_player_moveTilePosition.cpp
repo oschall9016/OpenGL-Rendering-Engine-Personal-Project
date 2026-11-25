@@ -104,11 +104,6 @@ void system_player_moveTilePosition::Update(double dt)
 
 		// request has been processed
 		currentState->moveRequest = false;
-		
-		// debug
-		//std::cout << "\n";
-		//std::cout << "[ " << tilemapPosition->currentX << " , " << tilemapPosition->currentZ << " ]";
-		//std::cout << "\n";
 	}
 }
 
@@ -124,16 +119,17 @@ void system_player_moveTilePosition::EnterWarp(component_player_currentState* cu
 	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
 
 	// get warp struct from list
-	auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+	//auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+	auto warp = tilemapPosition->gameWorld->GetWarp(warpIndex);
 
 	// swap current position to other side of warp
 	warp->currentIndex = 1 - warp->currentIndex;
 
 	// update currentMap
-	tilemapPosition->gameWorld->currentMap = warp->destinations[warp->currentIndex].gameMap;
+	tilemapPosition->gameWorld->SetCurrentMap(warp->destinations[warp->currentIndex].gameMap->GetMapName());
 
 	// update tilemap
-	tilemapPosition->currentTileMap = &tilemapPosition->gameWorld->currentMap->GetTilemap();
+	tilemapPosition->currentTileMap = &tilemapPosition->gameWorld->GetCurrentMap()->GetTilemap();
 
 	// update character position
 	tileX = warp->destinations[warp->currentIndex].x;
@@ -152,7 +148,8 @@ void system_player_moveTilePosition::ExitWarp(component_player_currentState* cur
 	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
 
 	// get warp struct from list
-	auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+	//auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
+	auto warp = tilemapPosition->gameWorld->GetWarp(warpIndex);
 
 	// move one step in the exit direction
 	// NOTE: currently bypasses collision detection

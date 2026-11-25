@@ -26,3 +26,5 @@ struct Warp
 
 	int currentIndex = 0; // swap with 1 - destination
 };
+
+// BIG ISSUE TWO SEPERATE WARPS IN EACH MOVE WARP UP TO WORLD
