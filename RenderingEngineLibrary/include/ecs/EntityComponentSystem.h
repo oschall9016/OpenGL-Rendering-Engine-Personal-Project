@@ -40,6 +40,9 @@ public:
 	template <typename SystemName, typename... ComponentTypes>
 	std::shared_ptr<SystemName> RegisterSystem(std::shared_ptr<SystemName> system); // register a system for use with the SystemManager
 
+	template <typename SystemName>
+	std::shared_ptr<SystemName> GetSystem();
+
 
 private:
 	EntityManager entityManager;
@@ -139,4 +142,10 @@ std::shared_ptr<SystemName> EntityComponentSystem::RegisterSystem(std::shared_pt
 	(systemSignature.set(componentManager.GetBitPosition<ComponentTypes>()), ...);
 
 	return systemManager.RegisterSystem<SystemName>(systemSignature, system);
+}
+
+template <typename SystemName>
+std::shared_ptr<SystemName> EntityComponentSystem::GetSystem()
+{
+	return systemManager.GetSystem<SystemName>();
 }

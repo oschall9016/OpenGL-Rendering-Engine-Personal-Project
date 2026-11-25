@@ -14,6 +14,8 @@ public:
 
 	template <typename SystemName>
 	std::shared_ptr<SystemName> RegisterSystem(Signature signature, std::shared_ptr<SystemName> system); // add a system and signature to the corresponding maps to be updated
+	template <typename SystemName>
+	std::shared_ptr<SystemName> GetSystem(); // returns a pointer to the system specified by the type
 
 	void EntityDestroyed(Entity entity); // remove entity from all systems
 	void EntitySignatureChanged(Entity entity, Signature entitySignature); // check if entity needs to be added to or removed from all systems
@@ -34,6 +36,23 @@ std::shared_ptr<SystemName> SystemManager::RegisterSystem(Signature signature, s
 	typeSignatureMap.insert({ systemName, signature });
 
 	return system;
+}
+
+template<typename SystemName>
+inline std::shared_ptr<SystemName> SystemManager::GetSystem()
+{
+	std::string systemName = typeid(SystemName).name();
+
+	auto system = typeSystemMap.find(systemName);
+
+	if (system == typeSystemMap.end())
+	{
+		std::cout << "Cannot Get System, " << systemName << ", System Is Not Registered\n";
+		return nullptr;
+	}
+	
+	return std::static_pointer_cast<SystemName>(system->second);
+	
 }
 
 inline void SystemManager::EntityDestroyed(Entity entity)
