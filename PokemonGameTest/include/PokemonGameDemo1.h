@@ -20,11 +20,26 @@ private:
 	void RunRenderLoop();
 	void SetCameraPos();
 
-	//SDLManager sdlManager;
-	//Camera camera;
-	//DeltaTime dt;
+	SDLManager sdlManager;
+	Camera camera;
+	DeltaTime dt;
 	AssetManager aManager;
-	//EntityComponentSystem ecs;
+	EntityComponentSystem ecs;
 	GameWorld world;
+	Renderer renderer;
+
+	// window settings
+	int windowWidth;
+	int windowHeight;
+
+	int renderWidth;
+	int renderHeight;
+
+	// player settings
+	int playerSpawnPosX;
+	int playerSpawnPosZ;
+	float playerSpawnPosY;
+
+	float playerScale;
 
 };
