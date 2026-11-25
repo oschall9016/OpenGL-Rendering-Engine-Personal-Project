@@ -31,8 +31,8 @@ public:
 	Tilemap& GetTilemap();
 	std::string& GetMapName();
 
-	void SetTileHeight(float x, float z, float height);
-	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
+	void SetTileHeight(int x, int z, float height);
+	void SetSlope(int x, int z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
 
 	void DrawGameMap(Renderer& renderer, Camera& camera);
 
@@ -40,8 +40,8 @@ public:
 
 private:
 
-	glm::mat4 createTileModelMat(float x, float z, float height);
-	glm::mat4 createSlopeModelMat(float x, float z, float height);
+	glm::mat4 createTileModelMat(int x, int z, float height);
+	glm::mat4 createSlopeModelMat(int x, int z, float height);
 
 	void createPosTexBuffer(unsigned int& posVBO, unsigned int& texVBO, std::vector<glm::mat4>& posMats, std::vector<float>& texIDs);
 

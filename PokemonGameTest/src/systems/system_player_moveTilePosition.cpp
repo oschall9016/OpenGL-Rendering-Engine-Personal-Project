@@ -36,7 +36,7 @@ void system_player_moveTilePosition::Update(double dt)
 		auto& tileZ = tilemapPosition->currentZ;
 		auto& tileY = tilemapPosition->currentY;
 
-		float stepSize = 1.0f;
+		int stepSize = 1;
 
 		// we are in a warp tile, step off it
 		if (currentState->warping)
@@ -136,7 +136,7 @@ void system_player_moveTilePosition::EnterWarp(component_player_currentState* cu
 	tileZ = warp->destinations[warp->currentIndex].z;
 }
 
-void system_player_moveTilePosition::ExitWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition, float stepSize)
+void system_player_moveTilePosition::ExitWarp(component_player_currentState* currentState, component_tilemapPosition* tilemapPosition, int stepSize)
 {
 	auto& tileX = tilemapPosition->currentX;
 	auto& tileZ = tilemapPosition->currentZ;
@@ -181,11 +181,11 @@ void system_player_moveTilePosition::ExitWarp(component_player_currentState* cur
 	currentState->warping = false;
 }
 
-bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* tilemapPosition, float x, float z)
+bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* tilemapPosition, int x, int z)
 {
 
-	float mapXSize = (float)tilemapPosition->currentTileMap->mapXSize;
-	float mapZSize = (float)tilemapPosition->currentTileMap->mapZSize;
+	int mapXSize = tilemapPosition->currentTileMap->mapXSize;
+	int mapZSize = tilemapPosition->currentTileMap->mapZSize;
 
 	if (x < 0 || z < 0 || x >= mapXSize || z >= mapZSize)
 	{

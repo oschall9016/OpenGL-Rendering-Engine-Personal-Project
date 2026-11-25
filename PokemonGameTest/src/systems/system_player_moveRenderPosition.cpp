@@ -39,10 +39,10 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 		float speed = totalDistance / totalTime;
 		float stepSize = speed * dt;
 
-		auto& tileX = tilePosition->currentX;
-		auto& tileZ = tilePosition->currentZ;
+		float tileX = (float)tilePosition->currentX;
+		float tileZ = (float)tilePosition->currentZ;
 
-		auto tileY = tilePosition->currentY;
+		auto& tileY = tilePosition->currentY;
 
 		auto& renderX = transform->position.x;
 		auto& renderZ = transform->position.z;
@@ -55,9 +55,6 @@ void system_player_moveRenderPosition::Update(float dt, Camera& camera)
 		if (currentState->warping)
 		{
 			
-			// isolate camera follow distance
-			
-
 			// teleport billboard
 			renderX = tileX;
 			renderZ = tileZ;

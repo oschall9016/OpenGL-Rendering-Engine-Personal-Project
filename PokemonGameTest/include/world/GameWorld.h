@@ -21,7 +21,7 @@ public:
 	//GameMap* currentMap = nullptr;
 	//std::vector<GameMap*> gameMaps = {};
 
-	GameMap* CreateGameMap(std::string mapName, float TileXSize, float TileZSize, std::shared_ptr<Texture> tileSheet, std::string mapPath);
+	GameMap* CreateGameMap(std::string mapName, int TileXSize, int TileZSize, std::shared_ptr<Texture> tileSheet, std::string mapPath);
 
 	GameMap* GetCurrentMap();
 	GameMap* GetMap(std::string mapName);

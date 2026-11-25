@@ -5,8 +5,8 @@
 
 struct component_tilemapPosition
 {
-	float currentX = 0.0f;
-	float currentZ = 0.0f;
+	int currentX = 0;
+	int currentZ = 0;
 
 	Tilemap* currentTileMap = nullptr;
 	GameWorld* gameWorld = nullptr;

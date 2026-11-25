@@ -14,8 +14,8 @@ struct WarpDestination
 {
 	GameMap* gameMap = nullptr;
 
-	float x = 0;
-	float z = 0;
+	int x = 0;
+	int z = 0;
 
 	Exit_Direction exitDirection = Exit_Direction::DOWN;
 };

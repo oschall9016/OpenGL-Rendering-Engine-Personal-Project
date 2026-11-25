@@ -11,29 +11,27 @@
 class Tilemap
 {
 public:
-	Tilemap(std::vector<Tile> mapTiles, float x, float z);
-	Tilemap(float x, float z);
+	Tilemap(std::vector<Tile> mapTiles, int x, int z);
+	Tilemap(int x, int z);
 
-	Tile& GetTile(float x, float z);
-	float GetTileHeight(float x, float z);
+	Tile& GetTile(int x, int z);
+	float GetTileHeight(int x, int z);
 
-	void SetTileSignature(float x, float z, uint8_t newSig, uint16_t newWarpIndex = NO_WARP);
-	void SetTileFlag(float x, float z, bool removeFlag, Tile_Type newType, uint16_t newWarpIndex = NO_WARP);
-	void SetTileHeight(float x, float z, float height);
+	void SetTileHeight(int x, int z, float height);
 
-	void SetTileTextureIndex(float x, float z, float texIndex);
+	void SetTileTextureIndex(int x, int z, float texIndex);
 
-	void SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
-	void SetCollider(float x, float z, bool removeCollider);
-	void SetWarp(float x, float z, bool removeWarp, uint16_t warpIndex);
+	void SetSlope(int x, int z, bool removeSlope, Rotate_Direction direction = Rotate_Direction::UP);
+	void SetCollider(int x, int z, bool removeCollider);
+	void SetWarp(int x, int z, bool removeWarp, uint16_t warpIndex);
 	
 
-	float mapXSize, mapZSize;
+	int mapXSize, mapZSize;
 	
 	std::vector<Tile> mapTiles;
 	std::vector<float> heightMap;
 
-	std::unordered_map<float,Slope> slopes = {};
+	std::unordered_map<int,Slope> slopes = {};
 
 	std::vector<Warp> mapWarps = {};
 

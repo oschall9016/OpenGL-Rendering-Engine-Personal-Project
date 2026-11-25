@@ -63,8 +63,8 @@ PokemonGameDemo1::PokemonGameDemo1()
     int renderWidth = 400; // 256 <- ds resolution feels a little too zoomed in
     int renderHeight = 300; // 192
 
-    float playerPosX = 2.0f;
-    float playerPosZ = 2.0f;
+    int playerPosX = 2;
+    int playerPosZ = 2;
     float playerScale = 1.8f;
 
     SDLManager sdlManager(windowWidth, windowHeight, "Cool Window");
@@ -88,7 +88,7 @@ PokemonGameDemo1::PokemonGameDemo1()
     float yOffset = std::sin(glm::radians(90.0f - cameraAngle)) * cameraDistance;
     float zOffset = std::cos(glm::radians(90.0f - cameraAngle)) * cameraDistance;
     
-    camera.SetPosition(playerPosX, yOffset, playerPosZ + zOffset);
+    camera.SetPosition(static_cast<float>(playerPosX), yOffset, static_cast<float>(playerPosZ) + zOffset);
     camera.SetPitchAngle(-cameraAngle);
     
     //
@@ -470,25 +470,25 @@ void PokemonGameDemo1::SetupMap()
     std::shared_ptr<Texture> tileTexture = aManager.LoadTexture("assets/Textures/PokeTiles.png", false);
 
     // create map 1
-    float tileXSize = 200;
-    float tileZSize = 65;
+    int tileXSize = 200;
+    int tileZSize = 65;
 
     //Tilemap tilemap(tileRows, tileCols);
     //GameMap gameMap(tilemap, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
     GameMap *gameMap = world.CreateGameMap("Exterior1", tileXSize, tileZSize, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
 
-    WarpDestination map1Destination = { gameMap, 27.0f, 40.0f };
+    WarpDestination map1Destination = { gameMap, 27, 40 };
 
     // create map 2
-    float tileXSize2 = 7;
-    float tileZSize2 = 9;
+    int tileXSize2 = 7;
+    int tileZSize2 = 9;
 
     //Tilemap tilemap2(tileRows2, tileCols2);
     //GameMap gameMap2(tilemap2, tileTexture, "assets/WorldFiles/InteriorExample.txt");
     GameMap* gameMapInterior = world.CreateGameMap("Interior1", tileXSize2, tileZSize2, tileTexture, "assets/WorldFiles/InteriorExample.txt");
 
     // create warp
-    WarpDestination map2Destination = { gameMapInterior, 3.0f, 8.0f, Exit_Direction::UP };
+    WarpDestination map2Destination = { gameMapInterior, 3, 8, Exit_Direction::UP };
 
     //tilemap.SetTileSignature(27, 40, Tile_Type::WARP, 0);
     //tilemap2.SetTileSignature(2, 8, Tile_Type::WARP, 0);

@@ -6,7 +6,7 @@
 
 GameWorld::GameWorld() {}
 
-GameMap* GameWorld::CreateGameMap(std::string mapName, float TileXSize, float TileZSize, std::shared_ptr<Texture> tileSheet, std::string mapPath)
+GameMap* GameWorld::CreateGameMap(std::string mapName, int TileXSize, int TileZSize, std::shared_ptr<Texture> tileSheet, std::string mapPath)
 {
 	Tilemap tilemap(TileXSize, TileZSize);
 	GameMap gameMap(mapName, tilemap, tileSheet, mapPath);

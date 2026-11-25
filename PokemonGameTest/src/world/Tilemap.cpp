@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstdint> 
 
-Tilemap::Tilemap(std::vector<Tile> tileMap, float x, float z)
+Tilemap::Tilemap(std::vector<Tile> tileMap, int x, int z)
 {
 	mapTiles = tileMap;
 	mapXSize = x;
@@ -15,7 +15,7 @@ Tilemap::Tilemap(std::vector<Tile> tileMap, float x, float z)
 	heightMap.resize(mapXSize * mapZSize);
 }
 
-Tilemap::Tilemap(float x, float z)
+Tilemap::Tilemap(int x, int z)
 {
 	mapXSize = x;
 	mapZSize = z;
@@ -31,77 +31,15 @@ Tilemap::Tilemap(float x, float z)
 }
 
 // TODO: check if tile not found 
-Tile& Tilemap::GetTile(float x, float z)
+Tile& Tilemap::GetTile(int x, int z)
 {
 	return mapTiles[(z * mapXSize) + x];
 }
 
-// TODO: make sure warp index is set when signature is WARP
-void Tilemap::SetTileSignature(float x, float z, uint8_t newSig, uint16_t newWarpIndex)
+// TODO: removal of slope
+void Tilemap::SetSlope(int x, int z, bool removeSlope, Rotate_Direction direction)
 {
-	Tile& tile = mapTiles[(z * mapXSize) + x];
-
-	tile.signature = newSig;
-
-	if (newSig & Tile_Type::WARP)
-	{
-		tile.warpIndex = newWarpIndex;
-	}
-
-	// cant be walkable and collider at the same time
-	if (newSig & Tile_Type::COLLIDER)
-	{
-		tile.signature &= ~Tile_Type::WALKABLE;
-	}
-	else if (newSig & Tile_Type::WALKABLE)
-	{
-		tile.signature &= ~Tile_Type::COLLIDER;
-	}
-
-}
-
-void Tilemap::SetTileFlag(float x, float z, bool removeFlag, Tile_Type newType, uint16_t newWarpIndex)
-{
-	Tile& tile = mapTiles[(z * mapXSize) + x];
-
-	if (removeFlag)
-	{
-		// make sure the flag is set
-		if (tile.signature & newType) // do i need to do this?
-		{
-			tile.signature &= ~newType;
-		}
-
-		if (newType & Tile_Type::WARP)
-		{
-			tile.warpIndex = NO_WARP;
-		}
-	}
-	else
-	{
-		tile.signature |= newType;
-	}
-
-	if (newType & Tile_Type::WARP)
-	{
-		tile.warpIndex = newWarpIndex;
-	}
-
-	// cant be walkable and collider at the same time
-	if (newType & Tile_Type::COLLIDER)
-	{
-		tile.signature &= ~Tile_Type::WALKABLE;
-	}
-	else if (newType & Tile_Type::WALKABLE)
-	{
-		tile.signature &= ~Tile_Type::COLLIDER;
-	}
-}
-
-// TODO: removal
-void Tilemap::SetSlope(float x, float z, bool removeSlope, Rotate_Direction direction)
-{
-	float tileIndex = (z * mapXSize) + x;
+	int tileIndex = (z * mapXSize) + x;
 	Tile& tile = mapTiles[tileIndex];
 
 	tile.signature |= Tile_Type::SLOPE;
@@ -111,7 +49,7 @@ void Tilemap::SetSlope(float x, float z, bool removeSlope, Rotate_Direction dire
 	heightMap[tileIndex] += 0.5f;
 }
 
-void Tilemap::SetCollider(float x, float z, bool removeCollider)
+void Tilemap::SetCollider(int x, int z, bool removeCollider)
 {
 	Tile& tile = mapTiles[(z * mapXSize) + x];
 
@@ -126,9 +64,9 @@ void Tilemap::SetCollider(float x, float z, bool removeCollider)
 
 }
 
-void  Tilemap::SetWarp(float x, float z, bool removeWarp, uint16_t warpIndex)
+void  Tilemap::SetWarp(int x, int z, bool removeWarp, uint16_t warpIndex)
 {
-	float tileIndex = (z * mapXSize) + x;
+	int tileIndex = (z * mapXSize) + x;
 	Tile& tile = mapTiles[tileIndex];
 
 	if (removeWarp)
@@ -143,20 +81,20 @@ void  Tilemap::SetWarp(float x, float z, bool removeWarp, uint16_t warpIndex)
 	}
 }
 
-void Tilemap::SetTileHeight(float x, float z, float height)
+void Tilemap::SetTileHeight(int x, int z, float height)
 {
 	heightMap[(z * mapXSize) + x] = height;
 }
 
-void Tilemap::SetTileTextureIndex(float x, float z, float texIndex)
+void Tilemap::SetTileTextureIndex(int x, int z, float texIndex)
 {
-	float tileIndex = (z * mapXSize) + x;
+	int tileIndex = (z * mapXSize) + x;
 	Tile& tile = mapTiles[tileIndex];
 
 	tile.textureIndex = texIndex;
 }
 
-float Tilemap::GetTileHeight(float x, float z)
+float Tilemap::GetTileHeight(int x, int z)
 {
 	return heightMap[(z * mapXSize) + x];
 }
