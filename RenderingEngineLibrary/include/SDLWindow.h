@@ -6,9 +6,13 @@ class SDLWindow
 {
 public:
 	SDLWindow(int width, int height, const char* title);
+	SDLWindow();
 	~SDLWindow();
 
 	void SwapBuffers();
+
+	void SetSize(int width, int height);
+	void SetTitle(const char* title);
 
 	int GetWidth();
 	int GetHeight();

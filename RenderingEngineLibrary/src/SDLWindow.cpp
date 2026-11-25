@@ -40,9 +40,44 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
 
     glEnable(GL_DEPTH_TEST);
 
-
 }
 
+SDLWindow::SDLWindow()
+{
+    width = 800;
+    height = 600;
+
+    SDL_Init(SDL_INIT_EVERYTHING);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to Create SDL window" << std::endl;
+        //return -1; TODO: error handling
+    }
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    context = SDL_GL_CreateContext(window);
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    // initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        //return -1; TODO: error handling
+    }
+
+    glViewport(0, 0, width, height);
+
+    glEnable(GL_DEPTH_TEST);
+
+
+}
 
 SDLWindow::~SDLWindow()
 {
@@ -54,6 +89,17 @@ SDLWindow::~SDLWindow()
 void SDLWindow::SwapBuffers()
 {
     SDL_GL_SwapWindow(window);
+}
+
+void SDLWindow::SetSize(int width, int height)
+{
+    SDL_SetWindowSize(window, width, height);
+    glViewport(0, 0, width, height);
+}
+
+void SDLWindow::SetTitle(const char* title)
+{
+    SDL_SetWindowTitle(window, title);
 }
 
 int SDLWindow::GetWidth()

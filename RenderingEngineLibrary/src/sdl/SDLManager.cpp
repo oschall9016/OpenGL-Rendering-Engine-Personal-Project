@@ -5,7 +5,9 @@
 
 #include <SDL2/SDL.h>
 
-SDLManager::SDLManager(int width, int height, const char* title) : window(width, height, title), input() {}
+SDLManager::SDLManager(int width, int height, const char* title) : window(width, height, title) {}
+
+SDLManager::SDLManager() {}
 
 void SDLManager::ManageEvents()
 {
@@ -26,4 +28,14 @@ void SDLManager::ManageEvents()
 			break;
 		}
 	}
+}
+
+void SDLManager::SetWindowSize(int width, int height)
+{
+	window.SetSize(width, height);
+}
+
+void SDLManager::SetWindowTitle(const char* title)
+{
+	window.SetTitle(title);
 }
