@@ -30,7 +30,6 @@ std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& path, bool
 	}
 
 	Textures.insert({ path, importedTexture });
-	std::cout << "Loaded Texture: " << path <<"\n";
 	return Textures.at(path);
 }
 
@@ -51,7 +50,6 @@ std::shared_ptr<Texture> AssetManager::LoadCubeMapTexture(const std::string& pat
 	}
 
 	Textures.insert({ path, importedTexture });
-	std::cout << "Loaded Cubemap Texture: " << path << "\n";
 	return Textures.at(path);
 }
 
@@ -73,7 +71,6 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& path, bool fli
 	}
 
 	Models.insert({ path, importedModel });
-	std::cout << "Loaded Model: " << path << "\n";
 	return Models.at(path); 
 }
 
@@ -86,7 +83,6 @@ std::shared_ptr<Model> AssetManager::LoadModel(const std::string& name, std::sha
 	}
 
 	Models.insert({ name, model });
-	std::cout << "Loaded Model: " << name << "\n";
 	return Models.at(name);
 }
 
@@ -101,7 +97,6 @@ std::shared_ptr<Shader> AssetManager::LoadShader(const std::string& name, const 
 	// if shader not in list, needs imported
 	std::shared_ptr<Shader> shaderPointer = std::make_shared<Shader>(vPath, fPath);
 	Shaders.insert({name, shaderPointer});
-	std::cout << "Loaded Shader: " << name << "\n";
 	return Shaders.at(name);
 }
 
