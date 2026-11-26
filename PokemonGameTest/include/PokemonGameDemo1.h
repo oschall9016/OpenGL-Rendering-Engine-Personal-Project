@@ -13,7 +13,6 @@ public:
 	PokemonGameDemo1();
 	void RunDemo();
 private:
-	void InitObjects();
 	void SetupMap();
 	void InitECS();
 	void PlaceMapModels();
