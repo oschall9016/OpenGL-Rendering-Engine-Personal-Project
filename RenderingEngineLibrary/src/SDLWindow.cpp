@@ -135,11 +135,12 @@ void SDLWindow::SetTitle(const char* title)
     SDL_SetWindowTitle(window, title);
 }
 
-int SDLWindow::GetWidth() const
+int SDLWindow::GetWidth()
 {
     return width;
 }
-int SDLWindow::GetHeight() const
+
+int SDLWindow::GetHeight()
 {
     return height;
 }
