@@ -56,76 +56,44 @@
 PokemonGameDemo1::PokemonGameDemo1()
 {
     /////////////////////// Initialization /////////////////////////
-    
-    windowWidth = 1440; // keep 4x3 to match render w/h
-    windowHeight = 1080;
 
-    renderWidth = 400; // 256 <- ds resolution, feels a little too zoomed in
-    renderHeight = 300; // 192
-
+      // player settings
     playerSpawnPosX = 2;
     playerSpawnPosZ = 2;
     playerSpawnPosY = 0.0f;
 
     playerScale = 1.8f;
 
+    // window settings
+    windowWidth = 1440; // keep 4x3 to match render w/h
+    windowHeight = 1080;
+
+    renderWidth = 400; // 256 <- ds resolution, feels a little too zoomed in
+    renderHeight = 300; // 192
+
     sdlManager.SetWindowSize(windowWidth, windowHeight);
-    sdlManager.SetWindowTitle("Cool Window");
+    sdlManager.SetWindowTitle("Movement and Rendering Test");
 
-    //Camera camera;
     camera.UpdateProjectionMatrix(45.0f, static_cast<float>(renderWidth), static_cast<float>(renderHeight));
-
-    // center the player sprite
     
-    float cameraAngle = 45.0f; // amount camera is angled down at player
-    float cameraFOV = 45.0f; // TODO: make FOV a member of camera for easier changing e.g. change the UpdateProjectionMatrix function
-
-    float billboardSize = 1.8f; // in world coords
-    float spriteSize = 32.0f; // in pixels
-
-    // finds the distance at which the sprite is exactly 32x32 pixels in the window
-    float screenScale = billboardSize * (static_cast<float>(renderHeight) / spriteSize);
-    float cameraDistance = (screenScale / 2.0f) / std::tan(glm::radians(cameraFOV / 2.0f));
-
-    // centers the camera on the player sprite
-    float yOffset = std::sin(glm::radians(90.0f - cameraAngle)) * cameraDistance;
-    float zOffset = std::cos(glm::radians(90.0f - cameraAngle)) * cameraDistance;
-    
-    camera.SetPosition(static_cast<float>(playerSpawnPosX), yOffset, static_cast<float>(playerSpawnPosZ) + zOffset);
-    camera.SetPitchAngle(-cameraAngle);
-    
-    //
-
-    //DeltaTime dt;
-    //AssetManager aManager;
-    //Renderer renderer;
-    //EntityComponentSystem ecs;
-
-    
-    /////////////////////// Asset Loading //////////////////////////
-    
-    std::shared_ptr<Shader> basicShader = aManager.LoadShader("BackpackShader", "assets/shaders/BasicBackpackVertex.vs", "assets/shaders/BasicBackpackFragment.fs");
-    std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/HeroSpriteTestOneRow.png", true);
-    std::shared_ptr<Texture> otherSpriteTexture = aManager.LoadTexture("assets/sprites/Sprite-0001.png", true);
-    std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
-    std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
-    std::shared_ptr<Model> otherSpriteModel = aManager.LoadModel("OtherModel", Model::CreateQuad(otherSpriteTexture));
-
-    std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
-
-    std::shared_ptr<Shader> worldShader = aManager.LoadShader("WorldShader", "assets/shaders/v_tile.vs", "assets/shaders/f_tile.fs");
-    std::shared_ptr<Shader> defaultShader = aManager.LoadShader("DefaultShader", "assets/shaders/v_default.vs", "assets/shaders/f_default.fs");
-
     SetupMap();
     PlaceMapModels();
     InitECS();
+    SetCameraPos();
+}
 
-    /////////////////////// Other Features ///////////////////////////
-    
+void PokemonGameDemo1::RunDemo()
+{
+    RunRenderLoop();
+}
+
+void PokemonGameDemo1::RunRenderLoop()
+{
+    // create framebuffer
+    std::shared_ptr<Shader> framebufferShader = aManager.LoadShader("FramebufferShader", "assets/shaders/FramebufferVertex.vs", "assets/shaders/FramebufferFragment.fs");
     Framebuffer pixelFramebuffer(renderWidth, renderHeight);
 
-    /////////////////////// Main Game Loop ///////////////////////////
-
+    // fetch systems
     auto entityRenderSystem = ecs.GetSystem<system_RenderEntities>();
 
     auto playerInputReadingSystem = ecs.GetSystem<system_player_inputDetection>();
@@ -133,16 +101,16 @@ PokemonGameDemo1::PokemonGameDemo1()
     auto playerRenderMovementSystem = ecs.GetSystem<system_player_moveRenderPosition>();
     auto playerAnimationSystem = ecs.GetSystem<system_player_playAnimation>();
 
+    /////////////////////// Main Game Loop ///////////////////////////
     bool gameRunning = true;
-
     while (gameRunning)
     {
-        //// Game Logic
-
         if (sdlManager.input.isKeyHeld(SDL_SCANCODE_ESCAPE))
         {
             gameRunning = false;
         }
+
+        //// Game Logic
 
         dt.Update();
 
@@ -156,18 +124,19 @@ PokemonGameDemo1::PokemonGameDemo1()
 
         //// Render Frame
 
-        pixelFramebuffer.Bind(); // do all rendering with the framebuffer binded
+        pixelFramebuffer.Bind(); // do all rendering with the framebuffer bound
 
         renderer.Clear();
 
         world.GetCurrentMap()->DrawGameMap(renderer, camera);
-   
+
         entityRenderSystem->RenderEntities();
 
         pixelFramebuffer.Unbind(windowWidth, windowHeight); //
 
         renderer.RenderFramebufferQuad(pixelFramebuffer, *framebufferShader);
 
+        // uncomment these and comment out the player systems to enable free cam
         //camera.ProcessInput(sdlManager.input, dt.Get());
         //camera.ProcessMouse(sdlManager.input.getMouseX(), sdlManager.input.getMouseY());
 
@@ -184,7 +153,7 @@ void PokemonGameDemo1::SetupMap()
     int tileXSize = 200;
     int tileZSize = 65;
 
-    GameMap *gameMap = world.CreateGameMap("Exterior1", tileXSize, tileZSize, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
+    GameMap* gameMap = world.CreateGameMap("Exterior1", tileXSize, tileZSize, tileTexture, "assets/WorldFiles/GameWorldExample.txt");
 
     // create map 2
     int tileXSize2 = 7;
@@ -211,7 +180,7 @@ void PokemonGameDemo1::SetupMap()
 void PokemonGameDemo1::InitECS()
 {
     // load assets
-    std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/HeroSpriteTestOneRow.png", true);
+    std::shared_ptr<Texture> testSpriteTexture = aManager.LoadTexture("assets/sprites/PlayerSprite.png", true);
     std::shared_ptr<Shader> testSpriteShader = aManager.LoadShader("SpriteShader", "assets/shaders/spriteVertex.vs", "assets/shaders/spriteFragment.fs");
     std::shared_ptr<Model> testSpriteModel = aManager.LoadModel("SpriteModel", Model::CreateQuad(testSpriteTexture));
 
@@ -292,6 +261,30 @@ void PokemonGameDemo1::InitECS()
 
     component_player_animations playerAnimationData;
     ecs.AddComponent<component_player_animations>(playerEntity, playerAnimationData);
+}
+
+void PokemonGameDemo1::SetCameraPos()
+{
+    // camera needs to stay:
+    //  - centered on the billboard looking down at 45 degrees
+    //  - at a distance where the sprite exactly 32x32 pixels in the window
+
+    float cameraAngle = 45.0f; // amount camera is angled down at player
+    float cameraFOV = 45.0f;
+
+    playerScale = 1.8f; // in world coords
+    float spriteSize = 32.0f; // in pixels
+
+    // finds the distance at which the sprite is exactly 32x32 pixels in the window
+    float screenScale = playerScale * (static_cast<float>(renderHeight) / spriteSize);
+    float cameraDistance = (screenScale / 2.0f) / std::tan(glm::radians(cameraFOV / 2.0f));
+
+    // centers the camera on the player sprite
+    float yOffset = std::sin(glm::radians(90.0f - cameraAngle)) * cameraDistance;
+    float zOffset = std::cos(glm::radians(90.0f - cameraAngle)) * cameraDistance;
+
+    camera.SetPosition(static_cast<float>(playerSpawnPosX), yOffset, static_cast<float>(playerSpawnPosZ) + zOffset);
+    camera.SetPitchAngle(-cameraAngle);
 }
 
 // this was painful to do by hand...
