@@ -1,6 +1,6 @@
 #include "SpriteAnimation.h"
 
-const int SpriteAnimation::GetCurrentFrame()
+int SpriteAnimation::GetCurrentFrame()
 {
 	return frames[currFrameIndex];
 }

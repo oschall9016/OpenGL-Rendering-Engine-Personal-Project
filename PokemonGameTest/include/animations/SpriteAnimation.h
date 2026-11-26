@@ -6,7 +6,7 @@ class SpriteAnimation
 {
 public:
 	void Update();
-	const int GetCurrentFrame();
+	int GetCurrentFrame();
 	void SetCurrentFrame(int frame);
 
 protected:
