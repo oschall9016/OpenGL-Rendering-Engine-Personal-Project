@@ -1,6 +1,7 @@
 #include "GameMap.h"
 
 #include "Tilemap.h"
+#include "Slope.h"
 
 #include "Model.h"
 #include "Mesh.h"
@@ -58,13 +59,15 @@ void GameMap::ReadMapFromFile(std::string mapPath)
 		return;
 	}
 
+	int mapXSize = tilemap.GetMapXSize();
+
 	// loop over each tile
 	std::string tileString;
 	int tileIndex = 0;
 	while (mapFile >> tileString)
 	{
-		int tileX = tileIndex % tilemap.mapXSize;
-		int tileZ = tileIndex / tilemap.mapXSize;
+		int tileX = tileIndex % mapXSize;
+		int tileZ = tileIndex / mapXSize;
 
 		// split the string into 3 seperate options
 		// tex id , height , type
@@ -130,23 +133,26 @@ void GameMap::InitInstancedMapData()
 {
 	// fill lists
 
-	int mapSize = tilemap.mapXSize * tilemap.mapZSize; //TODO: make this a part of tilemap
+	int mapXSize = tilemap.GetMapXSize();
+	int mapZSize = tilemap.GetMapZSize();
+
+	int mapSize = mapXSize * mapZSize; //TODO: make this a part of tilemap
 
 	tileModelMats.resize(mapSize);
 	tileTextureIds.resize(mapSize);
 
-	for (int i = 0; i < tilemap.mapXSize; i++)
+	for (int i = 0; i < mapXSize; i++)
 	{
-		for (int j = 0; j < tilemap.mapZSize; j++)
+		for (int j = 0; j < mapZSize; j++)
 		{
-			auto& tile = tilemap.GetTile(i, j);
+			auto* tile = tilemap.GetTile(i, j);
 			float tileHeight = tilemap.GetTileHeight(i, j);
-			int tileIndex = (j * tilemap.mapXSize) + i;
+			int tileIndex = (j * mapXSize) + i;
 
 			glm::mat4 modelMat = createTileModelMat(i, j, tileHeight);
 
 			tileModelMats[tileIndex] = modelMat;
-			tileTextureIds[tileIndex] = tile.textureIndex;
+			tileTextureIds[tileIndex] = tile->textureIndex;
 		}
 	}
 
@@ -238,7 +244,8 @@ void GameMap::SetTileHeight(int x, int z, float height)
 
 	
 	// update tile visuals
-	int modelMatOffset = (z * tilemap.mapXSize) + x;
+	int mapXSize = tilemap.GetMapXSize();
+	int modelMatOffset = (z * mapXSize) + x;
 
 	if (modelMatOffset < tileModelMats.size())
 	{
@@ -261,13 +268,15 @@ void GameMap::SetSlope(int x, int z, bool removeSlope, Rotate_Direction directio
 	tilemap.SetSlope(x, z, removeSlope, direction);
 
 	// update slope visuals
+	int mapXSize = tilemap.GetMapXSize();
+	int slopeIndex = (z * mapXSize) + x;
 
 	// add to vectors
-	auto& slope = tilemap.slopes.at((z * tilemap.mapXSize) + x);
+	auto* slope = tilemap.GetSlope(slopeIndex);
 	glm::mat4 modelMat = createSlopeModelMat(x, z,tilemap.GetTileHeight(x,z));
 
 	slopeModelMats.push_back(modelMat);
-	slopeTextureIds.push_back(slope.textureIndex);
+	slopeTextureIds.push_back(slope->textureIndex);
 
 
 	// remake buffers
@@ -276,6 +285,9 @@ void GameMap::SetSlope(int x, int z, bool removeSlope, Rotate_Direction directio
 
 void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 {
+	int mapXSize = tilemap.GetMapXSize();
+	int mapZSize = tilemap.GetMapZSize();
+
 	// enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -288,8 +300,8 @@ void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 
 	tileShader->Unbind();
 
-	renderer.RenderModelInstanced(*quad, *tileShader, static_cast<unsigned int>(tilemap.mapXSize * tilemap.mapZSize));
-	renderer.RenderModelInstanced(*slopeQuad, *tileShader, static_cast<unsigned int>(tilemap.slopes.size()));
+	renderer.RenderModelInstanced(*quad, *tileShader, static_cast<unsigned int>(mapXSize * mapZSize));
+	renderer.RenderModelInstanced(*slopeQuad, *tileShader, static_cast<unsigned int>(tilemap.GetSlopeListSize()));
 
 	// render models
 	modelShader->Bind();
@@ -324,14 +336,14 @@ void GameMap::DrawGameMap(Renderer& renderer, Camera& camera)
 
 glm::mat4 GameMap::createTileModelMat(int x, int z, float height)
 {
-	auto& tile = tilemap.GetTile(x, z);
+	auto* tile = tilemap.GetTile(x, z);
 
 	float xFloat = static_cast<float>(x);
 	float zFloat = static_cast<float>(z);
 
 	glm::vec3 pos;
 
-	if (tile.signature & Tile_Type::SLOPE)
+	if (tile->signature & Tile_Type::SLOPE)
 	{
 		pos = glm::vec3(xFloat, height - 1.5f, zFloat); // slopes tiles are at height + 0.5 logically, but should appear at height visually
 	}
@@ -352,12 +364,14 @@ glm::mat4 GameMap::createSlopeModelMat(int x, int z, float height)
 	float xFloat = static_cast<float>(x);
 	float zFloat = static_cast<float>(z);
 
+	int mapXSize = tilemap.GetMapXSize();
+
 	glm::vec3 pos;
 
 	pos = glm::vec3(xFloat, height - 1.0f, zFloat); // slopes tiles are at height + 0.5 logically, but should appear at height visually
 
-	auto& slope = tilemap.slopes.at((z * tilemap.mapXSize) + x);
-	float direction = static_cast<float>(slope.direction);
+	auto* slope = tilemap.GetSlope((z * mapXSize) + x);
+	float direction = static_cast<float>(slope->direction);
 
 	float scaleFactor = std::sqrtf(2.0f);
 	float slopeAngle = std::atan(1.0f);

@@ -46,7 +46,7 @@ void system_player_moveTilePosition::Update(double dt)
 		}
 
 		// we stepped on a warp tile, warp to new position
-		if (tilemapPosition->currentTileMap->GetTile(tileX, tileZ).signature & Tile_Type::WARP)
+		if (tilemapPosition->currentTileMap->GetTile(tileX, tileZ)->signature & Tile_Type::WARP)
 		{
 			EnterWarp(currentState, tilemapPosition);
 			continue;
@@ -116,7 +116,7 @@ void system_player_moveTilePosition::EnterWarp(component_player_currentState* cu
 	auto& tileZ = tilemapPosition->currentZ;
 
 	// get tile's warp index
-	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
+	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ)->warpIndex;
 
 	// get warp struct from list
 	//auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
@@ -145,7 +145,7 @@ void system_player_moveTilePosition::ExitWarp(component_player_currentState* cur
 	auto& inputDirection = currentState->currentDirection;
 
 	// get tile's warp index
-	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ).warpIndex;
+	auto& warpIndex = tilemapPosition->currentTileMap->GetTile(tileX, tileZ)->warpIndex;
 
 	// get warp struct from list
 	//auto& warp = tilemapPosition->currentTileMap->mapWarps[warpIndex];
@@ -184,16 +184,16 @@ void system_player_moveTilePosition::ExitWarp(component_player_currentState* cur
 bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* tilemapPosition, int x, int z)
 {
 
-	int mapXSize = tilemapPosition->currentTileMap->mapXSize;
-	int mapZSize = tilemapPosition->currentTileMap->mapZSize;
+	int mapXSize = tilemapPosition->currentTileMap->GetMapXSize();
+	int mapZSize = tilemapPosition->currentTileMap->GetMapZSize();
 
 	if (x < 0 || z < 0 || x >= mapXSize || z >= mapZSize)
 	{
 		return false;
 	}
 
-	Tile currentTile = tilemapPosition->currentTileMap->GetTile(tilemapPosition->currentX, tilemapPosition->currentZ);
-	Tile nextTile = tilemapPosition->currentTileMap->GetTile(x, z);
+	Tile* currentTile = tilemapPosition->currentTileMap->GetTile(tilemapPosition->currentX, tilemapPosition->currentZ);
+	Tile* nextTile = tilemapPosition->currentTileMap->GetTile(x, z);
 
 	float currTileHeight = tilemapPosition->currentTileMap->GetTileHeight(tilemapPosition->currentX, tilemapPosition->currentZ);
 	float nextTileHeight = tilemapPosition->currentTileMap->GetTileHeight(x, z);
@@ -202,9 +202,9 @@ bool system_player_moveTilePosition::CheckCollision(component_tilemapPosition* t
 
 	bool heightDiffIs1 = std::abs(nextTileHeight - currTileHeight) == 1.0f;
 	bool heightDiffUnderPoint5 = std::abs(nextTileHeight - currTileHeight) <= 0.5f;
-	bool bothSlopes = nextTile.signature & Tile_Type::SLOPE && currentTile.signature & Tile_Type::SLOPE;
+	bool bothSlopes = nextTile->signature & Tile_Type::SLOPE && currentTile->signature & Tile_Type::SLOPE;
 
-	if (nextTile.signature & Tile_Type::COLLIDER)
+	if (nextTile->signature & Tile_Type::COLLIDER)
 	{
 		return false;
 	}

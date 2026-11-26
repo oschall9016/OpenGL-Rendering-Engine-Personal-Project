@@ -29,11 +29,17 @@ Tilemap::Tilemap(int x, int z)
 
 	heightMap.resize(mapXSize * mapZSize);
 }
-
-// TODO: check if tile not found 
-Tile& Tilemap::GetTile(int x, int z)
+ 
+Tile* Tilemap::GetTile(int x, int z)
 {
-	return mapTiles[(z * mapXSize) + x];
+	if (x < 0 || z < 0 || x >= mapXSize || z >= mapZSize)
+	{
+		std::cout << "Could Not Get Tile: [" << x << ", " << z << "], Tile Not Found \n";
+		return nullptr;
+	}
+
+	int tileIndex = (z * mapXSize) + x;
+	return &mapTiles[tileIndex];
 }
 
 // TODO: removal of slope
@@ -97,4 +103,32 @@ void Tilemap::SetTileTextureIndex(int x, int z, float texIndex)
 float Tilemap::GetTileHeight(int x, int z)
 {
 	return heightMap[(z * mapXSize) + x];
+}
+
+int Tilemap::GetMapXSize()
+{
+	return mapXSize;
+}
+
+int Tilemap::GetMapZSize()
+{
+	return mapZSize;
+}
+
+const Slope* Tilemap::GetSlope(int index)
+{
+	auto slopePair = slopes.find(index);
+
+	if (slopePair == slopes.end())
+	{
+		std::cout << "Cannot Get Slope At Tile Index: " << index << ", Slope Does Not Exist\n";
+		return nullptr;
+	}
+
+	return &slopePair->second;
+}
+
+size_t Tilemap::GetSlopeListSize()
+{
+	return slopes.size();
 }
