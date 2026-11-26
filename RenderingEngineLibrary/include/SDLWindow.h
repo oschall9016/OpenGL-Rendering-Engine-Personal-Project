@@ -13,6 +13,7 @@ public:
 
 	void SetSize(int width, int height);
 	void SetTitle(const char* title);
+	void SetIcon(const char* path);
 
 	int GetWidth();
 	int GetHeight();
@@ -21,5 +22,4 @@ private:
 	SDL_GLContext context;
 	int width;
 	int height;
-	
 };

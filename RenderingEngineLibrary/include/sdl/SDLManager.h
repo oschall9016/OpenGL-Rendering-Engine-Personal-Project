@@ -15,6 +15,7 @@ public:
 
 	void SetWindowSize(int width, int height);
 	void SetWindowTitle(const char* title);
+	void SetWindowIcon(const char* path);
 
 	SDLWindow window;
 	SDLInput input;

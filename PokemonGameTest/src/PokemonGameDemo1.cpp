@@ -57,7 +57,7 @@ PokemonGameDemo1::PokemonGameDemo1()
 {
     /////////////////////// Initialization /////////////////////////
 
-      // player settings
+    // player settings
     playerSpawnPosX = 2;
     playerSpawnPosZ = 2;
     playerSpawnPosY = 0.0f;
@@ -73,6 +73,7 @@ PokemonGameDemo1::PokemonGameDemo1()
 
     sdlManager.SetWindowSize(windowWidth, windowHeight);
     sdlManager.SetWindowTitle("Movement and Rendering Test");
+    sdlManager.SetWindowIcon("assets/Textures/Icon.png");
 
     camera.UpdateProjectionMatrix(45.0f, static_cast<float>(renderWidth), static_cast<float>(renderHeight));
     

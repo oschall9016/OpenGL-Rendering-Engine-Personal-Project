@@ -39,3 +39,8 @@ void SDLManager::SetWindowTitle(const char* title)
 {
 	window.SetTitle(title);
 }
+
+void SDLManager::SetWindowIcon(const char* path)
+{
+	window.SetIcon(path);
+}

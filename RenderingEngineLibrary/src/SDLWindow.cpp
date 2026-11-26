@@ -1,7 +1,10 @@
 #include "SDLWindow.h"
 
 #include <SDL2/SDL.h>
+
 #include <glad/glad.h>
+
+#include <stb_image.h>
 
 #include <iostream>
 
@@ -96,6 +99,35 @@ void SDLWindow::SetSize(int width, int height)
     SDL_SetWindowSize(window, width, height);
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     glViewport(0, 0, width, height);
+}
+
+void SDLWindow::SetIcon(const char* path)
+{
+    // load icon image
+    int width, height, nrChannels;
+    unsigned char* data;
+    data = stbi_load(path, &width, &height, &nrChannels, 4);
+    if (!data)
+    {
+        std::cout << "Failed to Import Icon Image: " << path << "\n";
+        stbi_image_free(data);
+        return;
+    }
+
+    // create surface
+    SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormatFrom(data, width, height, 32, width * 4, SDL_PIXELFORMAT_RGBA32);
+    if (!surface)
+    {
+        std::cout << "Failed to Create SDL_Surface from Icon Image: " << path << "\n";
+        stbi_image_free(data);
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    SDL_SetWindowIcon(window, surface);
+
+    stbi_image_free(data);
+    SDL_FreeSurface(surface);
 }
 
 void SDLWindow::SetTitle(const char* title)
