@@ -30,17 +30,12 @@ void SDLManager::ManageEvents()
 	}
 }
 
-void SDLManager::SetWindowSize(int width, int height)
+SDLWindow& SDLManager::GetWindow()
 {
-	window.SetSize(width, height);
+	return window;
 }
 
-void SDLManager::SetWindowTitle(const char* title)
+SDLInput& SDLManager::GetInput()
 {
-	window.SetTitle(title);
-}
-
-void SDLManager::SetWindowIcon(const char* path)
-{
-	window.SetIcon(path);
+	return input;
 }

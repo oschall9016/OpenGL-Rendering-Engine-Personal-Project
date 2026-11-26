@@ -71,9 +71,9 @@ PokemonGameDemo1::PokemonGameDemo1()
     renderWidth = 400; // 256 <- ds resolution, feels a little too zoomed in
     renderHeight = 300; // 192
 
-    sdlManager.SetWindowSize(windowWidth, windowHeight);
-    sdlManager.SetWindowTitle("Movement and Rendering Test");
-    sdlManager.SetWindowIcon("assets/Textures/Icon.png");
+    sdlManager.GetWindow().SetSize(windowWidth, windowHeight);
+    sdlManager.GetWindow().SetTitle("Movement and Rendering Test");
+    sdlManager.GetWindow().SetIcon("assets/Textures/Icon.png");
 
     camera.UpdateProjectionMatrix(45.0f, static_cast<float>(renderWidth), static_cast<float>(renderHeight));
     
@@ -106,7 +106,7 @@ void PokemonGameDemo1::RunRenderLoop()
     bool gameRunning = true;
     while (gameRunning)
     {
-        if (sdlManager.input.isKeyHeld(SDL_SCANCODE_ESCAPE))
+        if (sdlManager.GetInput().isKeyHeld(SDL_SCANCODE_ESCAPE))
         {
             gameRunning = false;
         }
@@ -141,7 +141,7 @@ void PokemonGameDemo1::RunRenderLoop()
         //camera.ProcessInput(sdlManager.input, dt.Get());
         //camera.ProcessMouse(sdlManager.input.getMouseX(), sdlManager.input.getMouseY());
 
-        sdlManager.window.SwapBuffers();
+        sdlManager.GetWindow().SwapBuffers();
     }
 }
 
@@ -203,7 +203,7 @@ void PokemonGameDemo1::InitECS()
         (entityRenderSystem);
 
     // register input detection
-    auto playerInputReadingSystem = std::make_shared<system_player_inputDetection>(ecs, sdlManager.input);
+    auto playerInputReadingSystem = std::make_shared<system_player_inputDetection>(ecs, sdlManager.GetInput());
     ecs.RegisterSystem
         <
         system_player_inputDetection,

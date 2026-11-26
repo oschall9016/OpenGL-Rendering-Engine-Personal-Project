@@ -15,8 +15,8 @@ public:
 	void SetTitle(const char* title);
 	void SetIcon(const char* path);
 
-	int GetWidth();
-	int GetHeight();
+	int GetWidth() const;
+	int GetHeight() const;
 private:
 	SDL_Window* window;
 	SDL_GLContext context;

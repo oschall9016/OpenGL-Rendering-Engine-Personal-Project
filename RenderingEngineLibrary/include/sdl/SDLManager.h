@@ -13,12 +13,10 @@ public:
 
 	void ManageEvents();
 
-	void SetWindowSize(int width, int height);
-	void SetWindowTitle(const char* title);
-	void SetWindowIcon(const char* path);
+	SDLWindow& GetWindow();
+	SDLInput& GetInput();
 
+private:
 	SDLWindow window;
 	SDLInput input;
-	
-private:
 };
