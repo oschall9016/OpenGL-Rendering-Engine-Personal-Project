@@ -8,7 +8,7 @@
 class SDLManager
 {
 public:
-	SDLManager(int width, int height, const char* title);
+	SDLManager(int width, int height, std::string title);
 	SDLManager();
 
 	void ManageEvents();

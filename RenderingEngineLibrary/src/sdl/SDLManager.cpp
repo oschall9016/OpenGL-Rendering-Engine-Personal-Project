@@ -5,7 +5,9 @@
 
 #include <SDL2/SDL.h>
 
-SDLManager::SDLManager(int width, int height, const char* title) : window(width, height, title) {}
+#include <string>
+
+SDLManager::SDLManager(int width, int height, std::string title) : window(width, height, title) {}
 
 SDLManager::SDLManager() {}
 

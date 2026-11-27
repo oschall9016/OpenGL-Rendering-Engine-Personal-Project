@@ -7,9 +7,10 @@
 #include <stb_image.h>
 
 #include <iostream>
+#include <string>
 
 // TODO: - Add Icon
-SDLWindow::SDLWindow(int w, int h, const char* title) 
+SDLWindow::SDLWindow(int w, int h, std::string title)
 {
     width = w;
     height = h;
@@ -20,7 +21,7 @@ SDLWindow::SDLWindow(int w, int h, const char* title)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
     if (window == NULL)
     {
         std::cout << "Failed to Create SDL window" << std::endl;
@@ -101,12 +102,12 @@ void SDLWindow::SetSize(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void SDLWindow::SetIcon(const char* path)
+void SDLWindow::SetIcon(std::string path)
 {
     // load icon image
     int width, height, nrChannels;
     unsigned char* data;
-    data = stbi_load(path, &width, &height, &nrChannels, 4);
+    data = stbi_load(path.c_str(), &width, &height, &nrChannels, 4);
     if (!data)
     {
         std::cout << "Failed to Import Icon Image: " << path << "\n";
@@ -130,9 +131,9 @@ void SDLWindow::SetIcon(const char* path)
     SDL_FreeSurface(surface);
 }
 
-void SDLWindow::SetTitle(const char* title)
+void SDLWindow::SetTitle(std::string title)
 {
-    SDL_SetWindowTitle(window, title);
+    SDL_SetWindowTitle(window, title.c_str());
 }
 
 int SDLWindow::GetWidth()

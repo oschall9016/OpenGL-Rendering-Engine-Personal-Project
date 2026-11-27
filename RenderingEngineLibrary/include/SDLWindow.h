@@ -2,18 +2,20 @@
 
 #include <SDL2/SDL.h>
 
+#include <string>
+
 class SDLWindow
 {
 public:
-	SDLWindow(int width, int height, const char* title);
+	SDLWindow(int width, int height, std::string title);
 	SDLWindow();
 	~SDLWindow();
 
 	void SwapBuffers();
 
 	void SetSize(int width, int height);
-	void SetTitle(const char* title);
-	void SetIcon(const char* path);
+	void SetTitle(std::string title);
+	void SetIcon(std::string path);
 
 	int GetWidth();
 	int GetHeight();
